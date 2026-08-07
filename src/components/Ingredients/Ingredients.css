@@ -1,0 +1,376 @@
+.ingredients{
+
+    padding:7rem 0;
+
+    background:#fff;
+
+}
+
+.ingredients-container{
+
+    width:min(1320px,94%);
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:58% 42%;
+
+    align-items:center;
+
+    gap:2rem;
+
+}
+
+/* ========================= */
+/* IMAGEM */
+/* ========================= */
+
+.ingredients-image{
+
+    position:relative;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.ingredients-image::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:620px;
+    height:620px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(circle,
+        rgba(236,116,4,.14) 0%,
+        rgba(236,116,4,.05) 45%,
+        transparent 75%);
+
+    filter:blur(30px);
+
+}
+.ingredients-image img{
+
+    position:relative;
+
+    z-index:2;
+
+    width:100%;
+    max-width:560px;
+
+    border-radius:28px;
+
+    object-fit:cover;
+
+    box-shadow:
+        0 30px 70px rgba(0,0,0,.18),
+        0 8px 18px rgba(0,0,0,.08);
+
+    transition:.45s ease;
+
+}
+
+.ingredients-image img:hover{
+
+    transform:
+        translateY(-8px)
+        scale(1.03);
+
+    box-shadow:
+        0 45px 90px rgba(0,0,0,.22),
+        0 12px 24px rgba(0,0,0,.10);
+
+}
+
+
+
+/* ========================= */
+/* TEXTO */
+/* ========================= */
+
+.ingredients-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.ingredients-eyebrow{
+
+    color:#EC7404;
+
+    font-size:.82rem;
+
+    font-weight:700;
+
+    letter-spacing:.22em;
+
+    text-transform:uppercase;
+
+    margin-bottom:.8rem;
+
+}
+
+.ingredients-content h2{
+
+    font-size:clamp(3rem,4vw,4.8rem);
+
+    line-height:.95;
+
+    letter-spacing:-.03em;
+
+    margin-bottom:1rem;
+
+}
+
+.ingredients-description{
+
+    font-size:1.08rem;
+
+    line-height:1.6;
+
+    color:#5f5f5f;
+
+    margin-bottom:2rem;
+
+}
+
+/* ========================= */
+/* LISTA */
+/* ========================= */
+
+.ingredients-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.0rem;
+
+}
+
+.ingredient{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1.2rem;
+
+    padding:0.9rem 0;
+
+    border-top:1px solid #ececec;
+
+}
+
+.ingredient-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+
+    padding:1rem 0;
+
+    border-bottom:1px solid #ececec;
+
+}
+
+.ingredient:last-child{
+
+    border-bottom:1px solid #ececec;
+
+}
+
+.ingredient-icon{
+
+    width:60px;
+
+    height:60px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:50%;
+
+    background:#FFF7EF;
+
+    font-size:1.5rem;
+
+}
+
+.ingredient h3{
+
+    font-size:1.3rem;
+
+    color:#151312;
+
+    margin-bottom:.35rem;
+
+}
+
+.ingredient-info h3{
+
+    font-size:1.45rem;
+
+    margin-bottom:.25rem;
+
+    line-height:1.15;
+
+}
+
+.ingredient p{
+
+    color:#666;
+
+    font-size:.95rem;
+
+    line-height:1.7;
+
+}
+
+/* ========================= */
+/* TABLET */
+/* ========================= */
+
+@media(max-width:992px){
+
+    .ingredients{
+
+        padding:6rem 0;
+
+    }
+
+    .ingredients-container{
+
+        grid-template-columns:1fr;
+
+        gap:4rem;
+
+    }
+
+    .ingredients-image{
+
+        order:-1;
+
+    }
+
+    .ingredients-image::before{
+
+        width:420px;
+
+        height:420px;
+
+    }
+
+    .ingredients-image img{
+
+        max-width:400px;
+
+    }
+
+    .ingredients-content{
+
+        text-align:center;
+
+    }
+
+    .ingredient{
+
+        text-align:left;
+
+    }
+
+}
+
+/* ========================= */
+/* CELULAR */
+/* ========================= */
+
+@media(max-width:768px){
+
+    .ingredients{
+
+        padding:5rem 0;
+
+    }
+
+    .ingredients-container{
+
+        gap:3rem;
+
+    }
+
+    .ingredients-image::before{
+
+        width:300px;
+
+        height:300px;
+
+    }
+
+    .ingredients-image img{
+
+        max-width:280px;
+
+    }
+
+    .ingredients-content h2{
+
+        font-size:2.3rem;
+
+    }
+
+    .ingredients-description{
+
+        font-size:1rem;
+
+    }
+
+    .ingredient{
+
+        gap:1rem;
+
+        padding:1.5rem 0;
+
+    }
+
+    .ingredient-icon{
+
+        width:50px;
+
+        height:50px;
+
+        font-size:1.3rem;
+
+    }
+
+    .ingredient h3{
+
+        font-size:1.1rem;
+
+    }
+
+    .ingredient p{
+
+        font-size:.92rem;
+
+    }
+
+}

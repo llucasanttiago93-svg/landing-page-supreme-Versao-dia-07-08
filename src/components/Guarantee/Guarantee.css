@@ -1,0 +1,313 @@
+.guarantee{
+
+    padding:7rem 0;
+
+    background:#ffffff;
+
+}
+
+.guarantee .container{
+
+    width:min(1240px,92%);
+
+    margin:auto;
+
+}
+
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+.guarantee-header{
+
+    max-width:760px;
+
+    margin:0 auto 5rem;
+
+    text-align:center;
+
+}
+
+.guarantee-eyebrow{
+
+    color:#EC7404;
+
+    font-size:.85rem;
+
+    font-weight:700;
+
+    letter-spacing:.22em;
+
+    text-transform:uppercase;
+
+    margin-bottom:1rem;
+
+}
+
+.guarantee-header h2{
+
+    font-size:clamp(2.8rem,5vw,4.6rem);
+
+    line-height:1;
+
+    color:#151312;
+
+    margin-bottom:1.3rem;
+
+}
+
+.guarantee-description{
+
+    color:#666;
+
+    font-size:1.08rem;
+
+    line-height:1.8;
+
+}
+
+/* ========================= */
+/* GRID */
+/* ========================= */
+
+.guarantee-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:2rem;
+
+}
+
+/* ========================= */
+/* CARD */
+/* ========================= */
+
+.guarantee-card{
+
+    background:#ffffff;
+
+    border:1px solid #ececec;
+
+    border-radius:28px;
+
+    padding:2.5rem;
+
+    transition:.35s ease;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+.guarantee-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 22px 60px rgba(0,0,0,.08);
+
+    border-color:#EC7404;
+
+}
+
+.guarantee-icon{
+
+    width:70px;
+
+    height:70px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:50%;
+
+    background:#FFF7EF;
+
+    font-size:2rem;
+
+    margin-bottom:1.5rem;
+
+}
+
+.guarantee-card h3{
+
+    font-size:1.45rem;
+
+    color:#151312;
+
+    margin-bottom:.8rem;
+
+}
+
+.guarantee-card p{
+
+    color:#666;
+
+    font-size:1rem;
+
+    line-height:1.8;
+
+}
+
+/* ========================= */
+/* CTA */
+/* ========================= */
+
+.guarantee-cta{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-top:4rem;
+
+}
+
+.guarantee-button{
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:1rem 2.8rem;
+
+    border-radius:999px;
+
+    background:#EC7404;
+
+    color:#fff;
+
+    font-weight:700;
+
+    font-size:1rem;
+
+    transition:.35s ease;
+
+}
+
+.guarantee-button:hover{
+
+    background:#d96802;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 16px 40px rgba(236,116,4,.35);
+
+}
+
+/* ========================= */
+/* TABLET */
+/* ========================= */
+
+@media(max-width:992px){
+
+    .guarantee{
+
+        padding:6rem 0;
+
+    }
+
+    .guarantee-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+        gap:1.5rem;
+
+    }
+
+    .guarantee-card{
+
+        padding:2rem;
+
+    }
+
+}
+
+/* ========================= */
+/* CELULAR */
+/* ========================= */
+
+@media(max-width:768px){
+
+    .guarantee{
+
+        padding:5rem 0;
+
+    }
+
+    .guarantee-header{
+
+        margin-bottom:3rem;
+
+    }
+
+    .guarantee-header h2{
+
+        font-size:2.3rem;
+
+    }
+
+    .guarantee-description{
+
+        font-size:1rem;
+
+    }
+
+    .guarantee-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .guarantee-card{
+
+        align-items:center;
+
+        text-align:center;
+
+        padding:2rem 1.6rem;
+
+    }
+
+    .guarantee-icon{
+
+        width:64px;
+
+        height:64px;
+
+        font-size:1.8rem;
+
+        margin-bottom:1.2rem;
+
+    }
+
+    .guarantee-card h3{
+
+        font-size:1.25rem;
+
+    }
+
+    .guarantee-card p{
+
+        font-size:.95rem;
+
+    }
+
+    .guarantee-button{
+
+        width:100%;
+
+        max-width:360px;
+
+    }
+
+}

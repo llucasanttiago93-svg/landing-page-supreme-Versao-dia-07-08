@@ -1,0 +1,241 @@
+.footer{
+
+    padding:5rem 0 2rem;
+
+    background:#0f0f10;
+
+    color:#ffffff;
+
+}
+
+.footer .container{
+
+    width:min(1240px,92%);
+
+    margin:auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+
+}
+
+/* ========================= */
+/* LOGO */
+/* ========================= */
+
+.footer-logo{
+
+    margin-bottom:1.8rem;
+
+}
+
+.footer-logo img{
+
+    width:75px;
+
+    transition:.3s;
+
+}
+
+.footer-logo img:hover{
+
+    transform:scale(1.05);
+
+}
+
+/* ========================= */
+/* TITULO */
+/* ========================= */
+
+.footer h3{
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    margin-bottom:1rem;
+
+}
+
+.footer-description{
+
+    max-width:620px;
+
+    color:#bcbcbc;
+
+    line-height:1.8;
+
+    margin-bottom:2.8rem;
+
+}
+
+/* ========================= */
+/* REDES */
+/* ========================= */
+
+.footer-social{
+
+    display:flex;
+
+    gap:2rem;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    margin-bottom:2.5rem;
+
+}
+
+.footer-social a{
+
+    color:#ffffff;
+
+    font-weight:500;
+
+    transition:.3s;
+
+}
+
+.footer-social a:hover{
+
+    color:#EC7404;
+
+}
+
+/* ========================= */
+/* LINKS */
+/* ========================= */
+
+.footer-links{
+
+    display:flex;
+
+    gap:2rem;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    margin-bottom:3rem;
+
+}
+
+.footer-links a{
+
+    color:#9f9f9f;
+
+    font-size:.95rem;
+
+    transition:.3s;
+
+}
+
+.footer-links a:hover{
+
+    color:#EC7404;
+
+}
+
+/* ========================= */
+/* DIVISOR */
+/* ========================= */
+
+.footer-divider{
+
+    width:100%;
+
+    max-width:900px;
+
+    height:1px;
+
+    background:rgba(255,255,255,.08);
+
+    margin-bottom:2rem;
+
+}
+
+/* ========================= */
+/* COPYRIGHT */
+/* ========================= */
+
+.footer-copy{
+
+    color:#777;
+
+    font-size:.9rem;
+
+}
+
+/* ========================= */
+/* TABLET */
+/* ========================= */
+
+@media(max-width:992px){
+
+    .footer{
+
+        padding:4rem 0 2rem;
+
+    }
+
+}
+
+/* ========================= */
+/* CELULAR */
+/* ========================= */
+
+@media(max-width:768px){
+
+    .footer{
+
+        padding:4rem 0 2rem;
+
+    }
+
+    .footer h3{
+
+        font-size:1.6rem;
+
+    }
+
+    .footer-description{
+
+        font-size:.95rem;
+
+        margin-bottom:2rem;
+
+    }
+
+    .footer-social{
+
+        flex-direction:column;
+
+        gap:1rem;
+
+        margin-bottom:2rem;
+
+    }
+
+    .footer-links{
+
+        flex-direction:column;
+
+        gap:1rem;
+
+        margin-bottom:2rem;
+
+    }
+
+    .footer-copy{
+
+        font-size:.85rem;
+
+    }
+
+}

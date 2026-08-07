@@ -1,0 +1,313 @@
+.results{
+
+    padding:7rem 0;
+
+    background:#f8f8f8;
+
+}
+
+.results .container{
+
+    width:min(1240px,92%);
+
+    margin:auto;
+
+}
+
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+.results-header{
+
+    max-width:760px;
+
+    margin:0 auto 4rem;
+
+    text-align:center;
+
+}
+
+.results-eyebrow{
+
+    color:#EC7404;
+
+    font-size:.85rem;
+
+    font-weight:700;
+
+    letter-spacing:.22em;
+
+    text-transform:uppercase;
+
+    margin-bottom:1rem;
+
+}
+
+.results-header h2{
+
+    font-size:clamp(2.8rem,5vw,4.8rem);
+
+    line-height:1;
+
+    color:#151312;
+
+    margin-bottom:1.3rem;
+
+}
+
+.results-header p{
+
+    color:#666;
+
+    font-size:1.1rem;
+
+    line-height:1.7;
+
+}
+
+/* ========================= */
+/* GRID */
+/* ========================= */
+
+.results-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:2rem;
+
+}
+
+/* ========================= */
+/* CARD */
+/* ========================= */
+
+.result-card{
+
+    background:#fff;
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    box-shadow:
+
+        0 15px 40px rgba(0,0,0,.06);
+
+    transition:.35s;
+
+}
+
+.result-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+
+        0 30px 70px rgba(0,0,0,.12);
+
+}
+
+.result-card img{
+
+    width:100%;
+
+    height:340px;
+
+    object-fit:cover;
+
+    display:block;
+
+}
+
+.result-content{
+
+    padding:2rem;
+
+}
+
+.result-content span{
+
+    width:60px;
+
+    height:60px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#FFF7EF;
+
+    border-radius:50%;
+
+    color:#EC7404;
+
+    font-size:1.6rem;
+
+    margin-bottom:1.2rem;
+
+}
+
+.result-content h3{
+
+    font-size:1.5rem;
+
+    margin-bottom:.7rem;
+
+    color:#151312;
+
+}
+
+.result-content p{
+
+    color:#666;
+
+    line-height:1.7;
+
+}
+
+/* ========================= */
+/* FOOTER */
+/* ========================= */
+
+.results-footer{
+
+    margin-top:5rem;
+
+    text-align:center;
+
+}
+
+.results-footer .stars{
+
+    color:#EC7404;
+
+    font-size:2rem;
+
+    letter-spacing:.15rem;
+
+    margin-bottom:1rem;
+
+}
+
+.results-footer h3{
+
+    font-size:2rem;
+
+    color:#151312;
+
+    margin-bottom:.8rem;
+
+}
+
+.results-footer p{
+
+    color:#666;
+
+    font-size:1.05rem;
+
+}
+
+/* ========================= */
+/* TABLET */
+/* ========================= */
+
+@media(max-width:992px){
+
+    .results{
+
+        padding:6rem 0;
+
+    }
+
+    .results-grid{
+
+        gap:1.5rem;
+
+    }
+
+    .result-card img{
+
+        height:280px;
+
+    }
+
+}
+
+/* ========================= */
+/* CELULAR */
+/* ========================= */
+
+@media(max-width:768px){
+
+    .results{
+
+        padding:5rem 0;
+
+    }
+
+    .results-header{
+
+        margin-bottom:3rem;
+
+    }
+
+    .results-header h2{
+
+        font-size:2.3rem;
+
+    }
+
+    .results-header p{
+
+        font-size:1rem;
+
+    }
+
+    .results-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .result-card img{
+
+        height:260px;
+
+    }
+
+    .result-content{
+
+        padding:1.7rem;
+
+    }
+
+    .result-content h3{
+
+        font-size:1.25rem;
+
+    }
+
+    .result-content p{
+
+        font-size:.95rem;
+
+    }
+
+    .results-footer{
+
+        margin-top:4rem;
+
+    }
+
+    .results-footer h3{
+
+        font-size:1.6rem;
+
+    }
+
+}

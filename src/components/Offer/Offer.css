@@ -1,0 +1,457 @@
+.offer{
+
+    padding:7rem 0;
+
+    background:#151312;
+
+}
+
+.offer .container{
+
+    width:min(1240px,92%);
+
+    margin:auto;
+
+}
+
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+.offer-header{
+
+    max-width:760px;
+
+    margin:0 auto 5rem;
+
+    text-align:center;
+
+}
+
+.offer-eyebrow{
+
+    color:#EC7404;
+
+    font-size:.85rem;
+
+    font-weight:700;
+
+    letter-spacing:.22em;
+
+    text-transform:uppercase;
+
+    margin-bottom:1rem;
+
+}
+
+.offer-header h2{
+
+    color:#fff;
+
+    font-size:clamp(2.8rem,5vw,4.8rem);
+
+    line-height:1;
+
+    margin-bottom:1.5rem;
+
+}
+
+.offer-description{
+
+    color:#c9c9c9;
+
+    font-size:1.05rem;
+
+    line-height:1.8;
+
+}
+
+/* ========================= */
+/* GRID */
+/* ========================= */
+
+.pricing-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:2rem;
+
+    max-width:950px;
+
+    margin:auto;
+
+    align-items:stretch;
+
+}
+
+/* ========================= */
+/* CARD */
+/* ========================= */
+
+.pricing-card{
+
+    position:relative;
+
+    background:#ffffff;
+
+    border-radius:30px;
+
+    padding:2rem 2rem;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+
+    transition:.35s;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.12);
+
+}
+
+.pricing-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.featured{
+
+    border:3px solid #EC7404;
+
+    transform:scale(1.04);
+
+    box-shadow:0 30px 80px rgba(236,116,4,.25);
+
+}
+
+.featured:hover{
+
+    transform:scale(1.06);
+
+}
+
+/* ========================= */
+/* BADGE */
+/* ========================= */
+
+.badge{
+
+    position:absolute;
+
+    top:-18px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    background:#EC7404;
+
+    color:#fff;
+
+    padding:.6rem 1.4rem;
+
+    border-radius:999px;
+
+    font-size:.75rem;
+
+    font-weight:700;
+
+    letter-spacing:.08em;
+
+}
+
+/* ========================= */
+/* TITULO */
+/* ========================= */
+
+.pricing-card h3{
+
+    font-size:2rem;
+
+    color:#151312;
+
+    margin-bottom:1.5rem;
+
+}
+
+/* ========================= */
+/* IMAGEM */
+/* ========================= */
+
+.pricing-image{
+
+    width:100%;
+
+    max-width:300px;
+
+    display:block;
+
+
+    transition:.35s;
+
+}
+
+.featured-image{
+
+    max-width:370px;
+
+}
+
+.pricing-card:hover .pricing-image{
+
+    transform:scale(1.05);
+
+}
+
+/* ========================= */
+/* PREÇO */
+/* ========================= */
+
+.price{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:center;
+
+    margin-bottom:0.9rem;
+    margin-top: -1rem;
+
+}
+
+.price span{
+
+    font-size:1.4rem;
+
+    margin-top:.7rem;
+
+}
+
+.price strong{
+
+    font-size:4.5rem;
+
+    color:#EC7404;
+
+    line-height:1;
+
+}
+
+.price small{
+
+    font-size:1.4rem;
+
+    margin-top:.7rem;
+
+}
+
+/* ========================= */
+/* BENEFÍCIOS */
+/* ========================= */
+
+.pricing-card ul{
+
+    list-style:none;
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.9rem;
+
+    margin-bottom:2.2rem;
+
+}
+
+.pricing-card li{
+
+    color:#555;
+
+    font-size:1rem;
+
+}
+
+/* ========================= */
+/* BOTÃO */
+/* ========================= */
+
+.pricing-button{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:1rem;
+
+    border-radius:999px;
+
+    background:#151312;
+
+    color:#fff;
+
+    font-weight:700;
+
+    transition:.3s;
+
+}
+
+.pricing-button:hover{
+
+    background:#000;
+
+}
+
+.featured-button{
+
+    background:#EC7404;
+
+}
+
+.featured-button:hover{
+
+    background:#d86902;
+
+}
+
+/* ========================= */
+/* FOOTER */
+/* ========================= */
+
+.offer-footer{
+
+    margin-top:4rem;
+
+    display:flex;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:2rem;
+
+    color:#d6d6d6;
+
+    font-size:.95rem;
+
+}
+
+/* ========================= */
+/* TABLET */
+/* ========================= */
+
+@media(max-width:992px){
+
+    .offer{
+
+        padding:6rem 0;
+
+    }
+
+    .pricing-grid{
+
+        grid-template-columns:1fr;
+
+        max-width:520px;
+
+    }
+
+    .featured{
+
+        transform:none;
+
+    }
+
+    .featured:hover{
+
+        transform:translateY(-8px);
+
+    }
+
+}
+
+/* ========================= */
+/* CELULAR */
+/* ========================= */
+
+@media(max-width:768px){
+
+    .offer{
+
+        padding:5rem 0;
+
+    }
+
+    .offer-header{
+
+        margin-bottom:3rem;
+
+    }
+
+    .offer-header h2{
+
+        font-size:2.3rem;
+
+    }
+
+    .offer-description{
+
+        font-size:1rem;
+
+    }
+
+    .pricing-card{
+
+        padding:2rem 1.5rem;
+
+    }
+
+    .pricing-card h3{
+
+        font-size:1.6rem;
+
+    }
+
+    .pricing-image{
+
+        max-width:150px;
+
+    }
+
+    .featured-image{
+
+        max-width:210px;
+
+    }
+
+    .price strong{
+
+        font-size:3.4rem;
+
+    }
+
+    .offer-footer{
+
+        flex-direction:column;
+
+        align-items:center;
+
+        gap:1rem;
+
+        text-align:center;
+
+    }
+
+}
