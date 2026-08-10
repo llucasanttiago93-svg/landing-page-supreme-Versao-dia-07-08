@@ -87,21 +87,21 @@
 
 }
 
-.hero-rating{
+.hero-rating {
 
-    display:flex;
+    display: flex;
 
-    align-items:center;
+    align-items: center;
 
-    justify-content:center;
+    justify-content: center;
 
-    gap:.7rem;
+    gap: .7rem;
 
-    margin:0 auto 1rem;
+    margin: 0 auto 1rem;
 
-    width:fit-content;
+    width: fit-content;
 
-    font-size:.95rem;
+    font-size: .95rem;
 
 }
 
@@ -153,11 +153,11 @@
 
 }
 
-.hero-description strong{
+.hero-description strong {
 
-    color:var(--laranja);
+    color: var(--laranja);
 
-    font-weight:700;
+    font-weight: 700;
 
 }
 
@@ -237,7 +237,7 @@
 
     width: fit-content;
 
-    margin:0 auto;
+    margin: 0 auto;
 
     font-size: .95rem;
 
@@ -359,6 +359,17 @@
 
         font-size: 1rem;
         line-height: 1.7;
+
+    }
+
+    .hero-trust {
+
+        display: flex;
+
+        flex-direction: column;
+
+        flex-wrap: wrap;
+
 
     }
 

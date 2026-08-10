@@ -24,6 +24,7 @@
 
 }
 
+
 /* ========================= */
 /* LOGO */
 /* ========================= */
@@ -36,7 +37,7 @@
 
 .footer-logo img{
 
-    width:75px;
+    width:140px;
 
     transition:.3s;
 
@@ -48,19 +49,11 @@
 
 }
 
+
 /* ========================= */
 /* TITULO */
 /* ========================= */
 
-.footer h3{
-
-    font-size:2rem;
-
-    font-weight:700;
-
-    margin-bottom:1rem;
-
-}
 
 .footer-description{
 
@@ -74,39 +67,66 @@
 
 }
 
+
 /* ========================= */
 /* REDES */
 /* ========================= */
+.social-links {
 
-.footer-social{
+    display: flex;
 
-    display:flex;
+    align-items: center;
 
-    gap:2rem;
+    justify-content: center;
 
-    justify-content:center;
+    gap: 0.5rem;
 
-    flex-wrap:wrap;
-
-    margin-bottom:2.5rem;
-
-}
-
-.footer-social a{
-
-    color:#ffffff;
-
-    font-weight:500;
-
-    transition:.3s;
+    margin-bottom: 2.5rem;
 
 }
 
-.footer-social a:hover{
+.social-links a {
 
-    color:#EC7404;
+    width: 45px;
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #fff;
+
+    border: 2px solid var(--laranja);
+
+    border-radius: 50%;
+
+    transition: .3s;
 
 }
+
+.social-links a:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 6px 18px rgba(236,116,4,.2);
+
+}
+
+.social-links img {
+
+    width: 22px;
+
+    height: 22px;
+
+    object-fit: contain;
+
+    display: block;
+
+}
+
 
 /* ========================= */
 /* LINKS */
@@ -142,6 +162,7 @@
 
 }
 
+
 /* ========================= */
 /* DIVISOR */
 /* ========================= */
@@ -160,6 +181,7 @@
 
 }
 
+
 /* ========================= */
 /* COPYRIGHT */
 /* ========================= */
@@ -171,6 +193,7 @@
     font-size:.9rem;
 
 }
+
 
 /* ========================= */
 /* TABLET */
@@ -185,6 +208,7 @@
     }
 
 }
+
 
 /* ========================= */
 /* CELULAR */
@@ -212,19 +236,12 @@
 
     }
 
-    .footer-social{
-
-        flex-direction:column;
-
-        gap:1rem;
-
-        margin-bottom:2rem;
-
-    }
 
     .footer-links{
 
         flex-direction:column;
+
+        align-items:center;
 
         gap:1rem;
 

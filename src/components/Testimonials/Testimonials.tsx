@@ -1,148 +1,285 @@
+import { useRef, useState } from "react";
 import "./Testimonials.css";
 
 function Testimonials() {
-  return (
-    <section className="testimonials" id="depoimentos">
 
-      <div className="container">
+    const carouselRef = useRef<HTMLDivElement>(null);
 
-        <div className="testimonials-header">
+    const [current, setCurrent] = useState(0);
 
-          <p className="testimonials-eyebrow">
-            QUEM USA, RECOMENDA
-          </p>
+    const testimonials = [
+        {
+            image: "/images/brilho-intenso.png",
+            text: `"Meu cabelo ficou muito mais cheiroso. Todo mundo pergunta qual perfume estou usando. Simplesmente maravilhoso."`,
+            author: "Juliana M.",
+        },
+        {
+            image: "/images/espalhando-no-cabelo.png",
+            text: `"Nunca imaginei que um reparador pudesse deixar meu cabelo tão brilhante e perfumado ao mesmo tempo."`,
+            author: "Camila R.",
+        },
+        {
+            image: "/images/6 - Sentindo o Cheiro.png",
+            text: `"Virou meu finalizador favorito. O brilho é incrível e o perfume dura o dia inteiro."`,
+            author: "Fernanda S.",
+        },
+        {
+            image: "/images/frizz-controlado.png",
+            text: `"Virou meu finalizador favorito. O brilho é incrível e o perfume dura o dia inteiro."`,
+            author: "Fernanda S.",
+        },
+        {
+            image: "/images/woman-back.jpg",
+            text: `"Virou meu finalizador favorito. O brilho é incrível e o perfume dura o dia inteiro."`,
+            author: "Fernanda S.",
+        },
+    ];
 
-          <h2>
-            Apaixonadas pelo brilho.
-            <br />
-            Encantadas pela fragrância.
-          </h2>
 
-          <p className="testimonials-description">
-            Descubra por que o Queridinho Supreme se tornou o
-            finalizador favorito de milhares de mulheres.
-          </p>
+    const scrollToCard = (index: number) => {
 
-        </div>
+        const carousel = carouselRef.current;
 
-        <div className="testimonials-grid">
+        if (!carousel) return;
 
-          <article className="testimonial-card">
+        const cards =
+            carousel.querySelectorAll<HTMLElement>(".testimonial-card");
 
-            <img
-              src="/images/testimonial-1.webp"
-              alt="Cliente satisfeita"
-            />
+        const card = cards[index];
 
-            <div className="testimonial-content">
+        if (!card) return;
 
-              <div className="testimonial-stars">
-                ★★★★★
-              </div>
+        carousel.scrollTo({
+            left: card.offsetLeft,
+            behavior: "smooth",
+        });
 
-              <p className="testimonial-text">
-                "Meu cabelo ficou muito mais cheiroso.
-                Todo mundo pergunta qual perfume estou usando.
-                Simplesmente maravilhoso."
-              </p>
+    };
 
-              <div className="testimonial-author">
 
-                <strong>Juliana M.</strong>
+    const nextTestimonial = () => {
 
-                <span>Cliente Verificada</span>
+        const next =
+            current === testimonials.length - 1
+                ? 0
+                : current + 1;
 
-              </div>
+        scrollToCard(next);
+
+    };
+
+
+    const previousTestimonial = () => {
+
+        const previous =
+            current === 0
+                ? testimonials.length - 1
+                : current - 1;
+
+        scrollToCard(previous);
+
+    };
+
+
+    const handleScroll = () => {
+
+        const carousel = carouselRef.current;
+
+        if (!carousel) return;
+
+        const cards =
+            carousel.querySelectorAll<HTMLElement>(".testimonial-card");
+
+        let closestIndex = 0;
+        let closestDistance = Infinity;
+
+        cards.forEach((card, index) => {
+
+            const distance = Math.abs(
+                card.offsetLeft - carousel.scrollLeft
+            );
+
+            if (distance < closestDistance) {
+
+                closestDistance = distance;
+                closestIndex = index;
+
+            }
+
+        });
+
+        setCurrent(closestIndex);
+
+    };
+
+
+    return (
+
+        <section className="testimonials">
+
+            <div className="container">
+
+
+                {/* ========================= */}
+                {/* HEADER */}
+                {/* ========================= */}
+
+                <div className="testimonials-header">
+
+                    <p className="testimonials-eyebrow">
+                        QUEM USA, RECOMENDA
+                    </p>
+
+                    <h2>
+                        Apaixonadas pelo brilho.
+                        <br />
+                        Encantadas pela fragrância.
+                    </h2>
+
+                    <p className="testimonials-description">
+                        Descubra por que o Queridinho Supreme se tornou o
+                        finalizador favorito de milhares de mulheres.
+                    </p>
+
+                </div>
+
+
+                {/* ========================= */}
+                {/* CARROSSEL */}
+                {/* ========================= */}
+
+                <div className="testimonials-carousel">
+
+
+                    <button
+                        className="carousel-button carousel-prev"
+                        onClick={previousTestimonial}
+                        aria-label="Depoimento anterior"
+                    >
+                        ‹
+                    </button>
+
+
+                    <div
+                        className="testimonials-viewport"
+                        ref={carouselRef}
+                        onScroll={handleScroll}
+                    >
+
+                        <div className="testimonials-track">
+
+
+                            {testimonials.map((testimonial, index) => (
+
+                                <article
+                                    className="testimonial-card"
+                                    key={index}
+                                >
+
+                                    <img
+                                        src={testimonial.image}
+                                        alt="Cliente satisfeita"
+                                    />
+
+
+                                    <div className="testimonial-content">
+
+                                        <div className="testimonial-stars">
+                                            ★★★★★
+                                        </div>
+
+
+                                        <p className="testimonial-text">
+                                            {testimonial.text}
+                                        </p>
+
+
+                                        <div className="testimonial-author">
+
+                                            <strong>
+                                                {testimonial.author}
+                                            </strong>
+
+                                            <span>
+                                                Cliente Verificada
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            ))}
+
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        className="carousel-button carousel-next"
+                        onClick={nextTestimonial}
+                        aria-label="Próximo depoimento"
+                    >
+                        ›
+                    </button>
+
+                </div>
+
+
+                {/* ========================= */}
+                {/* INDICADORES */}
+                {/* ========================= */}
+
+                <div className="carousel-dots">
+
+                    {testimonials.map((_, index) => (
+
+                        <button
+                            key={index}
+                            className={
+                                current === index
+                                    ? "carousel-dot active"
+                                    : "carousel-dot"
+                            }
+                            onClick={() => scrollToCard(index)}
+                            aria-label={`Ir para depoimento ${index + 1}`}
+                        />
+
+                    ))}
+
+                </div>
+
+
+                {/* ========================= */}
+                {/* FOOTER */}
+                {/* ========================= */}
+
+                <div className="testimonials-footer">
+
+                    <div className="footer-stars">
+                        ★★★★★
+                    </div>
+
+                    <h3>
+                        Avaliação média 4,9 estrelas
+                    </h3>
+
+                    <p>
+                        Mais de milhares de clientes satisfeitas em todo o Brasil.
+                    </p>
+
+                </div>
+
 
             </div>
 
-          </article>
+        </section>
 
-          <article className="testimonial-card">
+    );
 
-            <img
-              src="/images/testimonial-2.webp"
-              alt="Cliente satisfeita"
-            />
-
-            <div className="testimonial-content">
-
-              <div className="testimonial-stars">
-                ★★★★★
-              </div>
-
-              <p className="testimonial-text">
-                "Nunca imaginei que um reparador pudesse deixar
-                meu cabelo tão brilhante e perfumado ao mesmo tempo."
-              </p>
-
-              <div className="testimonial-author">
-
-                <strong>Camila R.</strong>
-
-                <span>Cliente Verificada</span>
-
-              </div>
-
-            </div>
-
-          </article>
-
-          <article className="testimonial-card">
-
-            <img
-              src="/images/testimonial-3.webp"
-              alt="Cliente satisfeita"
-            />
-
-            <div className="testimonial-content">
-
-              <div className="testimonial-stars">
-                ★★★★★
-              </div>
-
-              <p className="testimonial-text">
-                "Virou meu finalizador favorito.
-                O brilho é incrível e o perfume dura
-                o dia inteiro."
-              </p>
-
-              <div className="testimonial-author">
-
-                <strong>Fernanda S.</strong>
-
-                <span>Cliente Verificada</span>
-
-              </div>
-
-            </div>
-
-          </article>
-
-        </div>
-
-        <div className="testimonials-footer">
-
-          <div className="footer-stars">
-
-            ★★★★★
-
-          </div>
-
-          <h3>
-            Avaliação média 4,9 estrelas
-          </h3>
-
-          <p>
-            Mais de milhares de clientes satisfeitas em todo o Brasil.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-  );
 }
 
 export default Testimonials;

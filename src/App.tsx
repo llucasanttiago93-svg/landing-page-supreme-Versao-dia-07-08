@@ -16,12 +16,12 @@ function App() {
     <>
       <Header />
       <Hero />
+      <Testimonials />
       <Solution />
       <Fragrance />
       <Ingredients />
       <Results />
       <HowTo />
-      <Testimonials />
       <Guarantee />
       <Offer />
       <Faq />
