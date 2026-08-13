@@ -254,7 +254,7 @@
 
     .solution-benefits {
 
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
 
         gap: .9rem;
 

@@ -9,32 +9,48 @@ function Testimonials() {
 
     const testimonials = [
         {
-            image: "/images/brilho-intenso.png",
-            text: `"Meu cabelo ficou muito mais cheiroso. Todo mundo pergunta qual perfume estou usando. Simplesmente maravilhoso."`,
-            author: "Juliana M.",
+            image: "/images/prova2.png",
         },
         {
-            image: "/images/espalhando-no-cabelo.png",
-            text: `"Nunca imaginei que um reparador pudesse deixar meu cabelo tão brilhante e perfumado ao mesmo tempo."`,
-            author: "Camila R.",
+            image: "/images/prova1.png",
+        },
+        
+        {
+            image: "/images/prova3.png",
         },
         {
-            image: "/images/6 - Sentindo o Cheiro.png",
-            text: `"Virou meu finalizador favorito. O brilho é incrível e o perfume dura o dia inteiro."`,
-            author: "Fernanda S.",
+            image: "/images/prova4.png",
         },
         {
-            image: "/images/frizz-controlado.png",
-            text: `"Virou meu finalizador favorito. O brilho é incrível e o perfume dura o dia inteiro."`,
-            author: "Fernanda S.",
+            image: "/images/prova5.png",
         },
         {
-            image: "/images/woman-back.jpg",
-            text: `"Virou meu finalizador favorito. O brilho é incrível e o perfume dura o dia inteiro."`,
-            author: "Fernanda S.",
+            image: "/images/prova6.png",
+        },
+        {
+            image: "/images/prova7.png",
+        },
+        {
+            image: "/images/prova8.png",
+        },
+        {
+            image: "/images/prova9.png",
+        },
+        {
+            image: "/images/prova10.png",
+        },
+        {
+            image: "/images/prova11.png",
+        },
+        {
+            image: "/images/prova12.png",
         },
     ];
 
+
+    /* ========================= */
+    /* IR PARA UM CARD */
+    /* ========================= */
 
     const scrollToCard = (index: number) => {
 
@@ -54,8 +70,14 @@ function Testimonials() {
             behavior: "smooth",
         });
 
+        setCurrent(index);
+
     };
 
+
+    /* ========================= */
+    /* PRÓXIMO */
+    /* ========================= */
 
     const nextTestimonial = () => {
 
@@ -69,6 +91,10 @@ function Testimonials() {
     };
 
 
+    /* ========================= */
+    /* ANTERIOR */
+    /* ========================= */
+
     const previousTestimonial = () => {
 
         const previous =
@@ -80,6 +106,10 @@ function Testimonials() {
 
     };
 
+
+    /* ========================= */
+    /* DETECTAR ARRASTE */
+    /* ========================= */
 
     const handleScroll = () => {
 
@@ -137,8 +167,8 @@ function Testimonials() {
                     </h2>
 
                     <p className="testimonials-description">
-                        Descubra por que o Queridinho Supreme se tornou o
-                        finalizador favorito de milhares de mulheres.
+                        Veja experiências reais de clientes que já
+                        conheceram o Queridinho Supreme.
                     </p>
 
                 </div>
@@ -151,14 +181,18 @@ function Testimonials() {
                 <div className="testimonials-carousel">
 
 
+                    {/* SETA ANTERIOR */}
+
                     <button
                         className="carousel-button carousel-prev"
                         onClick={previousTestimonial}
-                        aria-label="Depoimento anterior"
+                        aria-label="Prova social anterior"
                     >
                         ‹
                     </button>
 
+
+                    {/* ÁREA DO CARROSSEL */}
 
                     <div
                         className="testimonials-viewport"
@@ -167,7 +201,6 @@ function Testimonials() {
                     >
 
                         <div className="testimonials-track">
-
 
                             {testimonials.map((testimonial, index) => (
 
@@ -178,50 +211,24 @@ function Testimonials() {
 
                                     <img
                                         src={testimonial.image}
-                                        alt="Cliente satisfeita"
+                                        alt={`Prova social ${index + 1}`}
                                     />
-
-
-                                    <div className="testimonial-content">
-
-                                        <div className="testimonial-stars">
-                                            ★★★★★
-                                        </div>
-
-
-                                        <p className="testimonial-text">
-                                            {testimonial.text}
-                                        </p>
-
-
-                                        <div className="testimonial-author">
-
-                                            <strong>
-                                                {testimonial.author}
-                                            </strong>
-
-                                            <span>
-                                                Cliente Verificada
-                                            </span>
-
-                                        </div>
-
-                                    </div>
 
                                 </article>
 
                             ))}
-
 
                         </div>
 
                     </div>
 
 
+                    {/* SETA PRÓXIMA */}
+
                     <button
                         className="carousel-button carousel-next"
                         onClick={nextTestimonial}
-                        aria-label="Próximo depoimento"
+                        aria-label="Próxima prova social"
                     >
                         ›
                     </button>
@@ -245,7 +252,7 @@ function Testimonials() {
                                     : "carousel-dot"
                             }
                             onClick={() => scrollToCard(index)}
-                            aria-label={`Ir para depoimento ${index + 1}`}
+                            aria-label={`Ir para prova social ${index + 1}`}
                         />
 
                     ))}
@@ -264,11 +271,12 @@ function Testimonials() {
                     </div>
 
                     <h3>
-                        Avaliação média 4,9 estrelas
+                        Experiências reais de quem já usou.
                     </h3>
 
                     <p>
-                        Mais de milhares de clientes satisfeitas em todo o Brasil.
+                        Veja o que nossas clientes estão falando sobre o
+                        Queridinho Supreme.
                     </p>
 
                 </div>

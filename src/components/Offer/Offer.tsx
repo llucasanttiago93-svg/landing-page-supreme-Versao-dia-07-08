@@ -13,33 +13,51 @@ function Offer() {
           </p>
 
           <h2>
-            Leve brilho, perfume e
+            Seu cabelo merece
             <br />
-            tratamento para o seu cabelo.
+            mais.
           </h2>
 
           <p className="offer-description">
-            Escolha a opção ideal para você e descubra por que o
-            Queridinho Supreme conquistou milhares de clientes.
+            Escolha sua quantidade e leve para casa o
+            <strong> Queridinho Supreme</strong> que combina
+            tratamento, brilho e uma fragrância marcante.
           </p>
 
         </div>
 
+
         <div className="pricing-grid">
 
-          {/* CARD 1 */}
+
+          {/* ========================= */}
+          {/* 1 UNIDADE */}
+          {/* ========================= */}
 
           <article className="pricing-card">
+
+            <div className="card-label">
+              Para experimentar
+            </div>
 
             <h3>
               1 Unidade
             </h3>
 
-            <img
-              src="/images/product-front.png"
-              alt="1 Unidade Queridinho Supreme"
-              className="pricing-image"
-            />
+            <p className="card-description">
+              Perfeito para conhecer o <span>QUERIDINHO SUPREME</span>.
+            </p>
+
+            <div className="product-wrapper">
+
+              <img
+                src="/images/product-front.png"
+                alt="1 Unidade Queridinho Supreme"
+                className="pricing-image"
+              />
+
+            </div>
+
 
             <div className="price">
 
@@ -51,44 +69,86 @@ function Offer() {
 
             </div>
 
-            <ul>
 
-              <li>✔ Brilho intenso</li>
+            <ul className="pricing-benefits">
 
-              <li>✔ Fragrância Premium</li>
+              <li>
+                <span className="benefit-check">✓</span>
+                <span>Brilho intenso</span>
+              </li>
 
-              <li>✔ Controle do frizz</li>
+              <li>
+                <span className="benefit-check">✓</span>
+                <span>Fragrância Premium</span>
+              </li>
 
-              <li>✔ Toque sedoso</li>
+              <li>
+                <span className="benefit-check">✓</span>
+                <span>Controle do frizz</span>
+              </li>
+
+              <li>
+                <span className="benefit-check">✓</span>
+                <span>Toque sedoso</span>
+              </li>
 
             </ul>
+
 
             <a
               href="#"
               className="pricing-button"
             >
-              Comprar Agora
+              Comprar 1 Unidade
             </a>
+
+            <p className="card-secure">
+              🔒 Compra segura
+            </p>
 
           </article>
 
-          {/* CARD 2 */}
+
+
+          {/* ========================= */}
+          {/* 2 UNIDADES */}
+          {/* ========================= */}
 
           <article className="pricing-card featured">
 
             <div className="badge">
-              MAIS VENDIDO
+              🔥 MAIS VENDIDO
+            </div>
+
+            <div className="card-label featured-label">
+              Melhor escolha
             </div>
 
             <h3>
               2 Unidades
             </h3>
 
-            <img
-              src="/images/product-front.png"
-              alt="2 Unidades Queridinho Supreme"
-              className="pricing-image featured-image"
-            />
+            <p className="card-description">
+              Mais produto, mais economia e mais tempo de uso.
+            </p>
+
+
+            <div className="product-wrapper featured-product">
+
+              <img
+                src="/images/product-front-2un.png"
+                alt="2 Unidades Queridinho Supreme"
+                className="pricing-image featured-image"
+              />
+
+
+            </div>
+
+
+            <div className="price-old">
+              De <s>R$114,00</s>
+            </div>
+
 
             <div className="price">
 
@@ -100,38 +160,82 @@ function Offer() {
 
             </div>
 
-            <ul>
 
-              <li>✔ Melhor custo-benefício</li>
+            <div className="saving">
+              ✓ Você economiza R$17,00
+            </div>
 
-              <li>✔ Fragrância Premium</li>
 
-              <li>✔ Brilho intenso</li>
+            <ul className="pricing-benefits">
 
-              <li>✔ Controle do frizz</li>
+              <li>
+                <span className="benefit-check">✓</span>
+                <span>Melhor custo-benefício</span>
+              </li>
+
+              <li>
+                <span className="benefit-check">✓</span>
+                <span>Fragrância Premium</span>
+              </li>
+
+              <li>
+                <span className="benefit-check">✓</span>
+                <span>Brilho intenso</span>
+              </li>
+
+              <li>
+                <span className="benefit-check">✓</span>
+                <span>Controle do frizz</span>
+              </li>
 
             </ul>
+
 
             <a
               href="#"
               className="pricing-button featured-button"
             >
-              Comprar Agora
+              Quero 2 Unidades
             </a>
+
+
+            <p className="card-secure">
+              🔒 Compra segura · Pix e Cartão
+            </p>
 
           </article>
 
         </div>
 
+
+
+        {/* ========================= */}
+        {/* SEGURANÇA */}
+        {/* ========================= */}
+
         <div className="offer-footer">
 
-          <span>🔒 Compra Segura</span>
+          <div className="offer-trust-item">
+            <span className="trust-icon">🔒</span>
+            <span>Compra Segura</span>
+          </div>
 
-          <span>🚚 Envio para todo o Brasil</span>
+          <div className="offer-trust-item">
+            <span className="trust-icon">🚚</span>
+            <span>Envio para todo o Brasil</span>
+          </div>
 
-          <span>💳 Pix e Cartão</span>
+          <div className="offer-trust-item">
+            <span className="trust-icon">💳</span>
+            <span>Pix e Cartão</span>
+          </div>
 
         </div>
+
+
+        <p className="offer-bottom-text">
+          Escolha sua oferta e transforme o acabamento dos seus cabelos.
+        </p>
 
       </div>
 

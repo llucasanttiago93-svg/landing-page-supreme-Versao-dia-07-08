@@ -253,8 +253,15 @@
 
     .ingredients{
 
-        padding:6rem 0;
+        padding: 6rem 0;
+        margin-bottom: 5px;
 
+    }
+
+    .ingredients-list{
+        margin-inline: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
 
     .ingredients-container{
@@ -305,16 +312,28 @@
 
 @media(max-width:768px){
 
-    .ingredients{
+    .ingredient{
 
         padding:5rem 0;
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
 
+    }
+
+    .ingredient:nth-child(3){
+        border-bottom: 1px solid #ececec;
     }
 
     .ingredients-container{
 
         gap:3rem;
 
+    }
+
+    .ingredients-list{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
 
     .ingredients-image::before{
@@ -370,6 +389,11 @@
     .ingredient p{
 
         font-size:.92rem;
+
+    }
+       .ingredient{
+
+        text-align:center;
 
     }
 
