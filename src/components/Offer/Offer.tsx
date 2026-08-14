@@ -1,10 +1,27 @@
 import "./Offer.css";
 
-interface OfferProps {
-  onBuy: (quantity: 1 | 2) => void;
-}
+// ==========================================
+// LINKS DA LOJA ONLINE INFINITEPAY
+// ==========================================
+// Deixe vazio por enquanto.
+// Quando tivermos os links reais, basta colar aqui.
+//
+// 1 unidade → R$ 57,00
+// 2 unidades → R$ 97,00
 
-function Offer({ onBuy }: OfferProps) {
+const INFINITEPAY_LINK_1_UNIDADE = "";
+const INFINITEPAY_LINK_2_UNIDADES = "";
+
+function Offer() {
+
+  const handleBuy = (link: string) => {
+    if (!link) {
+      alert("Link de compra ainda não configurado.");
+      return;
+    }
+
+    window.location.href = link;
+  };
 
   return (
     <section className="offer" id="comprar">
@@ -103,7 +120,7 @@ function Offer({ onBuy }: OfferProps) {
             <button
               type="button"
               className="pricing-button"
-              onClick={() => onBuy(1)}
+              onClick={() => handleBuy(INFINITEPAY_LINK_1_UNIDADE)}
             >
               Comprar 1 Unidade
             </button>
@@ -199,7 +216,7 @@ function Offer({ onBuy }: OfferProps) {
             <button
               type="button"
               className="pricing-button featured-button"
-              onClick={() => onBuy(2)}
+              onClick={() => handleBuy(INFINITEPAY_LINK_2_UNIDADES)}
             >
               Quero 2 Unidades
             </button>
