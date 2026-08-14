@@ -542,6 +542,72 @@
 
 }
 
+.checkout-shipping-options {
+  margin-top: 1.5rem;
+}
+
+.checkout-shipping-options h3 {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
+}
+
+.checkout-shipping-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 1rem;
+
+  margin-bottom: 0.7rem;
+
+  border: 1px solid #ddd;
+  border-radius: 0.8rem;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  transition: 0.2s ease;
+}
+
+.checkout-shipping-option:hover {
+  border-color: #ec7404;
+}
+
+.checkout-shipping-option.selected {
+  border-color: #ec7404;
+  box-shadow: 0 0 0 2px rgba(236, 116, 4, 0.12);
+}
+
+.checkout-shipping-option div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.checkout-shipping-option span {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.checkout-shipping-option > strong {
+  white-space: nowrap;
+}
+
+.checkout-calculate:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.checkout-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 
 /* ========================= */
 /* MOBILE */
