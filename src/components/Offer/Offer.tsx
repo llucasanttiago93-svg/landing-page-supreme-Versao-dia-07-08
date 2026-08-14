@@ -1,6 +1,11 @@
 import "./Offer.css";
 
-function Offer() {
+interface OfferProps {
+  onBuy: (quantity: 1 | 2) => void;
+}
+
+function Offer({ onBuy }: OfferProps) {
+
   return (
     <section className="offer" id="comprar">
 
@@ -20,8 +25,8 @@ function Offer() {
 
           <p className="offer-description">
             Escolha sua quantidade e leve para casa o
-            <strong> Queridinho Supreme</strong> que combina
-            tratamento, brilho e uma fragrância marcante.
+            <strong> Queridinho Supreme</strong>, um reparador de pontas
+            que combina brilho, maciez e uma fragrância marcante.
           </p>
 
         </div>
@@ -51,8 +56,8 @@ function Offer() {
             <div className="product-wrapper">
 
               <img
-                src="/images/product-front.png"
-                alt="1 Unidade Queridinho Supreme"
+                src="/images/product-front.webp"
+                alt="Reparador de pontas Queridinho Supreme - 1 unidade"
                 className="pricing-image"
               />
 
@@ -79,7 +84,7 @@ function Offer() {
 
               <li>
                 <span className="benefit-check">✓</span>
-                <span>Fragrância Premium</span>
+                <span>Fragrância premium</span>
               </li>
 
               <li>
@@ -95,12 +100,13 @@ function Offer() {
             </ul>
 
 
-            <a
-              href="#"
+            <button
+              type="button"
               className="pricing-button"
+              onClick={() => onBuy(1)}
             >
               Comprar 1 Unidade
-            </a>
+            </button>
 
             <p className="card-secure">
               🔒 Compra segura
@@ -136,11 +142,10 @@ function Offer() {
             <div className="product-wrapper featured-product">
 
               <img
-                src="/images/product-front-2un.png"
-                alt="2 Unidades Queridinho Supreme"
+                src="/images/product-front-2un.webp"
+                alt="Reparador de pontas Queridinho Supreme - 2 unidades"
                 className="pricing-image featured-image"
               />
-
 
             </div>
 
@@ -175,7 +180,7 @@ function Offer() {
 
               <li>
                 <span className="benefit-check">✓</span>
-                <span>Fragrância Premium</span>
+                <span>Fragrância premium</span>
               </li>
 
               <li>
@@ -191,12 +196,13 @@ function Offer() {
             </ul>
 
 
-            <a
-              href="#"
+            <button
+              type="button"
               className="pricing-button featured-button"
+              onClick={() => onBuy(2)}
             >
               Quero 2 Unidades
-            </a>
+            </button>
 
 
             <p className="card-secure">
@@ -217,7 +223,7 @@ function Offer() {
 
           <div className="offer-trust-item">
             <span className="trust-icon">🔒</span>
-            <span>Compra Segura</span>
+            <span>Compra segura</span>
           </div>
 
           <div className="offer-trust-item">

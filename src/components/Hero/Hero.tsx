@@ -33,13 +33,13 @@ function Hero() {
                     <p className="hero-description">
 
                         Tudo isso com o <strong>Queridinho Supreme.</strong>
-                        Um reparador de pontas que proporciona brilho intenso,
+                        {" "}Um reparador de pontas que proporciona brilho intenso,
                         toque sedoso e uma fragrância maravilhosa para transformar
                         o acabamento do seu cabelo todos os dias.
 
                     </p>
 
-                    <div className="hero-benefits">
+                    <ul className="hero-benefits">
 
                         <li>
                             <span className="check">✔</span>
@@ -53,7 +53,7 @@ function Hero() {
 
                         <li>
                             <span className="check">✔</span>
-                            <span>Perfume Maravilhoso</span>
+                            <span>Perfume maravilhoso</span>
                         </li>
 
                         <li>
@@ -61,8 +61,7 @@ function Hero() {
                             <span>Toque sedoso</span>
                         </li>
 
-
-                    </div>
+                    </ul>
 
                     <a
                         href="#comprar"
@@ -87,7 +86,7 @@ function Hero() {
 
                     <img
                         src="/images/hero-application.webp"
-                        alt="Queridinho Supreme"
+                        alt="Queridinho Supreme, reparador de pontas da Vanti Cosméticos"
                     />
 
                 </div>

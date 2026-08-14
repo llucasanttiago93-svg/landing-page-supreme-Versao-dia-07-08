@@ -33,11 +33,12 @@ function Guarantee() {
             </div>
 
             <h3>
-              Compra Segura
+              Compra segura
             </h3>
 
             <p>
-              Pagamentos protegidos com criptografia e total segurança.
+              Pagamento realizado de forma segura por meio do checkout
+              da InfinitePay.
             </p>
 
           </article>
@@ -49,11 +50,12 @@ function Guarantee() {
             </div>
 
             <h3>
-              Envio Rápido
+              Envio para todo o Brasil
             </h3>
 
             <p>
-              Enviamos para todo o Brasil com rastreamento.
+              Enviamos seu pedido para todo o Brasil com acompanhamento
+              da entrega.
             </p>
 
           </article>
@@ -65,11 +67,11 @@ function Guarantee() {
             </div>
 
             <h3>
-              Pix e Cartão
+              Pix e cartão
             </h3>
 
             <p>
-              Escolha a forma de pagamento que preferir.
+              Escolha a forma de pagamento disponível no checkout.
             </p>
 
           </article>
@@ -81,7 +83,7 @@ function Guarantee() {
             </div>
 
             <h3>
-              Produto Original
+              Produto original
             </h3>
 
             <p>

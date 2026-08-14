@@ -21,7 +21,7 @@ function HowTo() {
           <p className="howto-description">
             Transforme o acabamento dos seus cabelos em poucos
             instantes e aproveite brilho, maciez e uma fragrância
-            sofisticada todos os dias.
+            sofisticada no dia a dia.
           </p>
 
         </div>
@@ -37,15 +37,17 @@ function HowTo() {
             <div className="step-image">
 
               <img
-                src="/images/aplicando-na-mao.png"
-                alt="Aplicando o produto na mão"
+                src="/images/aplicando-na-mao.webp"
+                alt="Aplicando o Queridinho Supreme na palma das mãos"
               />
 
             </div>
 
             <div className="step-content">
 
-              <h3>Aplique</h3>
+              <h3>
+                Aplique
+              </h3>
 
               <p>
                 Coloque 1 ou 2 pumps do Queridinho Supreme na palma
@@ -67,15 +69,17 @@ function HowTo() {
             <div className="step-image">
 
               <img
-                src="/images/espalhando-no-cabelo.png"
-                alt="Aplicando nos cabelos"
+                src="/images/espalhando-no-cabelo.webp"
+                alt="Aplicando o Queridinho Supreme no comprimento e nas pontas dos cabelos"
               />
 
             </div>
 
             <div className="step-content">
 
-              <h3>Espalhe</h3>
+              <h3>
+                Espalhe
+              </h3>
 
               <p>
                 Distribua suavemente no comprimento e nas pontas,
@@ -97,19 +101,21 @@ function HowTo() {
             <div className="step-image">
 
               <img
-                src="/images/finalizando.png"
-                alt="Resultado final"
+                src="/images/finalizando.webp"
+                alt="Cabelos finalizados com o Queridinho Supreme"
               />
 
             </div>
 
             <div className="step-content">
 
-              <h3>Finalize</h3>
+              <h3>
+                Finalize
+              </h3>
 
               <p>
                 Aproveite cabelos mais brilhantes, sedosos e com uma
-                fragrância marcante durante horas.
+                fragrância marcante.
               </p>
 
             </div>

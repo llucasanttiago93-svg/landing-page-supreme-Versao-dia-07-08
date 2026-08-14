@@ -28,12 +28,13 @@ function Faq() {
           <details>
 
             <summary>
-              O produto pesa os fios?
+              O Queridinho Supreme pesa os fios?
             </summary>
 
             <p>
-              Não. Sua fórmula possui toque leve e deixa
-              os cabelos macios e alinhados sem aspecto oleoso.
+              Não. O Queridinho Supreme possui uma textura leve e foi
+              desenvolvido para deixar os cabelos macios e alinhados
+              sem sensação pesada.
             </p>
 
           </details>
@@ -41,12 +42,13 @@ function Faq() {
           <details>
 
             <summary>
-              Posso usar todos os dias?
+              Posso usar o Queridinho Supreme todos os dias?
             </summary>
 
             <p>
-              Sim. O produto pode ser utilizado diariamente
-              em cabelos secos ou úmidos.
+              Sim. Ele pode ser utilizado diariamente em cabelos
+              secos ou úmidos, aplicando uma pequena quantidade
+              no comprimento e nas pontas.
             </p>
 
           </details>
@@ -54,12 +56,12 @@ function Faq() {
           <details>
 
             <summary>
-              Serve para qualquer tipo de cabelo?
+              O Queridinho Supreme serve para qualquer tipo de cabelo?
             </summary>
 
             <p>
-              Sim. É indicado para cabelos lisos,
-              ondulados, cacheados e crespos.
+              Sim. O produto pode ser utilizado em diferentes tipos
+              de cabelo, incluindo lisos, ondulados, cacheados e crespos.
             </p>
 
           </details>
@@ -71,8 +73,8 @@ function Faq() {
             </summary>
 
             <p>
-              A fragrância permanece nos fios por horas,
-              variando conforme a rotina e o tipo de cabelo.
+              A duração da fragrância pode variar de acordo com o
+              tipo de cabelo, quantidade aplicada e rotina de cada pessoa.
             </p>
 
           </details>
@@ -84,8 +86,9 @@ function Faq() {
             </summary>
 
             <p>
-              Enviamos para todo o Brasil com rastreamento
-              após a confirmação do pagamento.
+              Enviamos para todo o Brasil. Após a confirmação do pagamento,
+              o pedido é preparado para envio e você poderá acompanhar
+              a entrega conforme a modalidade disponível.
             </p>
 
           </details>

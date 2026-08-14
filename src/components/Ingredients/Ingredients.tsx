@@ -9,8 +9,8 @@ function Ingredients() {
         <div className="ingredients-image">
 
           <img
-            src="/images/product-angle.png"
-            alt="Queridinho Supreme"
+            src="/images/product-angle.webp"
+            alt="Frasco do Queridinho Supreme, reparador de pontas da Vanti Cosméticos"
           />
 
         </div>
@@ -18,7 +18,7 @@ function Ingredients() {
         <div className="ingredients-content">
 
           <p className="ingredients-eyebrow">
-            COMO FUNCIONA
+            INGREDIENTES
           </p>
 
           <h2>
@@ -26,10 +26,9 @@ function Ingredients() {
           </h2>
 
           <p className="ingredients-description">
-            Uma combinação de óleos vegetais nutritivos 
-            e uma fragrância premium para deixar seus 
-            cabelos macios, brilhantes, protegidos e 
-            perfumados durante todo o dia.
+            Uma combinação de óleos vegetais nutritivos e uma fragrância
+            premium para deixar os cabelos macios, brilhantes, alinhados
+            e perfumados.
           </p>
 
           <div className="ingredients-list">
@@ -42,10 +41,12 @@ function Ingredients() {
 
               <div>
 
-                <h3>Óleo de Jojoba</h3>
+                <h3>
+                  Óleo de Jojoba
+                </h3>
 
                 <p>
-                  Nutre profundamente sem deixar os fios pesados.
+                  Ajuda a nutrir os fios sem deixar o cabelo pesado.
                 </p>
 
               </div>
@@ -60,10 +61,12 @@ function Ingredients() {
 
               <div>
 
-                <h3>Óleo de Buriti</h3>
+                <h3>
+                  Óleo de Buriti
+                </h3>
 
                 <p>
-                  Intensifica o brilho natural e protege os cabelos.
+                  Ajuda a proporcionar brilho e um acabamento luminoso aos fios.
                 </p>
 
               </div>
@@ -78,10 +81,12 @@ function Ingredients() {
 
               <div>
 
-                <h3>Óleo de Patauá</h3>
+                <h3>
+                  Óleo de Patauá
+                </h3>
 
                 <p>
-                  Reduz o frizz e proporciona toque extremamente sedoso.
+                  Contribui para fios mais macios, alinhados e com menos frizz.
                 </p>
 
               </div>
@@ -96,7 +101,9 @@ function Ingredients() {
 
               <div>
 
-                <h3>Fragrância Premium</h3>
+                <h3>
+                  Fragrância Premium
+                </h3>
 
                 <p>
                   Perfuma os cabelos com uma fragrância sofisticada e de longa duração.

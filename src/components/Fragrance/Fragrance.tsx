@@ -6,7 +6,7 @@ function Fragrance() {
       className="fragrance"
       id="fragrancia"
       style={{
-        backgroundImage: "url('/images/fragrance-bg.png')",
+        backgroundImage: "url('/images/fragrance-bg.webp')",
       }}
     >
       <div className="fragrance-overlay">
@@ -14,8 +14,6 @@ function Fragrance() {
         <div className="container">
 
           <div className="fragrance-content">
-
-
 
             <h2>
               Não é apenas um reparador.
@@ -26,8 +24,9 @@ function Fragrance() {
             </h3>
 
             <p className="fragrance-description">
-              Brilho, maciez e um perfume sofisticado que acompanha você durante 
-              todo o dia. Cada movimento dos fios revela uma experiência elegante e marcante.
+              Brilho, maciez e uma fragrância sofisticada que acompanha você
+              durante o dia. Cada movimento dos fios revela uma experiência
+              elegante e marcante.
             </p>
 
           </div>
@@ -40,10 +39,13 @@ function Fragrance() {
                 ✨
               </div>
 
-              <h4>Fragrância Sofisticada</h4>
+              <h4>
+                Fragrância sofisticada
+              </h4>
 
               <p>
-                Aroma elegante e marcante que acompanha você durante todo o dia.
+                Aroma elegante e marcante que deixa os cabelos
+                perfumados ao longo do dia.
               </p>
 
             </div>
@@ -54,10 +56,13 @@ function Fragrance() {
                 🌸
               </div>
 
-              <h4>Perfume Premium</h4>
+              <h4>
+                Perfume premium
+              </h4>
 
               <p>
-                Uma fragrância floral, quente e envolvente para cabelos inesquecíveis.
+                Uma fragrância floral, quente e envolvente para
+                cabelos marcantes e inesquecíveis.
               </p>
 
             </div>
@@ -68,7 +73,9 @@ function Fragrance() {
                 ⏳
               </div>
 
-              <h4>Longa duração</h4>
+              <h4>
+                Longa duração
+              </h4>
 
               <p>
                 Sensação de cabelo recém-perfumado por muito mais tempo.

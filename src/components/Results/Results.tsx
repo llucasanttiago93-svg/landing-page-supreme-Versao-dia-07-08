@@ -19,8 +19,8 @@ function Results() {
           </h2>
 
           <p>
-            Desde a primeira aplicação você percebe fios mais
-            brilhantes, macios e perfumados.
+            Desde a primeira aplicação, você percebe fios mais
+            brilhantes, macios, alinhados e perfumados.
           </p>
 
         </div>
@@ -30,18 +30,20 @@ function Results() {
           <div className="result-card">
 
             <img
-              src="/images/brilho-intenso.png"
-              alt=""
+              src="/images/brilho-intenso.webp"
+              alt="Cabelos com brilho intenso após o uso do Queridinho Supreme"
             />
 
             <div className="result-content">
 
               <span>✨</span>
 
-              <h3>Brilho intenso</h3>
+              <h3>
+                Brilho intenso
+              </h3>
 
               <p>
-                Aspecto saudável e luminoso logo nas primeiras aplicações.
+                Aspecto luminoso e acabamento sofisticado para os fios.
               </p>
 
             </div>
@@ -51,18 +53,20 @@ function Results() {
           <div className="result-card">
 
             <img
-              src="/images/perfume-marcante.png"
-              alt=""
+              src="/images/perfume-marcante.webp"
+              alt="Cabelos perfumados com a fragrância do Queridinho Supreme"
             />
 
             <div className="result-content">
 
               <span>🌸</span>
 
-              <h3>Perfume marcante</h3>
+              <h3>
+                Perfume marcante
+              </h3>
 
               <p>
-                Um aroma sofisticado que permanece por muito mais tempo.
+                Uma fragrância sofisticada que acompanha os cabelos por mais tempo.
               </p>
 
             </div>
@@ -72,18 +76,20 @@ function Results() {
           <div className="result-card">
 
             <img
-              src="/images/maciez-absoluta.png"
-              alt=""
+              src="/images/maciez-absoluta.webp"
+              alt="Cabelos macios e sedosos após o uso do Queridinho Supreme"
             />
 
             <div className="result-content">
 
               <span>💎</span>
 
-              <h3>Maciez absoluta</h3>
+              <h3>
+                Maciez e sedosidade
+              </h3>
 
               <p>
-                Toque sedoso sem deixar os fios pesados.
+                Toque sedoso e confortável sem deixar os fios pesados.
               </p>
 
             </div>
@@ -93,18 +99,20 @@ function Results() {
           <div className="result-card">
 
             <img
-              src="/images/frizz-controlado.png"
-              alt=""
+              src="/images/frizz-controlado.webp"
+              alt="Cabelos alinhados e com frizz controlado após o uso do Queridinho Supreme"
             />
 
             <div className="result-content">
 
               <span>✔</span>
 
-              <h3>Frizz controlado</h3>
+              <h3>
+                Frizz controlado
+              </h3>
 
               <p>
-                Fios alinhados e aparência muito mais bonita.
+                Fios mais alinhados e com aparência mais bonita.
               </p>
 
             </div>
@@ -116,9 +124,7 @@ function Results() {
         <div className="results-footer">
 
           <div className="stars">
-
             ★★★★★
-
           </div>
 
           <h3>

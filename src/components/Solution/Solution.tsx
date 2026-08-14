@@ -9,14 +9,13 @@ function Solution() {
         <div className="solution-image">
 
           <img
-            src="/images/model-fragrance.png"
-            alt="Aplicação do Queridinho Supreme"
+            src="/images/model-fragrance.webp"
+            alt="Mulher aplicando o Queridinho Supreme nos cabelos"
           />
 
         </div>
 
         <div className="solution-content">
-
 
           <h2>
             O perfume que permanece
@@ -26,7 +25,7 @@ function Solution() {
           <p className="solution-description">
 
             O Queridinho Supreme combina óleos nutritivos com uma
-            fragrância incrível para deixar seus cabelos
+            fragrância sofisticada para deixar seus cabelos
             brilhantes, sedosos e perfumados por muito mais tempo.
 
           </p>
@@ -40,7 +39,7 @@ function Solution() {
 
             <div className="solution-item">
               <span>✓</span>
-              <p>Longa duração</p>
+              <p>Fragrância de longa duração</p>
             </div>
 
             <div className="solution-item">

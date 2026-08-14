@@ -9,41 +9,40 @@ function Testimonials() {
 
     const testimonials = [
         {
-            image: "/images/prova2.png",
+            image: "/images/prova2.webp",
         },
         {
-            image: "/images/prova1.png",
-        },
-        
-        {
-            image: "/images/prova3.png",
+            image: "/images/prova1.webp",
         },
         {
-            image: "/images/prova4.png",
+            image: "/images/prova3.webp",
         },
         {
-            image: "/images/prova5.png",
+            image: "/images/prova4.webp",
         },
         {
-            image: "/images/prova6.png",
+            image: "/images/prova5.webp",
         },
         {
-            image: "/images/prova7.png",
+            image: "/images/prova6.webp",
         },
         {
-            image: "/images/prova8.png",
+            image: "/images/prova7.webp",
         },
         {
-            image: "/images/prova9.png",
+            image: "/images/prova8.webp",
         },
         {
-            image: "/images/prova10.png",
+            image: "/images/prova9.webp",
         },
         {
-            image: "/images/prova11.png",
+            image: "/images/prova10.webp",
         },
         {
-            image: "/images/prova12.png",
+            image: "/images/prova11.webp",
+        },
+        {
+            image: "/images/prova12.webp",
         },
     ];
 
@@ -211,7 +210,7 @@ function Testimonials() {
 
                                     <img
                                         src={testimonial.image}
-                                        alt={`Prova social ${index + 1}`}
+                                        alt={`Experiência de cliente com o Queridinho Supreme - prova social ${index + 1}`}
                                     />
 
                                 </article>
