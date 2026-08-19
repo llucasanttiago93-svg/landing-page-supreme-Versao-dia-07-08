@@ -26,7 +26,7 @@ function Header() {
             onClick={closeMenu}
           >
             <img
-              src="/images/logo.webp"
+              src={`${import.meta.env.BASE_URL}images/logo.webp`}
               alt="Vanti Cosméticos"
             />
           </a>

@@ -9,40 +9,40 @@ function Testimonials() {
 
     const testimonials = [
         {
-            image: "/images/prova2.webp",
+            image: `${import.meta.env.BASE_URL}images/prova2.webp`,
         },
         {
-            image: "/images/prova1.webp",
+            image: `${import.meta.env.BASE_URL}images/prova1.webp`,
         },
         {
-            image: "/images/prova3.webp",
+            image: `${import.meta.env.BASE_URL}images/prova3.webp`,
         },
         {
-            image: "/images/prova4.webp",
+            image: `${import.meta.env.BASE_URL}images/prova4.webp`,
         },
         {
-            image: "/images/prova5.webp",
+            image: `${import.meta.env.BASE_URL}images/prova5.webp`,
         },
         {
-            image: "/images/prova6.webp",
+            image: `${import.meta.env.BASE_URL}images/prova6.webp`,
         },
         {
-            image: "/images/prova7.webp",
+            image: `${import.meta.env.BASE_URL}images/prova7.webp`,
         },
         {
-            image: "/images/prova8.webp",
+            image: `${import.meta.env.BASE_URL}images/prova8.webp`,
         },
         {
-            image: "/images/prova9.webp",
+            image: `${import.meta.env.BASE_URL}images/prova9.webp`,
         },
         {
-            image: "/images/prova10.webp",
+            image: `${import.meta.env.BASE_URL}images/prova10.webp`,
         },
         {
-            image: "/images/prova11.webp",
+            image: `${import.meta.env.BASE_URL}images/prova11.webp`,
         },
         {
-            image: "/images/prova12.webp",
+            image: `${import.meta.env.BASE_URL}images/prova12.webp`,
         },
     ];
 

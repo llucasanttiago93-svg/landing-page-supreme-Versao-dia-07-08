@@ -78,7 +78,7 @@ function Offer() {
               <div className="product-wrapper">
 
                 <img
-                  src="/images/product-front.webp"
+                  src={`${import.meta.env.BASE_URL}images/product-front.webp`}
                   alt="Reparador de pontas Queridinho Supreme - 1 unidade"
                   className="pricing-image"
                 />
@@ -165,7 +165,7 @@ function Offer() {
               <div className="product-wrapper featured-product">
 
                 <img
-                  src="/images/product-front-2un.webp"
+                  src={`${import.meta.env.BASE_URL}images/product-front-2un.webp`}
                   alt="Reparador de pontas Queridinho Supreme - 2 unidades"
                   className="pricing-image featured-image"
                 />

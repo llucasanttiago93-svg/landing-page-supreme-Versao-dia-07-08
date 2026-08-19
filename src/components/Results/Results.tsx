@@ -30,7 +30,7 @@ function Results() {
           <div className="result-card">
 
             <img
-              src="/images/brilho-intenso.webp"
+              src={`${import.meta.env.BASE_URL}images/brilho-intenso.webp`}
               alt="Cabelos com brilho intenso após o uso do Queridinho Supreme"
             />
 
@@ -53,7 +53,7 @@ function Results() {
           <div className="result-card">
 
             <img
-              src="/images/perfume-marcante.webp"
+              src={`${import.meta.env.BASE_URL}images/perfume-marcante.webp`}
               alt="Cabelos perfumados com a fragrância do Queridinho Supreme"
             />
 
@@ -76,7 +76,7 @@ function Results() {
           <div className="result-card">
 
             <img
-              src="/images/maciez-absoluta.webp"
+              src={`${import.meta.env.BASE_URL}images/maciez-absoluta.webp`}
               alt="Cabelos macios e sedosos após o uso do Queridinho Supreme"
             />
 
@@ -99,7 +99,7 @@ function Results() {
           <div className="result-card">
 
             <img
-              src="/images/frizz-controlado.webp"
+              src={`${import.meta.env.BASE_URL}images/frizz-controlado.webp`}
               alt="Cabelos alinhados e com frizz controlado após o uso do Queridinho Supreme"
             />
 

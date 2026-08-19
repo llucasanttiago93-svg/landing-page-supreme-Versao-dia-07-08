@@ -37,7 +37,7 @@ function HowTo() {
             <div className="step-image">
 
               <img
-                src="/images/aplicando-na-mao.webp"
+                src={`${import.meta.env.BASE_URL}images/aplicando-na-mao.webp`}
                 alt="Aplicando o Queridinho Supreme na palma das mãos"
               />
 
@@ -69,7 +69,7 @@ function HowTo() {
             <div className="step-image">
 
               <img
-                src="/images/espalhando-no-cabelo.webp"
+                src={`${import.meta.env.BASE_URL}images/espalhando-no-cabelo.webp`}
                 alt="Aplicando o Queridinho Supreme no comprimento e nas pontas dos cabelos"
               />
 
@@ -101,7 +101,7 @@ function HowTo() {
             <div className="step-image">
 
               <img
-                src="/images/finalizando.webp"
+                src={`${import.meta.env.BASE_URL}images/finalizando.webp`}
                 alt="Cabelos finalizados com o Queridinho Supreme"
               />
 

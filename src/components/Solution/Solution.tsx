@@ -9,7 +9,7 @@ function Solution() {
         <div className="solution-image">
 
           <img
-            src="/images/model-fragrance.webp"
+            src={`${import.meta.env.BASE_URL}images/model-fragrance.webp`}
             alt="Mulher aplicando o Queridinho Supreme nos cabelos"
           />
 

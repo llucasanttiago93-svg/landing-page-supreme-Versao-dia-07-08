@@ -9,7 +9,7 @@ function Ingredients() {
         <div className="ingredients-image">
 
           <img
-            src="/images/product-angle.webp"
+            src={`${import.meta.env.BASE_URL}images/product-angle.webp`}
             alt="Frasco do Queridinho Supreme, reparador de pontas da Vanti Cosméticos"
           />
 

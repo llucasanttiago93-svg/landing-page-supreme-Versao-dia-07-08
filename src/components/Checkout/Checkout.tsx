@@ -164,7 +164,7 @@ function Checkout({
 
     try {
       const response = await fetch(
-        "/api/frete",
+        "https://api.vanticompany.com.br/api/frete",
         {
           method: "POST",
 
@@ -184,7 +184,7 @@ function Checkout({
       if (!response.ok) {
         throw new Error(
           data?.error ||
-            "Não foi possível calcular o frete."
+          "Não foi possível calcular o frete."
         );
       }
 
@@ -333,7 +333,7 @@ function Checkout({
 
     try {
       const response = await fetch(
-        "/api/pagamento",
+        "https://api.vanticompany.com.br/api/pagamento",
         {
           method: "POST",
 
@@ -391,7 +391,7 @@ function Checkout({
       ) {
         throw new Error(
           data?.error ||
-            "Não foi possível criar o checkout."
+          "Não foi possível criar o checkout."
         );
       }
 
@@ -483,8 +483,8 @@ function Checkout({
           <img
             src={
               quantity === 1
-                ? "/images/product-front.webp"
-                : "/images/product-front-2un.webp"
+                ? `${import.meta.env.BASE_URL}images/product-front.webp`
+                : `${import.meta.env.BASE_URL}images/product-front-2un.webp`
             }
             alt={productLabel}
           />
@@ -596,11 +596,10 @@ function Checkout({
                   key={option.id}
                   type="button"
                   className={
-                    `checkout-shipping-option ${
-                      selectedShipping?.id ===
+                    `checkout-shipping-option ${selectedShipping?.id ===
                       option.id
-                        ? "selected"
-                        : ""
+                      ? "selected"
+                      : ""
                     }`
                   }
                   onClick={() =>
@@ -925,8 +924,8 @@ function Checkout({
 
               {selectedShipping
                 ? `R$ ${shippingPrice
-                    .toFixed(2)
-                    .replace(".", ",")}`
+                  .toFixed(2)
+                  .replace(".", ",")}`
                 : "—"}
 
             </strong>
@@ -976,8 +975,8 @@ function Checkout({
 
               {selectedShipping
                 ? `R$ ${shippingPrice
-                    .toFixed(2)
-                    .replace(".", ",")}`
+                  .toFixed(2)
+                  .replace(".", ",")}`
                 : "—"}
 
             </strong>
@@ -1017,8 +1016,8 @@ function Checkout({
           {!selectedShipping
             ? "Selecione o frete para continuar"
             : !customerDataValid
-            ? "Preencha seus dados para continuar"
-            : "Continuar para pagamento"}
+              ? "Preencha seus dados para continuar"
+              : "Continuar para pagamento"}
 
         </button>
 

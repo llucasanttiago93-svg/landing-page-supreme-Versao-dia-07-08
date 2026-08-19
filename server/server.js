@@ -5,6 +5,10 @@ import {
   PORT,
 } from "./config/config.js";
 
+import {
+  testarBanco,
+} from "./config/database.js";
+
 import apiRoutes from "./routes/api.routes.js";
 
 import melhorEnvioRoutes from "./routes/melhorEnvio.routes.js";
@@ -23,22 +27,9 @@ const app = express();
    PORTA
 ===================================================== */
 
-/*
- * Na Hostinger, a porta é fornecida pela variável
- * de ambiente PORT.
- *
- * Quando estivermos rodando localmente, usamos
- * a porta definida no config.js como fallback.
- */
-
 const SERVER_PORT =
   Number(process.env.PORT) || PORT;
 
-
-/*
- * Escutar em 0.0.0.0 permite que a aplicação
- * receba conexões externas quando estiver hospedada.
- */
 
 const SERVER_HOST =
   "0.0.0.0";
@@ -91,32 +82,83 @@ app.use(
    INICIAR SERVIDOR
 ===================================================== */
 
-app.listen(
-  SERVER_PORT,
-  SERVER_HOST,
-  () => {
+async function iniciarServidor() {
 
-    console.log("");
+  /* ===================================================
+     TESTAR MYSQL
+  =================================================== */
 
-    console.log(
+  try {
+
+    await testarBanco();
+
+  } catch (error) {
+
+    console.error(
       "================================="
     );
 
-    console.log(
-      "🚀 BACKEND VANTI ONLINE"
+    console.error(
+      "❌ ERRO AO CONECTAR AO MYSQL"
     );
 
-    console.log(
-      `Porta: ${SERVER_PORT}`
-    );
-
-    console.log(
-      `Host: ${SERVER_HOST}`
-    );
-
-    console.log(
+    console.error(
       "================================="
     );
+
+    console.error(
+      error.message
+    );
+
+    console.error(
+      "================================="
+    );
+
+    /*
+     * Não iniciamos o servidor se o banco
+     * não estiver disponível.
+     */
+
+    process.exit(1);
 
   }
-);
+
+
+  /* ===================================================
+     INICIAR EXPRESS
+  =================================================== */
+
+  app.listen(
+    SERVER_PORT,
+    SERVER_HOST,
+    () => {
+
+      console.log("");
+
+      console.log(
+        "================================="
+      );
+
+      console.log(
+        "🚀 BACKEND VANTI ONLINE"
+      );
+
+      console.log(
+        `Porta: ${SERVER_PORT}`
+      );
+
+      console.log(
+        `Host: ${SERVER_HOST}`
+      );
+
+      console.log(
+        "================================="
+      );
+
+    }
+  );
+
+}
+
+
+iniciarServidor();

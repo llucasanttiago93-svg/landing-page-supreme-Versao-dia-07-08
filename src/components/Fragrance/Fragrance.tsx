@@ -6,7 +6,7 @@ function Fragrance() {
       className="fragrance"
       id="fragrancia"
       style={{
-        backgroundImage: "url('/images/fragrance-bg.webp')",
+        backgroundImage: `url(${import.meta.env.BASE_URL}images/fragrance-bg.webp)`,
       }}
     >
       <div className="fragrance-overlay">

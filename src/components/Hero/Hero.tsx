@@ -85,7 +85,7 @@ function Hero() {
                 <div className="hero-right">
 
                     <img
-                        src="/images/hero-application.webp"
+                        src={`${import.meta.env.BASE_URL}images/hero-application.webp`}
                         alt="Queridinho Supreme, reparador de pontas da Vanti Cosméticos"
                     />
 

@@ -14,7 +14,7 @@ function Footer() {
             aria-label="Voltar ao início - Vanti Cosméticos"
           >
             <img
-              src="/images/logo-branco.webp"
+              src={`${import.meta.env.BASE_URL}images/logo-branco.webp`}
               alt="Vanti Cosméticos"
             />
           </a>
@@ -41,7 +41,7 @@ function Footer() {
             title="Instagram"
           >
             <img
-              src="/images/3.webp"
+              src={`${import.meta.env.BASE_URL}images/3.webp`}
               alt="Instagram"
             />
           </a>
@@ -55,7 +55,7 @@ function Footer() {
             title="WhatsApp"
           >
             <img
-              src="/images/2.webp"
+              src={`${import.meta.env.BASE_URL}images/2.webp`}
               alt="WhatsApp"
             />
           </a>
@@ -69,7 +69,7 @@ function Footer() {
             title="Mercado Livre"
           >
             <img
-              src="/images/1.webp"
+              src={`${import.meta.env.BASE_URL}images/1.webp`}
               alt="Mercado Livre"
             />
           </a>
