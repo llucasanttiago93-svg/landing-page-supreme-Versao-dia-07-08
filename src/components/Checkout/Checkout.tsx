@@ -1,6 +1,19 @@
 import { useEffect, useState } from "react";
 import "./Checkout.css";
 
+/*
+ * =====================================================
+ * MODO DE TESTE TEMPORÁRIO
+ * =====================================================
+ *
+ * ATENÇÃO:
+ * Deixe TRUE somente enquanto estivermos fazendo
+ * o teste de pagamento de R$ 1,00.
+ *
+ * Depois do teste, volte para FALSE.
+ */
+const TEST_PAYMENT_MODE = true;
+
 interface CheckoutProps {
   isOpen: boolean;
   quantity: 1 | 2;
@@ -31,7 +44,12 @@ function Checkout({
      PRODUTO
   ===================================================== */
 
-  const price = quantity === 1 ? 57 : 97;
+  const price =
+    TEST_PAYMENT_MODE
+      ? 1
+      : quantity === 1
+        ? 57
+        : 97;
 
   const productLabel =
     quantity === 1
@@ -246,9 +264,11 @@ function Checkout({
   ===================================================== */
 
   const shippingPrice =
-    selectedShipping
-      ? selectedShipping.custom_price
-      : 0;
+    TEST_PAYMENT_MODE
+      ? 0
+      : selectedShipping
+        ? selectedShipping.custom_price
+        : 0;
 
 
   /* =====================================================
@@ -934,9 +954,11 @@ function Checkout({
 
           <p>
 
-            {selectedShipping
-              ? selectedShipping.name
-              : "Digite seu CEP para consultar as opções de envio."}
+            {TEST_PAYMENT_MODE
+              ? "Frete zerado temporariamente para teste."
+              : selectedShipping
+                ? selectedShipping.name
+                : "Digite seu CEP para consultar as opções de envio."}
 
           </p>
 

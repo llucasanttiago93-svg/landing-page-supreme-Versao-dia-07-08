@@ -15,6 +15,8 @@ import melhorEnvioRoutes from "./routes/melhorEnvio.routes.js";
 
 import infinitePayRoutes from "./routes/infinitePay.routes.js";
 
+import blingRoutes from "./routes/bling.routes.js";
+
 
 /* =====================================================
    CONFIGURAÇÃO DO SERVIDOR
@@ -65,6 +67,16 @@ app.use(
 app.use(
   "/melhor-envio",
   melhorEnvioRoutes
+);
+
+
+/* =====================================================
+   ROTAS DO BLING
+===================================================== */
+
+app.use(
+  "/bling",
+  blingRoutes
 );
 
 

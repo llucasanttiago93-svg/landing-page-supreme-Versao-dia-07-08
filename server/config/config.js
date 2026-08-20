@@ -31,6 +31,16 @@ console.log(
 );
 
 console.log(
+  "BLING_CLIENT_ID:",
+  process.env.BLING_CLIENT_ID
+);
+
+console.log(
+  "BLING_REDIRECT_URI:",
+  process.env.BLING_REDIRECT_URI
+);
+
+console.log(
   "================================="
 );
 
@@ -96,6 +106,22 @@ const INFINITEPAY_WEBHOOK_URL =
 
 
 /* =====================================================
+   BLING
+===================================================== */
+
+const BLING_CLIENT_ID =
+  process.env.BLING_CLIENT_ID;
+
+
+const BLING_CLIENT_SECRET =
+  process.env.BLING_CLIENT_SECRET;
+
+
+const BLING_REDIRECT_URI =
+  process.env.BLING_REDIRECT_URI;
+
+
+/* =====================================================
    EXPORTAÇÕES
 ===================================================== */
 
@@ -120,5 +146,11 @@ export {
   PAYMENT_SUCCESS_URL,
 
   INFINITEPAY_WEBHOOK_URL,
+
+  BLING_CLIENT_ID,
+
+  BLING_CLIENT_SECRET,
+
+  BLING_REDIRECT_URI,
 
 };
