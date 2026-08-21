@@ -1,7 +1,3 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
 import {
   MELHOR_ENVIO_URL,
   CLIENT_ID,
@@ -9,28 +5,7 @@ import {
   CALLBACK_URL,
 } from "../config/config.js";
 
-
-/* =====================================================
-   CAMINHO DO ARQUIVO DE TOKENS
-===================================================== */
-
-const __filename =
-  fileURLToPath(import.meta.url);
-
-const __dirname =
-  path.dirname(__filename);
-
-const tokensDirectory =
-  path.resolve(
-    __dirname,
-    "../../data"
-  );
-
-const tokensFile =
-  path.join(
-    tokensDirectory,
-    "melhor-envio-tokens.json"
-  );
+import pool from "../config/database.js";
 
 
 /* =====================================================
@@ -43,143 +18,173 @@ const USER_AGENT =
 
 
 /* =====================================================
-   TOKENS
+   CONTROLE DOS TOKENS
 ===================================================== */
 
 let accessToken = null;
 
 let refreshToken = null;
 
+let tokensReady = null;
+
 
 /* =====================================================
-   CARREGAR TOKENS SALVOS
+   CRIAR TABELA DE TOKENS
 ===================================================== */
 
-function loadTokens() {
+async function ensureTokenTable() {
+
+  await pool.execute(`
+
+    CREATE TABLE IF NOT EXISTS melhor_envio_auth (
+
+      id INT NOT NULL AUTO_INCREMENT,
+
+      access_token TEXT NULL,
+
+      refresh_token TEXT NULL,
+
+      created_at TIMESTAMP NOT NULL
+        DEFAULT CURRENT_TIMESTAMP,
+
+      updated_at TIMESTAMP NOT NULL
+        DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+      PRIMARY KEY (id)
+
+    )
+
+  `);
+
+}
+
+
+/* =====================================================
+   CARREGAR TOKENS DO MYSQL
+===================================================== */
+
+async function loadTokens() {
 
   try {
 
+    await ensureTokenTable();
+
+
+    const [
+      rows
+    ] =
+      await pool.execute(`
+
+        SELECT
+
+          access_token,
+
+          refresh_token
+
+        FROM melhor_envio_auth
+
+        ORDER BY id DESC
+
+        LIMIT 1
+
+      `);
+
+
+    /* =================================================
+       NENHUM TOKEN
+    ================================================= */
+
     if (
-      !fs.existsSync(
-        tokensFile
-      )
+      rows.length === 0
     ) {
 
+      accessToken = null;
+
+      refreshToken = null;
+
+
       console.log(
-        "Nenhum token salvo do Melhor Envio."
+        "Nenhum token salvo do Melhor Envio no MySQL."
       );
+
 
       return;
 
     }
 
 
-    const file =
-      fs.readFileSync(
-        tokensFile,
-        "utf-8"
-      );
-
-
-    const data =
-      JSON.parse(
-        file
-      );
-
+    /* =================================================
+       CARREGAR TOKENS
+    ================================================= */
 
     accessToken =
-      data.accessToken ||
+      rows[0].access_token ||
       null;
 
 
     refreshToken =
-      data.refreshToken ||
+      rows[0].refresh_token ||
       null;
 
+
+    /* =================================================
+       LOG
+    ================================================= */
 
     if (accessToken) {
 
       console.log(
-        "✅ Tokens do Melhor Envio carregados."
+        "================================="
+      );
+
+      console.log(
+        "✅ TOKENS DO MELHOR ENVIO CARREGADOS DO MYSQL"
+      );
+
+      console.log(
+        "Access Token: OK"
+      );
+
+      console.log(
+        "Refresh Token:",
+        refreshToken
+          ? "OK"
+          : "NÃO ENCONTRADO"
+      );
+
+      console.log(
+        "================================="
       );
 
     } else {
 
       console.log(
-        "⚠️ Arquivo de tokens encontrado, mas sem access token."
+        "⚠️ Registro do Melhor Envio encontrado, mas sem access token."
       );
 
     }
 
-  } catch (error) {
-
-    console.error(
-      "Erro ao carregar tokens do Melhor Envio:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   SALVAR TOKENS
-===================================================== */
-
-function saveTokens(
-  data
-) {
-
-  try {
-
-    fs.mkdirSync(
-      tokensDirectory,
-      {
-        recursive: true,
-      }
-    );
-
-
-    fs.writeFileSync(
-
-      tokensFile,
-
-      JSON.stringify(
-
-        {
-          accessToken:
-            data.accessToken,
-
-          refreshToken:
-            data.refreshToken,
-
-          savedAt:
-            new Date().toISOString(),
-
-        },
-
-        null,
-
-        2
-
-      ),
-
-      "utf-8"
-
-    );
-
-
-    console.log(
-      "✅ Tokens do Melhor Envio salvos."
-    );
 
   } catch (error) {
 
     console.error(
-      "❌ Erro ao salvar tokens do Melhor Envio:",
-      error
+      "================================="
     );
+
+    console.error(
+      "❌ ERRO AO CARREGAR TOKENS DO MELHOR ENVIO"
+    );
+
+    console.error(
+      "Mensagem:",
+      error.message
+    );
+
+    console.error(
+      "================================="
+    );
+
 
     throw error;
 
@@ -189,10 +194,192 @@ function saveTokens(
 
 
 /* =====================================================
-   CARREGAR TOKENS AO INICIAR O MÓDULO
+   INICIALIZAR CARREGAMENTO
 ===================================================== */
 
-loadTokens();
+tokensReady =
+  loadTokens();
+
+
+/* =====================================================
+   AGUARDAR CARREGAMENTO DOS TOKENS
+===================================================== */
+
+async function waitForTokens() {
+
+  if (tokensReady) {
+
+    await tokensReady;
+
+  }
+
+}
+
+
+/* =====================================================
+   SALVAR TOKENS NO MYSQL
+===================================================== */
+
+async function saveTokens(
+  data
+) {
+
+  const novoAccessToken =
+    data.accessToken ||
+    null;
+
+
+  const novoRefreshToken =
+    data.refreshToken ||
+    refreshToken ||
+    null;
+
+
+  /* =================================================
+     VALIDAR ACCESS TOKEN
+  ================================================= */
+
+  if (!novoAccessToken) {
+
+    throw new Error(
+      "Não é possível salvar o Melhor Envio sem access token."
+    );
+
+  }
+
+
+  /* =================================================
+     ATUALIZAR MEMÓRIA
+  ================================================= */
+
+  accessToken =
+    novoAccessToken;
+
+
+  refreshToken =
+    novoRefreshToken;
+
+
+  /* =================================================
+     GARANTIR TABELA
+  ================================================= */
+
+  await ensureTokenTable();
+
+
+  /* =================================================
+     VERIFICAR SE JÁ EXISTE REGISTRO
+  ================================================= */
+
+  const [
+    rows
+  ] =
+    await pool.execute(`
+
+      SELECT
+
+        id
+
+      FROM melhor_envio_auth
+
+      ORDER BY id ASC
+
+      LIMIT 1
+
+    `);
+
+
+  /* =================================================
+     INSERIR
+  ================================================= */
+
+  if (
+    rows.length === 0
+  ) {
+
+    await pool.execute(`
+
+      INSERT INTO melhor_envio_auth (
+
+        access_token,
+
+        refresh_token
+
+      )
+
+      VALUES (?, ?)
+
+    `, [
+
+      accessToken,
+
+      refreshToken
+
+    ]);
+
+  }
+
+  /* =================================================
+     ATUALIZAR
+  ================================================= */
+
+  else {
+
+    await pool.execute(`
+
+      UPDATE melhor_envio_auth
+
+      SET
+
+        access_token = ?,
+
+        refresh_token = ?,
+
+        updated_at = CURRENT_TIMESTAMP
+
+      WHERE id = ?
+
+    `, [
+
+      accessToken,
+
+      refreshToken,
+
+      rows[0].id
+
+    ]);
+
+  }
+
+
+  /* =================================================
+     LOG
+  ================================================= */
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "✅ TOKENS DO MELHOR ENVIO SALVOS NO MYSQL"
+  );
+
+  console.log(
+    "Access Token: OK"
+  );
+
+  console.log(
+    "Refresh Token:",
+    refreshToken
+      ? "OK"
+      : "NÃO ENCONTRADO"
+  );
+
+  console.log(
+    "================================="
+  );
+
+}
 
 
 /* =====================================================
@@ -235,12 +422,42 @@ export function getAuthorizationUrl() {
 
 
 /* =====================================================
-   TROCAR CÓDIGO POR TOKEN
+   TROCAR CODE POR TOKEN
 ===================================================== */
 
 export async function authorizeWithCode(
   code
 ) {
+
+  if (!code) {
+
+    const error =
+      new Error(
+        "Código de autorização do Melhor Envio não informado."
+      );
+
+
+    error.status =
+      400;
+
+
+    throw error;
+
+  }
+
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "🔐 TROCANDO CODE POR TOKEN"
+  );
+
+  console.log(
+    "================================="
+  );
+
 
   const response =
     await fetch(
@@ -294,9 +511,9 @@ export async function authorizeWithCode(
     await response.json();
 
 
-  /* ===================================================
+  /* =================================================
      ERRO
-  =================================================== */
+  ================================================= */
 
   if (!response.ok) {
 
@@ -314,14 +531,23 @@ export async function authorizeWithCode(
       data;
 
 
+    console.error(
+      "❌ ERRO AO OBTER TOKEN"
+    );
+
+    console.error(
+      data
+    );
+
+
     throw error;
 
   }
 
 
-  /* ===================================================
-     VALIDAR RESPOSTA
-  =================================================== */
+  /* =================================================
+     VALIDAR ACCESS TOKEN
+  ================================================= */
 
   if (
     !data.access_token
@@ -346,28 +572,18 @@ export async function authorizeWithCode(
   }
 
 
-  /* ===================================================
-     ATUALIZAR TOKENS EM MEMÓRIA
-  =================================================== */
+  /* =================================================
+     SALVAR TOKENS
+  ================================================= */
 
-  accessToken =
-    data.access_token;
+  await saveTokens({
 
+    accessToken:
+      data.access_token,
 
-  refreshToken =
-    data.refresh_token ||
-    refreshToken;
-
-
-  /* ===================================================
-     SALVAR TOKENS NO DISCO
-  =================================================== */
-
-  saveTokens({
-
-    accessToken,
-
-    refreshToken,
+    refreshToken:
+      data.refresh_token ||
+      null,
 
   });
 
@@ -381,11 +597,7 @@ export async function authorizeWithCode(
   );
 
   console.log(
-    "Access Token salvo."
-  );
-
-  console.log(
-    "Refresh Token salvo."
+    "Tokens salvos no MYSQL."
   );
 
   console.log(
@@ -404,6 +616,9 @@ export async function authorizeWithCode(
 
 async function refreshAccessToken() {
 
+  await waitForTokens();
+
+
   if (!refreshToken) {
 
     throw new Error(
@@ -414,7 +629,15 @@ async function refreshAccessToken() {
 
 
   console.log(
-    "🔄 Renovando token do Melhor Envio..."
+    "================================="
+  );
+
+  console.log(
+    "🔄 RENOVANDO TOKEN DO MELHOR ENVIO"
+  );
+
+  console.log(
+    "================================="
   );
 
 
@@ -468,9 +691,9 @@ async function refreshAccessToken() {
     await response.json();
 
 
-  /* ===================================================
+  /* =================================================
      ERRO
-  =================================================== */
+  ================================================= */
 
   if (!response.ok) {
 
@@ -488,14 +711,23 @@ async function refreshAccessToken() {
       data;
 
 
+    console.error(
+      "❌ ERRO AO RENOVAR TOKEN"
+    );
+
+    console.error(
+      data
+    );
+
+
     throw error;
 
   }
 
 
-  /* ===================================================
-     VALIDAR RESPOSTA
-  =================================================== */
+  /* =================================================
+     VALIDAR NOVO TOKEN
+  ================================================= */
 
   if (
     !data.access_token
@@ -520,34 +752,32 @@ async function refreshAccessToken() {
   }
 
 
-  /* ===================================================
-     ATUALIZAR TOKENS
-  =================================================== */
-
-  accessToken =
-    data.access_token;
-
-
-  refreshToken =
-    data.refresh_token ||
-    refreshToken;
-
-
-  /* ===================================================
+  /* =================================================
      SALVAR NOVOS TOKENS
-  =================================================== */
+  ================================================= */
 
-  saveTokens({
+  await saveTokens({
 
-    accessToken,
+    accessToken:
+      data.access_token,
 
-    refreshToken,
+    refreshToken:
+      data.refresh_token ||
+      refreshToken,
 
   });
 
 
   console.log(
-    "✅ Token do Melhor Envio renovado."
+    "================================="
+  );
+
+  console.log(
+    "✅ TOKEN DO MELHOR ENVIO RENOVADO"
+  );
+
+  console.log(
+    "================================="
   );
 
 
@@ -560,7 +790,10 @@ async function refreshAccessToken() {
    VERIFICAR AUTORIZAÇÃO
 ===================================================== */
 
-export function isAuthorized() {
+export async function isAuthorized() {
+
+  await waitForTokens();
+
 
   return Boolean(
     accessToken
@@ -581,9 +814,12 @@ export async function calculateShipping({
 
 }) {
 
-  /* ===================================================
+  await waitForTokens();
+
+
+  /* =================================================
      VERIFICAR AUTORIZAÇÃO
-  =================================================== */
+  ================================================= */
 
   if (!accessToken) {
 
@@ -606,9 +842,9 @@ export async function calculateShipping({
   }
 
 
-  /* ===================================================
+  /* =================================================
      DADOS DO PRODUTO
-  =================================================== */
+  ================================================= */
 
   const peso =
     quantidade === 2
@@ -622,9 +858,9 @@ export async function calculateShipping({
       : 57;
 
 
-  /* ===================================================
-     CEP DE DESTINO
-  =================================================== */
+  /* =================================================
+     LIMPAR CEP
+  ================================================= */
 
   const cepDestinoLimpo =
     String(
@@ -634,6 +870,10 @@ export async function calculateShipping({
       ""
     );
 
+
+  /* =================================================
+     VALIDAR CEP
+  ================================================= */
 
   if (
     cepDestinoLimpo.length !== 8
@@ -654,9 +894,9 @@ export async function calculateShipping({
   }
 
 
-  /* ===================================================
+  /* =================================================
      PAYLOAD
-  =================================================== */
+  ================================================= */
 
   const payload = {
 
@@ -708,9 +948,9 @@ export async function calculateShipping({
   };
 
 
-  /* ===================================================
-     FUNÇÃO PARA FAZER A COTAÇÃO
-  =================================================== */
+  /* =================================================
+     FUNÇÃO DE COTAÇÃO
+  ================================================= */
 
   async function requestShipping() {
 
@@ -751,24 +991,28 @@ export async function calculateShipping({
   }
 
 
-  /* ===================================================
+  /* =================================================
      PRIMEIRA TENTATIVA
-  =================================================== */
+  ================================================= */
 
   let response =
     await requestShipping();
 
 
-  /* ===================================================
+  /* =================================================
      TOKEN EXPIRADO
-  =================================================== */
+  ================================================= */
 
   if (
     response.status === 401
   ) {
 
     console.log(
-      "⚠️ Access Token expirado. Tentando renovar..."
+      "⚠️ Access Token expirado."
+    );
+
+    console.log(
+      "🔄 Tentando renovar automaticamente..."
     );
 
 
@@ -780,11 +1024,21 @@ export async function calculateShipping({
       response =
         await requestShipping();
 
+
     } catch (error) {
 
       console.error(
-        "❌ Não foi possível renovar o token:",
-        error.data || error
+        "❌ Não foi possível renovar o token."
+      );
+
+      console.error(
+        "Mensagem:",
+        error.message
+      );
+
+      console.error(
+        "Dados:",
+        error.data || null
       );
 
 
@@ -795,17 +1049,17 @@ export async function calculateShipping({
   }
 
 
-  /* ===================================================
-     RESPOSTA
-  =================================================== */
+  /* =================================================
+     LER RESPOSTA
+  ================================================= */
 
   const data =
     await response.json();
 
 
-  /* ===================================================
+  /* =================================================
      ERRO
-  =================================================== */
+  ================================================= */
 
   if (!response.ok) {
 
@@ -828,9 +1082,9 @@ export async function calculateShipping({
   }
 
 
-  /* ===================================================
+  /* =================================================
      SUCESSO
-  =================================================== */
+  ================================================= */
 
   return data;
 
@@ -838,10 +1092,13 @@ export async function calculateShipping({
 
 
 /* =====================================================
-   EXPORTAR ESTADO DOS TOKENS
+   OBTER TOKENS
 ===================================================== */
 
-export function getTokens() {
+export async function getTokens() {
+
+  await waitForTokens();
+
 
   return {
 

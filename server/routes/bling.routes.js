@@ -1,7 +1,9 @@
 import express from "express";
 
+
 import {
   getAuthorizationUrl,
+  validarState,
   exchangeCodeForToken,
   saveTokens,
   testBlingApi,
@@ -18,12 +20,20 @@ const router =
 
 router.get(
   "/authorize",
-  (req, res) => {
+  async (req, res) => {
 
     try {
 
+      /*
+       * O service agora:
+       *
+       * 1. Gera o state
+       * 2. Salva no MySQL
+       * 3. Monta a URL do Bling
+       */
+
       const authorizationUrl =
-        getAuthorizationUrl();
+        await getAuthorizationUrl();
 
 
       console.log(
@@ -55,11 +65,20 @@ router.get(
     } catch (error) {
 
       console.error(
+        "================================="
+      );
+
+      console.error(
         "❌ ERRO AO INICIAR AUTORIZAÇÃO BLING"
       );
 
       console.error(
-        error
+        "Mensagem:",
+        error.message
+      );
+
+      console.error(
+        "================================="
       );
 
 
@@ -72,6 +91,9 @@ router.get(
 
           error:
             "Não foi possível iniciar a autorização do Bling.",
+
+          details:
+            error.message,
 
         });
 
@@ -93,6 +115,7 @@ router.get(
 
       const {
         code,
+        state,
         error,
         error_description,
       } = req.query;
@@ -201,12 +224,139 @@ router.get(
       }
 
 
+      /* =================================================
+         VALIDAR STATE
+      ================================================= */
+
+      if (!state) {
+
+        console.error(
+          "❌ Callback do Bling sem state."
+        );
+
+
+        return res
+          .status(400)
+          .send(`
+
+            <html>
+
+              <head>
+                <meta charset="UTF-8">
+                <title>Erro Bling</title>
+              </head>
+
+              <body>
+
+                <h1>Erro de segurança</h1>
+
+                <p>
+                  O Bling não enviou o parâmetro state.
+                </p>
+
+                <p>
+                  Inicie novamente a autorização.
+                </p>
+
+              </body>
+
+            </html>
+
+          `);
+
+      }
+
+
+      /* =================================================
+         VALIDAR STATE NO MYSQL
+      ================================================= */
+
       console.log(
         "================================="
       );
 
       console.log(
-        "🔐 CALLBACK BLING RECEBIDO"
+        "🔐 VALIDANDO STATE DO BLING"
+      );
+
+      console.log(
+        "STATE RECEBIDO:",
+        state
+      );
+
+      console.log(
+        "================================="
+      );
+
+
+      const stateValido =
+        await validarState(
+          state
+        );
+
+
+      /* =================================================
+         STATE INVÁLIDO
+      ================================================= */
+
+      if (!stateValido) {
+
+        console.error(
+          "================================="
+        );
+
+        console.error(
+          "❌ STATE BLING INVÁLIDO"
+        );
+
+        console.error(
+          "================================="
+        );
+
+
+        return res
+          .status(400)
+          .send(`
+
+            <html>
+
+              <head>
+                <meta charset="UTF-8">
+                <title>Erro de segurança</title>
+              </head>
+
+              <body>
+
+                <h1>Erro de segurança</h1>
+
+                <p>
+                  O parâmetro state não corresponde
+                  ao processo de autorização iniciado.
+                </p>
+
+                <p>
+                  Inicie novamente a autorização.
+                </p>
+
+              </body>
+
+            </html>
+
+          `);
+
+      }
+
+
+      /* =================================================
+         STATE VÁLIDO
+      ================================================= */
+
+      console.log(
+        "================================="
+      );
+
+      console.log(
+        "✅ STATE VALIDADO COM SUCESSO"
       );
 
       console.log(
@@ -254,7 +404,8 @@ router.get(
          TESTAR API
       ================================================= */
 
-      let testeApi = null;
+      let testeApi =
+        null;
 
 
       try {
@@ -262,10 +413,11 @@ router.get(
         testeApi =
           await testBlingApi();
 
+
       } catch (error) {
 
         console.error(
-          "⚠️ Tokens salvos, mas teste da API falhou."
+          "⚠️ TOKENS SALVOS, MAS TESTE DA API FALHOU."
         );
 
         console.error(
@@ -276,7 +428,7 @@ router.get(
 
 
       /* =================================================
-         RESPOSTA
+         RESPOSTA FINAL
       ================================================= */
 
       return res
@@ -355,6 +507,23 @@ router.get(
 
                 }
 
+                .success {
+
+                  color:
+                    #16a34a;
+
+                  font-weight:
+                    bold;
+
+                }
+
+                .warning {
+
+                  color:
+                    #ca8a04;
+
+                }
+
               </style>
 
             </head>
@@ -376,6 +545,10 @@ router.get(
                 <p>
                   Os tokens foram salvos
                   no banco de dados.
+                </p>
+
+                <p class="success">
+                  Conexão com o Bling estabelecida.
                 </p>
 
                 <p>
