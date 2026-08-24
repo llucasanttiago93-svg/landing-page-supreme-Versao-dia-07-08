@@ -22,45 +22,6 @@ function escapeHtml(value) {
 
 
 /* =====================================================
-   VALIDAR URL DO COMPROVANTE
-===================================================== */
-
-function getReceiptUrl(value) {
-
-  if (!value) {
-    return null;
-  }
-
-
-  try {
-
-    const url =
-      new URL(value);
-
-
-    if (
-      url.protocol !== "https:" &&
-      url.protocol !== "http:"
-    ) {
-
-      return null;
-
-    }
-
-
-    return url.toString();
-
-
-  } catch {
-
-    return null;
-
-  }
-
-}
-
-
-/* =====================================================
    PÁGINA DE PAGAMENTO CONCLUÍDO
 ===================================================== */
 
@@ -70,11 +31,7 @@ export function pagamentoConcluido(
 ) {
 
   const {
-    receipt_url,
     order_nsu,
-    slug,
-    capture_method,
-    transaction_nsu,
   } = req.query;
 
 
@@ -88,30 +45,6 @@ export function pagamentoConcluido(
     );
 
 
-  const slugSeguro =
-    escapeHtml(
-      slug
-    );
-
-
-  const captureMethod =
-    escapeHtml(
-      capture_method
-    );
-
-
-  const transactionNsu =
-    escapeHtml(
-      transaction_nsu
-    );
-
-
-  const receiptUrl =
-    getReceiptUrl(
-      receipt_url
-    );
-
-
   /* ===================================================
      LOG
   =================================================== */
@@ -121,27 +54,12 @@ export function pagamentoConcluido(
   );
 
   console.log(
-    "PAGAMENTO CONCLUÍDO"
+    "PÁGINA DE PAGAMENTO CONCLUÍDO"
   );
 
   console.log(
-    "Order NSU:",
+    "ORDER NSU:",
     order_nsu
-  );
-
-  console.log(
-    "Slug:",
-    slug
-  );
-
-  console.log(
-    "Método:",
-    capture_method
-  );
-
-  console.log(
-    "Transaction NSU:",
-    transaction_nsu
   );
 
   console.log(
@@ -169,7 +87,7 @@ export function pagamentoConcluido(
       >
 
       <title>
-        Pedido recebido - Vanti Cosméticos
+        Compra aprovada - Vanti Cosméticos
       </title>
 
 
@@ -228,10 +146,51 @@ export function pagamentoConcluido(
         }
 
 
+        .check {
+
+          width:
+            64px;
+
+          height:
+            64px;
+
+          margin:
+            0 auto 24px;
+
+          border-radius:
+            50%;
+
+          background:
+            #ec7404;
+
+          color:
+            #ffffff;
+
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            center;
+
+          font-size:
+            32px;
+
+          font-weight:
+            bold;
+
+        }
+
+
         h1 {
 
           margin:
             0 0 12px;
+
+          font-size:
+            30px;
 
         }
 
@@ -243,6 +202,9 @@ export function pagamentoConcluido(
 
           line-height:
             1.6;
+
+          margin:
+            8px 0;
 
         }
 
@@ -270,33 +232,10 @@ export function pagamentoConcluido(
         }
 
 
-        .details {
+        .message {
 
           margin-top:
             20px;
-
-          padding:
-            16px;
-
-          background:
-            #fafafa;
-
-          border-radius:
-            10px;
-
-          text-align:
-            left;
-
-          font-size:
-            14px;
-
-        }
-
-
-        .details p {
-
-          margin:
-            8px 0;
 
         }
 
@@ -307,7 +246,7 @@ export function pagamentoConcluido(
             inline-block;
 
           margin-top:
-            24px;
+            28px;
 
           background:
             #ec7404;
@@ -319,13 +258,21 @@ export function pagamentoConcluido(
             none;
 
           padding:
-            14px 24px;
+            14px 28px;
 
           border-radius:
             8px;
 
           font-weight:
             bold;
+
+        }
+
+
+        a:hover {
+
+          opacity:
+            0.9;
 
         }
 
@@ -338,20 +285,31 @@ export function pagamentoConcluido(
 
       <div class="box">
 
+
+        <div class="check">
+
+          ✓
+
+        </div>
+
+
         <h1>
-          Pedido recebido!
+
+          Tudo certo com sua compra!
+
         </h1>
 
 
         <p>
-          Obrigado pela sua compra
-          na Vanti Cosméticos.
+
+          Seu pagamento foi aprovado
+          com sucesso.
+
         </p>
 
 
-        ${
-          orderNsu
-            ? `
+        ${orderNsu
+      ? `
 
               <div class="order">
 
@@ -364,90 +322,32 @@ export function pagamentoConcluido(
               </div>
 
             `
-            : ""
-        }
+      : ""
+    }
 
 
-        <p>
+        <div class="message">
 
-          Estamos processando a
-          confirmação do pagamento.
+          <p>
 
-        </p>
+            Seu pedido foi recebido pela
+            Vanti Cosméticos e já está sendo
+            preparado.
 
+          </p>
 
-        ${
-          orderNsu ||
-          slugSeguro ||
-          captureMethod ||
-          transactionNsu
-            ? `
-
-              <div class="details">
-
-                ${
-                  slugSeguro
-                    ? `
-                      <p>
-                        <strong>
-                          Checkout:
-                        </strong>
-                        ${slugSeguro}
-                      </p>
-                    `
-                    : ""
-                }
+        </div>
 
 
-                ${
-                  captureMethod
-                    ? `
-                      <p>
-                        <strong>
-                          Método:
-                        </strong>
-                        ${captureMethod}
-                      </p>
-                    `
-                    : ""
-                }
+        <a
+          href="<a href="https://vanticosmeticos.com.br/"
+>"
+        >
 
+          Ver outros produtos Vanti
 
-                ${
-                  transactionNsu
-                    ? `
-                      <p>
-                        <strong>
-                          Transação:
-                        </strong>
-                        ${transactionNsu}
-                      </p>
-                    `
-                    : ""
-                }
+        </a>
 
-              </div>
-
-            `
-            : ""
-        }
-
-
-        ${
-          receiptUrl
-            ? `
-
-              <a
-                href="${escapeHtml(receiptUrl)}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ver comprovante
-              </a>
-
-            `
-            : ""
-        }
 
       </div>
 

@@ -696,9 +696,9 @@ export async function webhookInfinitePay(
       "================================="
     );
 
-        /* =================================================
-       CRIAR PEDIDO NO BLING
-    ================================================= */
+    /* =================================================
+   CRIAR PEDIDO NO BLING
+================================================= */
 
     console.log(
       "================================="
@@ -830,6 +830,9 @@ export async function webhookInfinitePay(
         complemento:
           pedido.complemento,
 
+        referencia:
+          pedido.referencia,
+
         bairro:
           pedido.bairro,
 
@@ -851,7 +854,7 @@ export async function webhookInfinitePay(
 
     if (
       !resultadoBling ||
-      !resultadoBling.id
+      !resultadoBling.blingOrderId
     ) {
 
       throw new Error(
@@ -862,7 +865,7 @@ export async function webhookInfinitePay(
 
 
     const blingOrderId =
-      resultadoBling.id;
+      resultadoBling.blingOrderId;
 
 
     /* =================================================
