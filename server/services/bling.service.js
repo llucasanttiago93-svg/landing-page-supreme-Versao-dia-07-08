@@ -9,7 +9,7 @@ import {
 import pool from "../config/database.js";
 
 /* =====================================================
-   CONFIGURAÇÕES DA API BLING
+   CONFIGURAÇÕES
 ===================================================== */
 
 const BLING_API_URL =
@@ -18,15 +18,24 @@ const BLING_API_URL =
 const BLING_AUTH_URL =
   "https://www.bling.com.br/Api/v3/oauth/authorize";
 
-/* =====================================================
-   PRODUTO VANTI
-===================================================== */
+/*
+ * Mapeamento dos produtos:
+ *
+ * 1 unidade -> BLING_PRODUCT_ID_1
+ * 2 unidades -> BLING_PRODUCT_ID_2
+ *
+ * Esses IDs devem ser os IDs REAIS dos produtos
+ * cadastrados no Bling.
+ */
 
-const BLING_PRODUTO_SKU =
-  "VTRP30MLQDS";
+const BLING_PRODUCT_ID_1 =
+  process.env.BLING_PRODUCT_ID_1 || "";
+
+const BLING_PRODUCT_ID_2 =
+  process.env.BLING_PRODUCT_ID_2 || "";
 
 /* =====================================================
-   GERAR STATE
+   UTILITÁRIOS
 ===================================================== */
 
 function gerarState() {
@@ -35,58 +44,69 @@ function gerarState() {
     .toString("hex");
 }
 
+function limparCpf(valor) {
+  return valor
+    ? String(valor).replace(/\D/g, "")
+    : "";
+}
+
+function limparCep(valor) {
+  return valor
+    ? String(valor).replace(/\D/g, "")
+    : "";
+}
+
+function numeroValido(valor) {
+  const numero = Number(valor);
+
+  return Number.isFinite(numero)
+    ? numero
+    : null;
+}
+
+function valorMonetario(valor) {
+  const numero = Number(valor);
+
+  if (!Number.isFinite(numero) || numero < 0) {
+    return null;
+  }
+
+  return Number(numero.toFixed(2));
+}
+
 /* =====================================================
-   SALVAR STATE NO MYSQL
+   STATE OAUTH
 ===================================================== */
 
 async function salvarState(state) {
-
   await pool.execute(
     `
       DELETE FROM bling_oauth_state
       WHERE created_at <
-        DATE_SUB(
-          NOW(),
-          INTERVAL 10 MINUTE
-        )
+        DATE_SUB(NOW(), INTERVAL 10 MINUTE)
     `
   );
 
   await pool.execute(
     `
       INSERT INTO bling_oauth_state
-      (
-        state
-      )
-      VALUES
-      (
-        ?
-      )
+      (state)
+      VALUES (?)
     `,
-    [
-      state
-    ]
+    [state]
   );
 }
 
-/* =====================================================
-   VALIDAR E CONSUMIR STATE
-===================================================== */
-
 export async function validarState(state) {
-
   if (!state) {
-
     console.error(
-      "❌ STATE NÃO INFORMADO."
+      "❌ STATE BLING NÃO INFORMADO."
     );
 
     return false;
   }
 
-  const [
-    rows
-  ] =
+  const [rows] =
     await pool.execute(
       `
         SELECT
@@ -97,30 +117,12 @@ export async function validarState(state) {
         WHERE state = ?
         LIMIT 1
       `,
-      [
-        state
-      ]
+      [state]
     );
 
-  if (
-    rows.length === 0
-  ) {
-
+  if (!rows.length) {
     console.error(
-      "================================="
-    );
-
-    console.error(
-      "❌ STATE BLING INVÁLIDO"
-    );
-
-    console.error(
-      "STATE RECEBIDO:",
-      state
-    );
-
-    console.error(
-      "================================="
+      "❌ STATE BLING INVÁLIDO."
     );
 
     return false;
@@ -134,38 +136,21 @@ export async function validarState(state) {
       stateData.created_at
     ).getTime();
 
-  const agora =
-    Date.now();
-
-  const dezMinutos =
+  const expirado =
+    Date.now() - criadoEm >
     10 * 60 * 1000;
 
-  if (
-    agora -
-      criadoEm >
-    dezMinutos
-  ) {
-
-    console.error(
-      "================================="
-    );
-
-    console.error(
-      "❌ STATE BLING EXPIRADO"
-    );
-
-    console.error(
-      "================================="
-    );
-
+  if (expirado) {
     await pool.execute(
       `
         DELETE FROM bling_oauth_state
         WHERE id = ?
       `,
-      [
-        stateData.id
-      ]
+      [stateData.id]
+    );
+
+    console.error(
+      "❌ STATE BLING EXPIRADO."
     );
 
     return false;
@@ -176,31 +161,26 @@ export async function validarState(state) {
       DELETE FROM bling_oauth_state
       WHERE id = ?
     `,
-    [
-      stateData.id
-    ]
+    [stateData.id]
   );
 
   console.log(
-    "================================="
-  );
-
-  console.log(
-    "✅ STATE BLING VALIDADO"
-  );
-
-  console.log(
-    "================================="
+    "✅ STATE BLING VALIDADO."
   );
 
   return true;
 }
 
 /* =====================================================
-   GERAR URL DE AUTORIZAÇÃO
+   AUTORIZAÇÃO
 ===================================================== */
 
 export async function getAuthorizationUrl() {
+  if (!BLING_CLIENT_ID) {
+    throw new Error(
+      "BLING_CLIENT_ID não configurado."
+    );
+  }
 
   const state =
     gerarState();
@@ -211,49 +191,24 @@ export async function getAuthorizationUrl() {
 
   const params =
     new URLSearchParams({
-
       response_type:
         "code",
 
       client_id:
         BLING_CLIENT_ID,
 
-      state:
-        state,
-
-      redirect_uri:
-        BLING_REDIRECT_URI,
-
+      state,
     });
 
   const authorizationUrl =
     `${BLING_AUTH_URL}?${params.toString()}`;
 
   console.log(
-    "================================="
+    "🔐 URL DE AUTORIZAÇÃO BLING:"
   );
 
   console.log(
-    "🔐 URL DE AUTORIZAÇÃO BLING"
-  );
-
-  console.log(
-    "STATE GERADO:",
-    state
-  );
-
-  console.log(
-    "REDIRECT URI:",
-    BLING_REDIRECT_URI
-  );
-
-  console.log(
-    "URL:",
     authorizationUrl
-  );
-
-  console.log(
-    "================================="
   );
 
   return authorizationUrl;
@@ -266,9 +221,7 @@ export async function getAuthorizationUrl() {
 export async function exchangeCodeForToken(
   code
 ) {
-
   if (!code) {
-
     throw new Error(
       "Código de autorização do Bling não informado."
     );
@@ -289,14 +242,13 @@ export async function exchangeCodeForToken(
           "POST",
 
         headers: {
-
-          "Authorization":
+          Authorization:
             `Basic ${credentials}`,
 
           "Content-Type":
             "application/x-www-form-urlencoded",
 
-          "Accept":
+          Accept:
             "application/json",
 
           "enable-jwt":
@@ -305,13 +257,10 @@ export async function exchangeCodeForToken(
 
         body:
           new URLSearchParams({
-
             grant_type:
               "authorization_code",
 
-            code:
-              code,
-
+            code,
           }).toString(),
       }
     );
@@ -320,29 +269,6 @@ export async function exchangeCodeForToken(
     await response.json();
 
   if (!response.ok) {
-
-    console.error(
-      "================================="
-    );
-
-    console.error(
-      "❌ ERRO AO OBTER TOKENS DO BLING"
-    );
-
-    console.error(
-      "STATUS:",
-      response.status
-    );
-
-    console.error(
-      "RESPOSTA:",
-      data
-    );
-
-    console.error(
-      "================================="
-    );
-
     const error =
       new Error(
         "Erro ao obter tokens do Bling."
@@ -361,35 +287,25 @@ export async function exchangeCodeForToken(
     !data.access_token ||
     !data.refresh_token
   ) {
-
     throw new Error(
       "Bling não retornou access_token e refresh_token."
     );
   }
 
   console.log(
-    "================================="
-  );
-
-  console.log(
-    "✅ TOKENS RECEBIDOS DO BLING"
-  );
-
-  console.log(
-    "================================="
+    "✅ TOKENS RECEBIDOS DO BLING."
   );
 
   return data;
 }
 
 /* =====================================================
-   SALVAR TOKENS NO MYSQL
+   SALVAR TOKENS
 ===================================================== */
 
 export async function saveTokens(
   data
 ) {
-
   const {
     access_token,
     refresh_token,
@@ -400,29 +316,19 @@ export async function saveTokens(
     !access_token ||
     !refresh_token
   ) {
-
     throw new Error(
       "Tokens do Bling inválidos."
     );
   }
 
-  let expiresAt =
-    null;
-
-  if (expires_in) {
-
-    expiresAt =
-      new Date(
+  const expiresAt =
+    expires_in
+      ? new Date(
         Date.now() +
-          Number(expires_in) *
-          1000
-      );
-  }
-
-  /*
-   * O projeto trabalha com apenas
-   * um conjunto de tokens do Bling.
-   */
+        Number(expires_in) *
+        1000
+      )
+      : null;
 
   await pool.execute(
     `
@@ -438,12 +344,7 @@ export async function saveTokens(
         refresh_token,
         expires_at
       )
-      VALUES
-      (
-        ?,
-        ?,
-        ?
-      )
+      VALUES (?, ?, ?)
     `,
     [
       access_token,
@@ -453,41 +354,23 @@ export async function saveTokens(
   );
 
   console.log(
-    "================================="
-  );
-
-  console.log(
-    "✅ TOKENS DO BLING SALVOS"
-  );
-
-  console.log(
-    "EXPIRA EM:",
-    expiresAt
-  );
-
-  console.log(
-    "================================="
+    "✅ TOKENS DO BLING SALVOS NO MYSQL."
   );
 
   return {
-
     success:
       true,
 
     expiresAt,
-
   };
 }
 
 /* =====================================================
-   PEGAR TOKENS SALVOS
+   LER TOKENS
 ===================================================== */
 
 export async function getTokens() {
-
-  const [
-    rows
-  ] =
+  const [rows] =
     await pool.execute(
       `
         SELECT
@@ -502,10 +385,7 @@ export async function getTokens() {
       `
     );
 
-  if (
-    rows.length === 0
-  ) {
-
+  if (!rows.length) {
     return null;
   }
 
@@ -513,15 +393,13 @@ export async function getTokens() {
 }
 
 /* =====================================================
-   RENOVAR ACCESS TOKEN
+   RENOVAR TOKEN
 ===================================================== */
 
 export async function refreshAccessToken(
   refreshToken
 ) {
-
   if (!refreshToken) {
-
     throw new Error(
       "Refresh token do Bling não informado."
     );
@@ -542,14 +420,13 @@ export async function refreshAccessToken(
           "POST",
 
         headers: {
-
-          "Authorization":
+          Authorization:
             `Basic ${credentials}`,
 
           "Content-Type":
             "application/x-www-form-urlencoded",
 
-          "Accept":
+          Accept:
             "application/json",
 
           "enable-jwt":
@@ -558,13 +435,11 @@ export async function refreshAccessToken(
 
         body:
           new URLSearchParams({
-
             grant_type:
               "refresh_token",
 
             refresh_token:
               refreshToken,
-
           }).toString(),
       }
     );
@@ -573,29 +448,6 @@ export async function refreshAccessToken(
     await response.json();
 
   if (!response.ok) {
-
-    console.error(
-      "================================="
-    );
-
-    console.error(
-      "❌ ERRO AO RENOVAR TOKEN BLING"
-    );
-
-    console.error(
-      "STATUS:",
-      response.status
-    );
-
-    console.error(
-      "RESPOSTA:",
-      data
-    );
-
-    console.error(
-      "================================="
-    );
-
     const error =
       new Error(
         "Erro ao renovar token do Bling."
@@ -618,16 +470,14 @@ export async function refreshAccessToken(
 }
 
 /* =====================================================
-   PEGAR ACCESS TOKEN VÁLIDO
+   ACCESS TOKEN VÁLIDO
 ===================================================== */
 
 export async function getAccessToken() {
-
   const tokens =
     await getTokens();
 
   if (!tokens) {
-
     throw new Error(
       "Bling ainda não foi autorizado."
     );
@@ -636,33 +486,18 @@ export async function getAccessToken() {
   if (
     tokens.expires_at
   ) {
-
-    const agora =
-      Date.now();
-
     const expiracao =
       new Date(
         tokens.expires_at
       ).getTime();
 
-    /*
-     * Renovar 1 minuto antes.
-     */
-
-    const margem =
-      60 * 1000;
-
     if (
-      agora >=
-      expiracao - margem
+      Date.now() >=
+      expiracao -
+      60 * 1000
     ) {
-
       console.log(
-        "Token Bling expirado ou próximo de expirar."
-      );
-
-      console.log(
-        "Renovando..."
+        "🔄 TOKEN BLING EXPIRANDO. RENOVANDO..."
       );
 
       const novosTokens =
@@ -670,7 +505,8 @@ export async function getAccessToken() {
           tokens.refresh_token
         );
 
-      return novosTokens.access_token;
+      return novosTokens
+        .access_token;
     }
   }
 
@@ -678,82 +514,56 @@ export async function getAccessToken() {
 }
 
 /* =====================================================
-   FUNÇÃO AUXILIAR:
-   REQUISIÇÃO À API DO BLING
+   REQUISIÇÃO PADRÃO BLING
 ===================================================== */
 
 async function blingRequest(
+  accessToken,
   url,
   options = {}
 ) {
-
-  const accessToken =
-    await getAccessToken();
-
   const response =
     await fetch(
       url,
       {
-
         ...options,
 
         headers: {
-
           ...(options.headers || {}),
 
-          "Authorization":
+          Authorization:
             `Bearer ${accessToken}`,
 
           "Content-Type":
             "application/json",
 
-          "Accept":
+          Accept:
             "application/json",
 
           "enable-jwt":
             "1",
-
         },
-
       }
     );
 
-  const data =
-    await response.json();
+  const text =
+    await response.text();
+
+  let data = {};
+
+  try {
+    data =
+      text
+        ? JSON.parse(text)
+        : {};
+  } catch {
+    data = {
+      raw:
+        text,
+    };
+  }
 
   if (!response.ok) {
-
-    console.error(
-      "================================="
-    );
-
-    console.error(
-      "❌ ERRO NA API DO BLING"
-    );
-
-    console.error(
-      "URL:",
-      url
-    );
-
-    console.error(
-      "STATUS:",
-      response.status
-    );
-
-    console.error(
-      "RESPOSTA:",
-      JSON.stringify(
-        data,
-        null,
-        2
-      )
-    );
-
-    console.error(
-      "================================="
-    );
-
     const error =
       new Error(
         "Erro na API do Bling."
@@ -772,166 +582,296 @@ async function blingRequest(
 }
 
 /* =====================================================
-   BUSCAR PRODUTO PELO SKU
+   ESCOLHER PRODUTO BLING PELA QUANTIDADE
 ===================================================== */
 
-export async function buscarProdutoPorSku(
-  sku
+function resolverProdutoBlingId(
+  quantidade,
+  produtoBlingIdInformado
 ) {
+  /*
+   * Se o chamador informar explicitamente um ID,
+   * ele tem prioridade.
+   */
 
   if (
-    !sku ||
-    String(sku).trim() === ""
+    produtoBlingIdInformado
   ) {
-
-    throw new Error(
-      "SKU do produto não informado."
+    return String(
+      produtoBlingIdInformado
     );
   }
 
-  const skuLimpo =
-    String(
-      sku
-    ).trim();
+  const quantidadeNumero =
+    Number(quantidade);
 
-  const url =
-    `${BLING_API_URL}/produtos?` +
-    `pagina=1&` +
-    `limite=100&` +
-    `codigo=${encodeURIComponent(skuLimpo)}`;
+  if (
+    quantidadeNumero === 1
+  ) {
+    if (
+      !BLING_PRODUCT_ID_1
+    ) {
+      throw new Error(
+        "BLING_PRODUCT_ID_1 não configurado."
+      );
+    }
 
-  console.log(
-    "================================="
+    return BLING_PRODUCT_ID_1;
+  }
+
+  if (
+    quantidadeNumero === 2
+  ) {
+    if (
+      !BLING_PRODUCT_ID_2
+    ) {
+      throw new Error(
+        "BLING_PRODUCT_ID_2 não configurado."
+      );
+    }
+
+    return BLING_PRODUCT_ID_2;
+  }
+
+  throw new Error(
+    `Não existe produto Bling configurado para ${quantidadeNumero} unidades.`
   );
+}
 
-  console.log(
-    "🔎 PROCURANDO PRODUTO NO BLING"
-  );
+/* =====================================================
+   CRIAR / ATUALIZAR CONTATO
+===================================================== */
 
-  console.log(
-    "SKU:",
-    skuLimpo
-  );
+async function obterOuAtualizarContato({
+  accessToken,
+  nome,
+  email,
+  telefone,
+  cpf,
+  cep,
+  rua,
+  numero,
+  complemento,
+  bairro,
+  cidade,
+  estado,
+}) {
+  const cpfLimpo =
+    limparCpf(cpf);
 
-  console.log(
-    "================================="
-  );
+  let contatoId =
+    null;
 
-  const resultado =
+  /* ===================================================
+     PROCURAR PELO CPF
+  =================================================== */
+
+  if (
+    cpfLimpo
+  ) {
+    const resultado =
+      await blingRequest(
+        accessToken,
+
+        `${BLING_API_URL}/contatos?numeroDocumento=${encodeURIComponent(cpfLimpo)}`,
+
+        {
+          method:
+            "GET",
+        }
+      );
+
+    const contatos =
+      Array.isArray(
+        resultado?.data
+      )
+        ? resultado.data
+        : [];
+
+    if (
+      contatos.length &&
+      contatos[0]?.id
+    ) {
+      contatoId =
+        contatos[0].id;
+
+      console.log(
+        "✅ CLIENTE ENCONTRADO NO BLING:",
+        contatoId
+      );
+    }
+  }
+
+  /* ===================================================
+     ENDEREÇO
+  =================================================== */
+
+  const endereco = {
+    endereco:
+      rua || "",
+
+    numero:
+      numero || "",
+
+    complemento:
+      complemento || "",
+
+    bairro:
+      bairro || "",
+
+    cep:
+      limparCep(cep),
+
+    municipio:
+      cidade || "",
+
+    uf:
+      estado || "",
+  };
+
+  /* ===================================================
+     ATUALIZAR CLIENTE EXISTENTE
+  =================================================== */
+
+  if (
+    contatoId
+  ) {
+    const contatoAtualizado = {
+      nome:
+        String(nome).trim(),
+
+      email:
+        email
+          ? String(email).trim()
+          : undefined,
+
+      celular:
+        telefone
+          ? String(telefone).trim()
+          : undefined,
+
+      numeroDocumento:
+        cpfLimpo ||
+        undefined,
+
+      tipo:
+        "F",
+
+      endereco,
+    };
+
     await blingRequest(
-      url,
+      accessToken,
+
+      `${BLING_API_URL}/contatos/${contatoId}`,
+
       {
         method:
-          "GET",
+          "PUT",
+
+        body:
+          JSON.stringify(
+            contatoAtualizado
+          ),
       }
     );
 
-  const produtos =
-    Array.isArray(
-      resultado?.data
-    )
-      ? resultado.data
-      : [];
+    console.log(
+      "✅ CLIENTE ATUALIZADO NO BLING."
+    );
+
+    return contatoId;
+  }
+
+  /* ===================================================
+     CRIAR NOVO CLIENTE
+  =================================================== */
+
+  const novoContato = {
+    nome:
+      String(nome).trim(),
+
+    email:
+      email
+        ? String(email).trim()
+        : undefined,
+
+    celular:
+      telefone
+        ? String(telefone).trim()
+        : undefined,
+
+    numeroDocumento:
+      cpfLimpo ||
+      undefined,
+
+    tipo:
+      "F",
+
+    endereco,
+  };
+
+  const resultado =
+    await blingRequest(
+      accessToken,
+
+      `${BLING_API_URL}/contatos`,
+
+      {
+        method:
+          "POST",
+
+        body:
+          JSON.stringify(
+            novoContato
+          ),
+      }
+    );
+
+  contatoId =
+    resultado?.data?.id ||
+    null;
 
   if (
-    produtos.length === 0
+    !contatoId
   ) {
-
-    console.error(
-      "================================="
-    );
-
-    console.error(
-      "❌ PRODUTO NÃO ENCONTRADO NO BLING"
-    );
-
-    console.error(
-      "SKU:",
-      skuLimpo
-    );
-
-    console.error(
-      "================================="
-    );
-
     throw new Error(
-      `Produto com SKU "${skuLimpo}" não encontrado no Bling.`
+      "Bling não retornou o ID do contato criado."
     );
   }
 
-  /*
-   * Como estamos filtrando pelo código,
-   * pegamos o primeiro resultado.
-   */
-
-  const produto =
-    produtos[0];
-
   console.log(
-    "================================="
+    "✅ CLIENTE CRIADO NO BLING:",
+    contatoId
   );
 
-  console.log(
-    "✅ PRODUTO ENCONTRADO NO BLING"
-  );
-
-  console.log(
-    "ID:",
-    produto.id
-  );
-
-  console.log(
-    "NOME:",
-    produto.nome
-  );
-
-  console.log(
-    "SKU:",
-    produto.codigo
-  );
-
-  console.log(
-    "PREÇO:",
-    produto.preco
-  );
-
-  console.log(
-    "ESTOQUE:",
-    produto?.estoque?.saldoVirtualTotal
-  );
-
-  console.log(
-    "================================="
-  );
-
-  return produto;
+  return contatoId;
 }
 
 /* =====================================================
-   BUSCAR O PRODUTO PRINCIPAL DA VANTI
+   CRIAR PEDIDO DE VENDA
 ===================================================== */
 
-export async function buscarProdutoVanti() {
-
-  return await buscarProdutoPorSku(
-    BLING_PRODUTO_SKU
-  );
-
-}
-
-/* =====================================================
-   CRIAR PEDIDO DE VENDA NO BLING
-===================================================== */
+/*
+ * produtoBlingId:
+ *
+ * Se vier informado pelo chamador,
+ * ele será utilizado.
+ *
+ * Caso contrário:
+ *
+ * quantidade 1 -> BLING_PRODUCT_ID_1
+ * quantidade 2 -> BLING_PRODUCT_ID_2
+ */
 
 export async function criarPedidoVenda({
-
   produtoBlingId,
 
   quantidade,
 
   valorProduto,
 
-  valorFrete,
+  valorFrete = 0,
 
   valorTotal,
 
@@ -957,292 +897,156 @@ export async function criarPedidoVenda({
 
   estado,
 
+  referencia,
+
   orderNsu,
-
 }) {
-
   /* ===================================================
-     VALIDAÇÕES
+     QUANTIDADE
   =================================================== */
 
-  if (!produtoBlingId) {
-
-    throw new Error(
-      "ID do produto no Bling não informado."
+  const quantidadeNumero =
+    numeroValido(
+      quantidade
     );
-  }
 
   if (
-    !quantidade ||
-    Number(quantidade) <= 0
+    !quantidadeNumero ||
+    quantidadeNumero <= 0 ||
+    !Number.isInteger(
+      quantidadeNumero
+    )
   ) {
-
     throw new Error(
-      "Quantidade do produto inválida para o Bling."
+      "Quantidade do produto inválida."
     );
   }
+
+  /* ===================================================
+     NOME
+  =================================================== */
 
   if (
     !nome ||
     String(nome).trim().length < 3
   ) {
-
     throw new Error(
-      "Nome do cliente não informado para o Bling."
+      "Nome do cliente não informado."
     );
   }
 
   /* ===================================================
-     NORMALIZAR VALORES
+     VALORES
   =================================================== */
 
-  const quantidadeNumero =
-    Number(
-      quantidade
-    );
-
   const valorProdutoNumero =
-    Number(
+    valorMonetario(
       valorProduto
     );
 
   const valorFreteNumero =
-    Number(
-      valorFrete || 0
+    valorMonetario(
+      valorFrete
     );
 
   const valorTotalNumero =
-    Number(
+    valorMonetario(
       valorTotal
     );
 
   if (
-    !Number.isFinite(
-      quantidadeNumero
-    )
+    valorProdutoNumero === null
   ) {
-
     throw new Error(
-      "Quantidade inválida para criação do pedido no Bling."
+      "Valor do produto no pedido é inválido."
     );
   }
 
   if (
-    !Number.isFinite(
-      valorProdutoNumero
-    )
+    valorFreteNumero === null
   ) {
-
     throw new Error(
-      "Valor do produto inválido para criação do pedido no Bling."
+      "Valor do frete no pedido é inválido."
     );
   }
 
   if (
-    !Number.isFinite(
-      valorFreteNumero
-    )
+    valorTotalNumero === null
   ) {
-
     throw new Error(
-      "Valor do frete inválido para criação do pedido no Bling."
-    );
-  }
-
-  if (
-    !Number.isFinite(
-      valorTotalNumero
-    )
-  ) {
-
-    throw new Error(
-      "Valor total inválido para criação do pedido no Bling."
+      "Valor total do pedido é inválido."
     );
   }
 
   /* ===================================================
-     LIMPAR CPF
+     PRODUTO BLING
   =================================================== */
 
-  const cpfLimpo =
-    cpf
-      ? String(cpf)
-          .replace(
-            /\D/g,
-            ""
-          )
-      : "";
+  const produtoId =
+    resolverProdutoBlingId(
+      quantidadeNumero,
+      produtoBlingId
+    );
 
   /* ===================================================
-     PROCURAR CLIENTE
+     ACCESS TOKEN
   =================================================== */
 
-  let contatoId =
-    null;
-
-  if (cpfLimpo) {
-
-    const url =
-      `${BLING_API_URL}/contatos?` +
-      `numeroDocumento=${encodeURIComponent(cpfLimpo)}`;
-
-    const resultadoContato =
-      await blingRequest(
-        url,
-        {
-          method:
-            "GET",
-        }
-      );
-
-    const contatos =
-      Array.isArray(
-        resultadoContato?.data
-      )
-        ? resultadoContato.data
-        : [];
-
-    if (
-      contatos.length > 0 &&
-      contatos[0]?.id
-    ) {
-
-      contatoId =
-        contatos[0].id;
-
-      console.log(
-        "✅ CLIENTE ENCONTRADO NO BLING:",
-        contatoId
-      );
-    }
-  }
+  const accessToken =
+    await getAccessToken();
 
   /* ===================================================
-     CRIAR CLIENTE
+     CLIENTE
   =================================================== */
 
-  if (!contatoId) {
+  const contatoId =
+    await obterOuAtualizarContato({
+      accessToken,
 
-    const contato = {
+      nome,
+      email,
+      telefone,
+      cpf,
 
-      nome:
-        String(
-          nome
-        ).trim(),
+      cep,
+      rua,
+      numero,
+      complemento,
+      bairro,
+      cidade,
+      estado,
+    });
 
-      email:
-        email
-          ? String(
-              email
-            ).trim()
-          : undefined,
+  /* ===================================================
+     VALOR UNITÁRIO
+  =================================================== */
 
-      celular:
-        telefone
-          ? String(
-              telefone
-            ).trim()
-          : undefined,
+  /*
+   * Exemplo:
+   *
+   * quantidade = 1
+   * valorProduto = 30
+   *
+   * item.valor = 30
+   *
+   * ----------------
+   *
+   * quantidade = 2
+   * valorProduto = 55
+   *
+   * item.valor = 27.50
+   *
+   * Portanto, aqui o valorProduto representa
+   * o valor TOTAL dos produtos.
+   */
 
-      numeroDocumento:
-        cpfLimpo ||
-        undefined,
-
-      /*
-       * Pessoa física.
-       */
-
-      tipo:
-        "F",
-
-      /*
-       * Cliente ativo.
-       */
-
-      situacao:
-        "A",
-
-      endereco: {
-
-        endereco:
-          rua || "",
-
-        numero:
-          numero || "",
-
-        complemento:
-          complemento || "",
-
-        bairro:
-          bairro || "",
-
-        cep:
-          cep || "",
-
-        municipio:
-          cidade || "",
-
-        uf:
-          estado || "",
-
-      },
-
-    };
-
-    console.log(
-      "================================="
+  const valorUnitario =
+    Number(
+      (
+        valorProdutoNumero /
+        quantidadeNumero
+      ).toFixed(2)
     );
-
-    console.log(
-      "👤 CRIANDO CLIENTE NO BLING"
-    );
-
-    console.log(
-      JSON.stringify(
-        contato,
-        null,
-        2
-      )
-    );
-
-    console.log(
-      "================================="
-    );
-
-    const resultadoCriacaoContato =
-      await blingRequest(
-        `${BLING_API_URL}/contatos`,
-        {
-
-          method:
-            "POST",
-
-          body:
-            JSON.stringify(
-              contato
-            ),
-
-        }
-      );
-
-    contatoId =
-      resultadoCriacaoContato
-        ?.data
-        ?.id ||
-      null;
-
-    if (!contatoId) {
-
-      throw new Error(
-        "Bling não retornou o ID do cliente criado."
-      );
-    }
-
-    console.log(
-      "✅ CLIENTE CRIADO NO BLING:",
-      contatoId
-    );
-  }
 
   /* ===================================================
      DATA
@@ -1257,22 +1061,28 @@ export async function criarPedidoVenda({
       );
 
   /* ===================================================
-     OBSERVAÇÃO
+     OBSERVAÇÕES
   =================================================== */
 
-  const observacaoPedido =
+  const observacoes = [
+    "Pedido originado no site Vanti.",
+
     orderNsu
+      ? `Order NSU: ${orderNsu}`
+      : null,
 
-      ? `Pedido originado no site Vanti. Order NSU: ${orderNsu}`
-
-      : "Pedido originado no site Vanti.";
+    referencia
+      ? `Referência: ${String(referencia).trim()}`
+      : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   /* ===================================================
      MONTAR PEDIDO
   =================================================== */
 
   const pedidoBling = {
-
     data:
       hoje,
 
@@ -1280,60 +1090,39 @@ export async function criarPedidoVenda({
       hoje,
 
     contato: {
-
       id:
-        Number(
-          contatoId
-        ),
-
+        Number(contatoId),
     },
 
     itens: [
-
       {
-
         quantidade:
           quantidadeNumero,
 
         valor:
-          valorProdutoNumero /
-          quantidadeNumero,
+          valorUnitario,
 
         produto: {
-
           id:
-            Number(
-              produtoBlingId
-            ),
-
+            Number(produtoId),
         },
-
       },
-
     ],
 
-    observacoes:
-      observacaoPedido,
+    observacoes,
 
     ...(valorFreteNumero > 0
-
       ? {
-
-          transporte: {
-
-            frete:
-              valorFreteNumero,
-
-          },
-
-        }
-
+        transporte: {
+          frete:
+            valorFreteNumero,
+        },
+      }
       : {}),
-
   };
 
   /* ===================================================
-     CRIAR PEDIDO
+     LOG
   =================================================== */
 
   console.log(
@@ -1345,8 +1134,8 @@ export async function criarPedidoVenda({
   );
 
   console.log(
-    "PRODUTO BLING ID:",
-    produtoBlingId
+    "PRODUTO BLING:",
+    produtoId
   );
 
   console.log(
@@ -1355,8 +1144,13 @@ export async function criarPedidoVenda({
   );
 
   console.log(
-    "VALOR PRODUTO:",
+    "VALOR DOS PRODUTOS:",
     valorProdutoNumero
+  );
+
+  console.log(
+    "VALOR UNITÁRIO:",
+    valorUnitario
   );
 
   console.log(
@@ -1367,6 +1161,11 @@ export async function criarPedidoVenda({
   console.log(
     "VALOR TOTAL:",
     valorTotalNumero
+  );
+
+  console.log(
+    "CONTATO ID:",
+    contatoId
   );
 
   console.log(
@@ -1385,11 +1184,17 @@ export async function criarPedidoVenda({
     )
   );
 
+  /* ===================================================
+     CRIAR PEDIDO
+  =================================================== */
+
   const resultadoPedido =
     await blingRequest(
-      `${BLING_API_URL}/pedidos/vendas`,
-      {
+      accessToken,
 
+      `${BLING_API_URL}/pedidos/vendas`,
+
+      {
         method:
           "POST",
 
@@ -1397,9 +1202,12 @@ export async function criarPedidoVenda({
           JSON.stringify(
             pedidoBling
           ),
-
       }
     );
+
+  /* ===================================================
+     ID DO PEDIDO
+  =================================================== */
 
   const pedidoCriado =
     resultadoPedido?.data ||
@@ -1409,8 +1217,9 @@ export async function criarPedidoVenda({
     pedidoCriado?.id ||
     null;
 
-  if (!blingOrderId) {
-
+  if (
+    !blingOrderId
+  ) {
     throw new Error(
       "Bling não retornou o ID do pedido criado."
     );
@@ -1425,18 +1234,8 @@ export async function criarPedidoVenda({
   );
 
   console.log(
-    "CONTATO ID:",
-    contatoId
-  );
-
-  console.log(
     "BLING ORDER ID:",
     blingOrderId
-  );
-
-  console.log(
-    "ORDER NSU:",
-    orderNsu
   );
 
   console.log(
@@ -1444,7 +1243,6 @@ export async function criarPedidoVenda({
   );
 
   return {
-
     success:
       true,
 
@@ -1454,59 +1252,167 @@ export async function criarPedidoVenda({
     contatoId:
       contatoId,
 
+    produtoBlingId:
+      produtoId,
+
+    quantidade:
+      quantidadeNumero,
+
+    valorProduto:
+      valorProdutoNumero,
+
+    valorUnitario,
+
+    valorFrete:
+      valorFreteNumero,
+
+    valorTotal:
+      valorTotalNumero,
+
     data:
       resultadoPedido,
-
   };
-
 }
 
 /* =====================================================
-   TESTAR API DO BLING
+   BUSCAR PRODUTO VANTI PELO SKU
 ===================================================== */
 
-export async function testBlingApi() {
+export async function buscarProdutoVanti(
+  sku
+) {
+
+  const SKU =
+    sku
+      ? String(sku).trim()
+      : "VTRP30MLQDS";
+
+  if (!SKU) {
+
+    throw new Error(
+      "SKU do produto Vanti não informado."
+    );
+
+  }
 
   console.log(
     "================================="
   );
 
   console.log(
-    "🔎 TESTANDO PRODUTO VANTI NO BLING"
+    "🔎 BUSCANDO PRODUTO VANTI NO BLING"
   );
 
   console.log(
     "SKU:",
-    BLING_PRODUTO_SKU
+    SKU
   );
 
   console.log(
     "================================="
   );
+
+
+  /* ===================================================
+     ACCESS TOKEN
+  =================================================== */
+
+  const accessToken =
+    await getAccessToken();
+
+
+  /* ===================================================
+     CONSULTAR PRODUTO PELO SKU
+  =================================================== */
+
+  const url =
+    `${BLING_API_URL}/produtos?codigo=${encodeURIComponent(SKU)}`;
+
+
+  console.log(
+    "URL:",
+    url
+  );
+
+
+  const resultado =
+    await blingRequest(
+      accessToken,
+      url,
+      {
+        method: "GET",
+      }
+    );
+
+
+  console.log(
+    "RESPOSTA DA BUSCA DO PRODUTO:"
+  );
+
+  console.log(
+    JSON.stringify(
+      resultado,
+      null,
+      2
+    )
+  );
+
+
+  /* ===================================================
+     EXTRAIR PRODUTO
+  =================================================== */
+
+  const produtos =
+    Array.isArray(
+      resultado?.data
+    )
+      ? resultado.data
+      : [];
+
+
+  if (
+    produtos.length === 0
+  ) {
+
+    console.error(
+      "❌ PRODUTO NÃO ENCONTRADO NO BLING"
+    );
+
+    console.error(
+      "SKU:",
+      SKU
+    );
+
+    return null;
+
+  }
+
 
   const produto =
-    await buscarProdutoVanti();
+    produtos[0];
 
-  const data = {
 
-    data: [
+  /* ===================================================
+     VALIDAR PRODUTO
+  =================================================== */
 
-      produto
+  if (
+    !produto?.id
+  ) {
 
-    ],
+    throw new Error(
+      `Bling encontrou o SKU ${SKU}, mas não retornou o ID do produto.`
+    );
 
-  };
+  }
+
 
   console.log(
     "================================="
   );
 
   console.log(
-    "✅ API DO BLING FUNCIONANDO"
-  );
-
-  console.log(
-    "PRODUTO VANTI ENCONTRADO"
+    "✅ PRODUTO VANTI ENCONTRADO"
   );
 
   console.log(
@@ -1525,9 +1431,66 @@ export async function testBlingApi() {
   );
 
   console.log(
+    "PREÇO CADASTRADO NO BLING:",
+    produto.preco
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  return produto;
+
+}
+
+/* =====================================================
+   TESTAR API DO BLING
+===================================================== */
+
+export async function testBlingApi() {
+  const accessToken =
+    await getAccessToken();
+
+  const data =
+    await blingRequest(
+      accessToken,
+
+      `${BLING_API_URL}/produtos?limite=1`,
+
+      {
+        method:
+          "GET",
+      }
+    );
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "✅ API DO BLING FUNCIONANDO"
+  );
+
+  console.log(
+    JSON.stringify(
+      data,
+      null,
+      2
+    )
+  );
+
+  console.log(
     "================================="
   );
 
   return data;
-
 }
+
+/* =====================================================
+   EXPORTAÇÃO
+===================================================== */
+
+export {
+  resolverProdutoBlingId,
+};

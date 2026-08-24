@@ -319,6 +319,7 @@ async function saveTokens(
 
   }
 
+
   /* =================================================
      ATUALIZAR
   ================================================= */
@@ -451,7 +452,7 @@ export async function authorizeWithCode(
   );
 
   console.log(
-    "🔐 TROCANDO CODE POR TOKEN"
+    "🔐 TROCANDO CÓDIGO POR TOKEN"
   );
 
   console.log(
@@ -843,19 +844,48 @@ export async function calculateShipping({
 
 
   /* =================================================
+     NORMALIZAR QUANTIDADE
+  ================================================= */
+
+  const quantidadeNumerica =
+    Math.max(
+      1,
+      Number(
+        quantidade
+      ) || 1
+    );
+
+
+  /* =================================================
      DADOS DO PRODUTO
   ================================================= */
 
-  const peso =
-    quantidade === 2
-      ? 0.2
-      : 0.1;
+  /*
+   * Produto:
+   *
+   * 12 cm largura
+   * 5 cm altura
+   * 17 cm comprimento
+   * 100 g
+   * R$ 57,00
+   */
+
+  const pesoPorUnidade =
+    0.1;
 
 
-  const valorProduto =
-    quantidade === 2
-      ? 97
-      : 57;
+  const valorPorUnidade =
+    57;
+
+
+  const pesoTotal =
+    pesoPorUnidade *
+    quantidadeNumerica;
+
+
+  const valorTotal =
+    valorPorUnidade *
+    quantidadeNumerica;
 
 
   /* =================================================
@@ -933,19 +963,83 @@ export async function calculateShipping({
           17,
 
         weight:
-          peso,
+          pesoTotal,
 
         insurance_value:
-          valorProduto,
+          valorTotal,
 
         quantity:
-          1,
+          quantidadeNumerica,
 
       },
 
     ],
 
   };
+
+
+  /* =================================================
+     LOG DA COTAÇÃO
+  ================================================= */
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "📦 CALCULANDO FRETE — MELHOR ENVIO"
+  );
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "URL:",
+    `${MELHOR_ENVIO_URL}/api/v2/me/shipment/calculate`
+  );
+
+  console.log(
+    "ORIGEM:",
+    process.env.ORIGIN_CEP
+  );
+
+  console.log(
+    "DESTINO:",
+    cepDestinoLimpo
+  );
+
+  console.log(
+    "QUANTIDADE:",
+    quantidadeNumerica
+  );
+
+  console.log(
+    "PESO TOTAL:",
+    pesoTotal,
+    "kg"
+  );
+
+  console.log(
+    "VALOR TOTAL:",
+    valorTotal
+  );
+
+  console.log(
+    "PAYLOAD ENVIADO:"
+  );
+
+  console.log(
+    JSON.stringify(
+      payload,
+      null,
+      2
+    )
+  );
+
+  console.log(
+    "================================="
+  );
 
 
   /* =================================================
@@ -1058,7 +1152,41 @@ export async function calculateShipping({
 
 
   /* =================================================
-     ERRO
+     LOG DA RESPOSTA
+  ================================================= */
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "📥 RESPOSTA DO MELHOR ENVIO"
+  );
+
+  console.log(
+    "STATUS HTTP:",
+    response.status
+  );
+
+  console.log(
+    "RESPOSTA:"
+  );
+
+  console.log(
+    JSON.stringify(
+      data,
+      null,
+      2
+    )
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  /* =================================================
+     ERRO HTTP
   ================================================= */
 
   if (!response.ok) {
@@ -1083,7 +1211,89 @@ export async function calculateShipping({
 
 
   /* =================================================
-     SUCESSO
+     VERIFICAR RESPOSTA VAZIA
+  ================================================= */
+
+  if (
+    !Array.isArray(data) ||
+    data.length === 0
+  ) {
+
+    console.warn(
+      "⚠️ MELHOR ENVIO NÃO RETORNOU NENHUMA OPÇÃO DE FRETE."
+    );
+
+  }
+
+
+  /* =================================================
+     VERIFICAR OPÇÕES COM ERRO
+  ================================================= */
+
+  if (
+    Array.isArray(data)
+  ) {
+
+    const opcoesValidas =
+      data.filter(
+        (item) =>
+          !item.error
+      );
+
+
+    const opcoesComErro =
+      data.filter(
+        (item) =>
+          item.error
+      );
+
+
+    console.log(
+      "OPÇÕES VÁLIDAS:",
+      opcoesValidas.length
+    );
+
+    console.log(
+      "OPÇÕES COM ERRO:",
+      opcoesComErro.length
+    );
+
+
+    if (
+      opcoesComErro.length > 0
+    ) {
+
+      console.warn(
+        "⚠️ SERVIÇOS COM ERRO:"
+      );
+
+      console.warn(
+        JSON.stringify(
+          opcoesComErro,
+          null,
+          2
+        )
+      );
+
+    }
+
+
+    if (
+      opcoesValidas.length === 0 &&
+      opcoesComErro.length > 0
+    ) {
+
+      console.warn(
+        "⚠️ NENHUMA TRANSPORTADORA DISPONÍVEL PARA ESTE TRECHO NO AMBIENTE ATUAL."
+      );
+
+    }
+
+  }
+
+
+  /* =================================================
+     RETORNAR RESPOSTA
   ================================================= */
 
   return data;

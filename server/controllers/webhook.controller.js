@@ -242,7 +242,7 @@ export async function webhookInfinitePay(
        * Retornamos 200 para evitar que a
        * InfinitePay fique reenviando indefinidamente
        * um pedido que não existe no nosso banco.
-       */
+      */
 
       return res.sendStatus(200);
 
@@ -325,7 +325,7 @@ export async function webhookInfinitePay(
      *
      * Isso permite que um webhook reenviado continue
      * o processo exatamente de onde parou.
-     */
+    */
 
     if (
       pedido.status === "pago" &&
@@ -577,8 +577,52 @@ export async function webhookInfinitePay(
 
 
     /* =================================================
-       BUSCAR PRODUTO NO BLING PELO SKU
+       DETERMINAR PRODUTO BLING PELA QUANTIDADE
     ================================================= */
+
+    const quantidade =
+      Number(
+        pedido.quantidade
+      );
+
+
+    let skuProduto;
+
+
+    if (
+      quantidade === 1
+    ) {
+
+      skuProduto =
+        process.env.BLING_SKU_1_UNIDADE ||
+        "VTRP30MLQDS";
+
+
+    } else if (
+      quantidade === 2
+    ) {
+
+      /*
+       * TEMPORÁRIO:
+       *
+       * Enquanto o produto específico de 2 unidades
+       * não foi criado no Bling, usamos o produto
+       * VTKT6RPS apenas para testar a integração.
+      */
+
+      skuProduto =
+        process.env.BLING_SKU_2_UNIDADES ||
+        "VTKT6RPS";
+
+
+    } else {
+
+      throw new Error(
+        `Quantidade não suportada para integração com o Bling: ${quantidade}`
+      );
+
+    }
+
 
     console.log(
       "================================="
@@ -589,8 +633,13 @@ export async function webhookInfinitePay(
     );
 
     console.log(
-      "SKU:",
-      "VTRP30MLQDS"
+      "QUANTIDADE DO PEDIDO:",
+      quantidade
+    );
+
+    console.log(
+      "SKU ESCOLHIDO:",
+      skuProduto
     );
 
     console.log(
@@ -599,7 +648,9 @@ export async function webhookInfinitePay(
 
 
     const produtoBling =
-      await buscarProdutoVanti();
+      await buscarProdutoVanti(
+        skuProduto
+      );
 
 
     /* =================================================
@@ -612,7 +663,7 @@ export async function webhookInfinitePay(
     ) {
 
       throw new Error(
-        "Produto VTRP30MLQDS não encontrado no Bling."
+        `Produto ${skuProduto} não encontrado no Bling.`
       );
 
     }
@@ -645,8 +696,7 @@ export async function webhookInfinitePay(
       "================================="
     );
 
-
-    /* =================================================
+        /* =================================================
        CRIAR PEDIDO NO BLING
     ================================================= */
 
@@ -938,7 +988,7 @@ export async function webhookInfinitePay(
      * Como bling_order_id ainda estará vazio,
      * um novo webhook poderá tentar novamente
      * enviar o pedido ao Bling.
-     */
+    */
 
     return res.sendStatus(400);
 

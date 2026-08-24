@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Checkout.css";
 
 /*
@@ -6,19 +6,29 @@ import "./Checkout.css";
  * MODO DE TESTE TEMPORÁRIO
  * =====================================================
  *
- * ATENÇÃO:
  * Deixe TRUE somente enquanto estivermos fazendo
  * o teste de pagamento de R$ 1,00.
  *
  * Depois do teste, volte para FALSE.
  */
+
 const TEST_PAYMENT_MODE = true;
+
+
+/* =====================================================
+   PROPS
+===================================================== */
 
 interface CheckoutProps {
   isOpen: boolean;
   quantity: 1 | 2;
   onClose: () => void;
 }
+
+
+/* =====================================================
+   FRETE
+===================================================== */
 
 interface ShippingOption {
   id: number;
@@ -35,11 +45,31 @@ interface ShippingOption {
   };
 }
 
+
+/* =====================================================
+   ENDEREÇO VIA CEP
+===================================================== */
+
+interface CepAddress {
+  logradouro: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
+  erro?: boolean;
+}
+
+
+/* =====================================================
+   COMPONENTE
+===================================================== */
+
 function Checkout({
   isOpen,
   quantity,
   onClose,
 }: CheckoutProps) {
+
+
   /* =====================================================
      PRODUTO
   ===================================================== */
@@ -50,6 +80,7 @@ function Checkout({
       : quantity === 1
         ? 57
         : 97;
+
 
   const productLabel =
     quantity === 1
@@ -62,7 +93,9 @@ function Checkout({
   ===================================================== */
 
   const [cep, setCep] = useState("");
-  const [cepError, setCepError] = useState("");
+
+  const [cepError, setCepError] =
+    useState("");
 
   const [shippingOptions, setShippingOptions] =
     useState<ShippingOption[]>([]);
@@ -72,6 +105,42 @@ function Checkout({
 
   const [loadingShipping, setLoadingShipping] =
     useState(false);
+
+
+  /* =====================================================
+     BUSCA DE ENDEREÇO
+  ===================================================== */
+
+  const [loadingAddress, setLoadingAddress] =
+    useState(false);
+
+  const [addressError, setAddressError] =
+    useState("");
+
+  const [addressFound, setAddressFound] =
+    useState(false);
+
+
+  /*
+   * Guarda a requisição atual para podermos
+   * cancelar caso outra seja iniciada.
+   */
+
+  const addressAbortController =
+    useRef<AbortController | null>(null);
+
+
+  /*
+   * Cache simples de CEP.
+   *
+   * Se o mesmo CEP for consultado novamente,
+   * não fazemos outra requisição.
+   */
+
+  const addressCache =
+    useRef<Map<string, CepAddress>>(
+      new Map()
+    );
 
 
   /* =====================================================
@@ -113,19 +182,43 @@ function Checkout({
   const [addressState, setAddressState] =
     useState("");
 
+  const [addressReference, setAddressReference] =
+    useState("");
+
 
   /* =====================================================
      BLOQUEAR SCROLL
   ===================================================== */
 
   useEffect(() => {
-    if (!isOpen) return;
+
+    if (!isOpen) {
+      return;
+    }
 
     document.body.style.overflow = "hidden";
 
     return () => {
       document.body.style.overflow = "";
     };
+
+  }, [isOpen]);
+
+
+  /* =====================================================
+     LIMPAR ABORT CONTROLLER AO FECHAR
+  ===================================================== */
+
+  useEffect(() => {
+
+    if (!isOpen) {
+
+      addressAbortController.current?.abort();
+
+      addressAbortController.current = null;
+
+    }
+
   }, [isOpen]);
 
 
@@ -136,27 +229,250 @@ function Checkout({
   const handleCepChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const value = event.target.value;
 
-    const numbersOnly = value.replace(/\D/g, "");
+    const value =
+      event.target.value;
 
-    const limited = numbersOnly.slice(0, 8);
+
+    const numbersOnly =
+      value.replace(/\D/g, "");
+
+
+    const limited =
+      numbersOnly.slice(0, 8);
+
 
     const formatted =
       limited.length > 5
         ? `${limited.slice(0, 5)}-${limited.slice(5)}`
         : limited;
 
+
     setCep(formatted);
 
-    if (cepError) {
-      setCepError("");
+    setCepError("");
+
+    setAddressError("");
+
+    setAddressFound(false);
+
+
+    /*
+     * Se o CEP mudar, a cotação antiga
+     * deixa de ser válida.
+     */
+
+    setShippingOptions([]);
+
+    setSelectedShipping(null);
+
+
+    /*
+     * Limpamos o endereço porque ele pode
+     * pertencer ao CEP anterior.
+     *
+     * Todos os campos serão preenchidos novamente
+     * quando o novo CEP for consultado.
+     */
+
+    setAddressStreet("");
+
+    setAddressNumber("");
+
+    setAddressComplement("");
+
+    setAddressNeighborhood("");
+
+    setAddressCity("");
+
+    setAddressState("");
+
+    setAddressReference("");
+
+  };
+
+
+  /* =====================================================
+     BUSCAR ENDEREÇO PELO CEP
+  ===================================================== */
+
+  const fetchAddressByCep = async (
+    cepNumber: string
+  ) => {
+
+    /*
+     * Cancela uma consulta anterior.
+     */
+
+    addressAbortController.current?.abort();
+
+
+    const controller =
+      new AbortController();
+
+
+    addressAbortController.current =
+      controller;
+
+
+    setLoadingAddress(true);
+
+    setAddressError("");
+
+    setAddressFound(false);
+
+
+    /*
+     * Verifica primeiro o cache.
+     */
+
+    const cachedAddress =
+      addressCache.current.get(
+        cepNumber
+      );
+
+
+    if (cachedAddress) {
+
+      setAddressStreet(
+        cachedAddress.logradouro || ""
+      );
+
+      setAddressNeighborhood(
+        cachedAddress.bairro || ""
+      );
+
+      setAddressCity(
+        cachedAddress.localidade || ""
+      );
+
+      setAddressState(
+        cachedAddress.uf || ""
+      );
+
+      setAddressFound(true);
+
+      setLoadingAddress(false);
+
+      return;
     }
 
-    // Se o usuário alterar o CEP,
-    // apagamos a cotação anterior.
-    setShippingOptions([]);
-    setSelectedShipping(null);
+
+    try {
+
+      const response =
+        await fetch(
+          `https://viacep.com.br/ws/${cepNumber}/json/`,
+          {
+            signal:
+              controller.signal,
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Não foi possível consultar o endereço."
+        );
+
+      }
+
+
+      const data:
+        CepAddress =
+        await response.json();
+
+
+      if (data.erro) {
+
+        throw new Error(
+          "CEP não encontrado."
+        );
+
+      }
+
+
+      /*
+       * Salva no cache.
+       */
+
+      addressCache.current.set(
+        cepNumber,
+        data
+      );
+
+
+      /*
+       * Preenche automaticamente
+       * os campos do endereço.
+       *
+       * IMPORTANTE:
+       * Esses campos continuam editáveis.
+       */
+
+      setAddressStreet(
+        data.logradouro || ""
+      );
+
+      setAddressNeighborhood(
+        data.bairro || ""
+      );
+
+      setAddressCity(
+        data.localidade || ""
+      );
+
+      setAddressState(
+        data.uf || ""
+      );
+
+      setAddressFound(true);
+
+
+    } catch (error) {
+
+      /*
+       * AbortError significa apenas que
+       * cancelamos uma requisição anterior.
+       */
+
+      if (
+        error instanceof DOMException &&
+        error.name === "AbortError"
+      ) {
+
+        return;
+
+      }
+
+
+      console.error(
+        "Erro ao consultar CEP:",
+        error
+      );
+
+
+      setAddressError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível localizar o endereço."
+      );
+
+
+    } finally {
+
+      if (
+        addressAbortController.current ===
+        controller
+      ) {
+
+        setLoadingAddress(false);
+
+      }
+
+    }
+
   };
 
 
@@ -165,79 +481,127 @@ function Checkout({
   ===================================================== */
 
   const handleCalculateShipping = async () => {
-    const numbersOnly = cep.replace(/\D/g, "");
 
-    if (numbersOnly.length !== 8) {
+    const numbersOnly =
+      cep.replace(/\D/g, "");
+
+
+    if (
+      numbersOnly.length !== 8
+    ) {
+
       setCepError(
         "Digite um CEP válido com 8 números."
       );
 
       return;
+
     }
 
+
     setCepError("");
+
+    setAddressError("");
+
+    setAddressFound(false);
+
     setLoadingShipping(true);
+
     setShippingOptions([]);
+
     setSelectedShipping(null);
 
+
     try {
-      const response = await fetch(
-        "https://api.vanticompany.com.br/api/frete",
-        {
-          method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response =
+        await fetch(
+          "https://api.vanticompany.com.br/api/frete",
+          {
+            method: "POST",
 
-          body: JSON.stringify({
-            cepDestino: numbersOnly,
-            quantidade: quantity,
-          }),
-        }
-      );
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
 
-      const data = await response.json();
+            body: JSON.stringify({
+
+              cepDestino:
+                numbersOnly,
+
+              quantidade:
+                quantity,
+
+            }),
+
+          }
+        );
+
+
+      const data =
+        await response.json();
+
 
       if (!response.ok) {
+
         throw new Error(
           data?.error ||
           "Não foi possível calcular o frete."
         );
+
       }
+
 
       /*
        * O Melhor Envio retorna uma lista
        * com as opções de transporte.
        */
 
-      const options: ShippingOption[] = data
-        .filter(
-          (option: ShippingOption) =>
-            option.custom_price != null
-        )
-        .map(
-          (option: ShippingOption) => ({
-            ...option,
-            custom_price: Number(
-              option.custom_price
-            ),
-          })
-        );
+      const options:
+        ShippingOption[] =
+        data
+          .filter(
+            (option: ShippingOption) =>
+              option.custom_price != null
+          )
+          .map(
+            (option: ShippingOption) => ({
 
-      if (options.length === 0) {
+              ...option,
+
+              custom_price:
+                Number(
+                  option.custom_price
+                ),
+
+            })
+          );
+
+
+      if (
+        options.length === 0
+      ) {
+
         throw new Error(
           "Nenhuma opção de frete encontrada para este CEP."
         );
+
       }
 
-      setShippingOptions(options);
+
+      setShippingOptions(
+        options
+      );
+
 
     } catch (error) {
+
       console.error(
         "Erro ao calcular frete:",
         error
       );
+
 
       setCepError(
         error instanceof Error
@@ -245,9 +609,60 @@ function Checkout({
           : "Erro ao calcular o frete."
       );
 
+
     } finally {
+
       setLoadingShipping(false);
+
     }
+
+  };
+
+
+  /* =====================================================
+     SELECIONAR FRETE
+  ===================================================== */
+
+  const handleSelectShipping = async (
+    option: ShippingOption
+  ) => {
+
+    /*
+     * Seleciona imediatamente o frete.
+     */
+
+    setSelectedShipping(
+      option
+    );
+
+
+    /*
+     * O CEP já foi validado para
+     * chegar até aqui.
+     */
+
+    const numbersOnly =
+      cep.replace(/\D/g, "");
+
+
+    if (
+      numbersOnly.length !== 8
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+     * Busca automaticamente o endereço
+     * referente ao CEP.
+     */
+
+    await fetchAddressByCep(
+      numbersOnly
+    );
+
   };
 
 
@@ -286,34 +701,108 @@ function Checkout({
   const handleCpfChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+
     const numbersOnly =
-      event.target.value.replace(/\D/g, "");
+      event.target.value
+        .replace(/\D/g, "");
+
 
     const limited =
       numbersOnly.slice(0, 11);
 
-    let formatted = limited;
 
-    if (limited.length > 9) {
+    let formatted =
+      limited;
+
+
+    if (
+      limited.length > 9
+    ) {
+
       formatted =
         `${limited.slice(0, 3)}.` +
         `${limited.slice(3, 6)}.` +
         `${limited.slice(6, 9)}-` +
         limited.slice(9);
 
-    } else if (limited.length > 6) {
+    } else if (
+      limited.length > 6
+    ) {
+
       formatted =
         `${limited.slice(0, 3)}.` +
         `${limited.slice(3, 6)}.` +
         limited.slice(6);
 
-    } else if (limited.length > 3) {
+    } else if (
+      limited.length > 3
+    ) {
+
       formatted =
         `${limited.slice(0, 3)}.` +
         limited.slice(3);
+
     }
 
-    setCustomerCpf(formatted);
+
+    setCustomerCpf(
+      formatted
+    );
+
+  };
+
+
+  /* =====================================================
+     FORMATAR TELEFONE
+  ===================================================== */
+
+  const handlePhoneChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+
+    const numbersOnly =
+      event.target.value
+        .replace(/\D/g, "")
+        .slice(0, 11);
+
+
+    let formatted =
+      numbersOnly;
+
+
+    if (
+      numbersOnly.length > 10
+    ) {
+
+      formatted =
+        `(${numbersOnly.slice(0, 2)}) ` +
+        `${numbersOnly.slice(2, 7)}-` +
+        numbersOnly.slice(7);
+
+    } else if (
+      numbersOnly.length > 6
+    ) {
+
+      formatted =
+        `(${numbersOnly.slice(0, 2)}) ` +
+        `${numbersOnly.slice(2, 6)}-` +
+        numbersOnly.slice(6);
+
+    } else if (
+      numbersOnly.length > 2
+    ) {
+
+      formatted =
+        `(${numbersOnly.slice(0, 2)}) ` +
+        numbersOnly.slice(2);
+
+    }
+
+
+    setCustomerPhone(
+      formatted
+    );
+
   };
 
 
@@ -323,14 +812,26 @@ function Checkout({
 
   const customerDataValid =
     customerName.trim().length >= 3 &&
-    customerCpf.replace(/\D/g, "").length === 11 &&
+
+    customerCpf
+      .replace(/\D/g, "")
+      .length === 11 &&
+
     customerEmail.includes("@") &&
-    customerPhone.replace(/\D/g, "").length >= 10 &&
+
+    customerPhone
+      .replace(/\D/g, "")
+      .length >= 10 &&
+
     addressStreet.trim().length >= 3 &&
+
     addressNumber.trim().length > 0 &&
+
     addressNeighborhood.trim().length >= 2 &&
+
     addressCity.trim().length >= 2 &&
-    addressState.length === 2;
+
+    addressState.trim().length === 2;
 
 
   /* =====================================================
@@ -339,102 +840,171 @@ function Checkout({
 
   const canContinue =
     selectedShipping !== null &&
-    customerDataValid;
+    customerDataValid &&
+    !loadingAddress;
 
 
   /* =====================================================
-     BOTÃO DE PAGAMENTO
+     PAGAMENTO
   ===================================================== */
 
-  const handleContinuePayment = async () => {
-    if (!canContinue || !selectedShipping) {
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        "https://api.vanticompany.com.br/api/pagamento",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify({
-            quantidade: quantity,
-
-            frete: shippingPrice,
-
-            cliente: {
-              nome: customerName,
-              cpf: customerCpf,
-              email: customerEmail,
-              telefone: customerPhone,
-            },
-
-            endereco: {
-              cep: cep.replace(/\D/g, ""),
-              rua: addressStreet,
-              numero: addressNumber,
-              complemento: addressComplement,
-              bairro: addressNeighborhood,
-              cidade: addressCity,
-              estado: addressState,
-            },
-
-            freteDetalhes: {
-              id: selectedShipping.id,
-              empresa:
-                selectedShipping.company.name,
-              nome: selectedShipping.name,
-              valor: shippingPrice,
-              prazo:
-                selectedShipping.custom_delivery_time ||
-                selectedShipping.delivery_time,
-            },
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      console.log(
-        "Resposta do pagamento:",
-        data
-      );
+  const handleContinuePayment =
+    async () => {
 
       if (
-        !response.ok ||
-        !data?.success ||
-        !data?.url
+        !canContinue ||
+        !selectedShipping
       ) {
-        throw new Error(
-          data?.error ||
-          "Não foi possível criar o checkout."
-        );
+
+        return;
+
       }
 
-      /*
-       * Redireciona o cliente para
-       * o checkout da InfinitePay.
-       */
 
-      window.location.href = data.url;
+      try {
 
-    } catch (error) {
-      console.error(
-        "Erro ao criar pagamento:",
-        error
-      );
+        const response =
+          await fetch(
+            "https://api.vanticompany.com.br/api/pagamento",
+            {
+              method: "POST",
 
-      alert(
-        error instanceof Error
-          ? error.message
-          : "Não foi possível iniciar o pagamento."
-      );
-    }
-  };
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body: JSON.stringify({
+
+                quantidade:
+                  quantity,
+
+                frete:
+                  shippingPrice,
+
+                cliente: {
+
+                  nome:
+                    customerName,
+
+                  cpf:
+                    customerCpf,
+
+                  email:
+                    customerEmail,
+
+                  telefone:
+                    customerPhone,
+
+                },
+
+                endereco: {
+
+                  cep:
+                    cep.replace(
+                      /\D/g,
+                      ""
+                    ),
+
+                  rua:
+                    addressStreet,
+
+                  numero:
+                    addressNumber,
+
+                  complemento:
+                    addressComplement,
+
+                  bairro:
+                    addressNeighborhood,
+
+                  cidade:
+                    addressCity,
+
+                  estado:
+                    addressState,
+
+                  referencia:
+                    addressReference,
+
+                },
+
+                freteDetalhes: {
+
+                  id:
+                    selectedShipping.id,
+
+                  empresa:
+                    selectedShipping
+                      .company
+                      .name,
+
+                  nome:
+                    selectedShipping
+                      .name,
+
+                  valor:
+                    shippingPrice,
+
+                  prazo:
+                    selectedShipping
+                      .custom_delivery_time ||
+                    selectedShipping
+                      .delivery_time,
+
+                },
+
+              }),
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        console.log(
+          "Resposta do pagamento:",
+          data
+        );
+
+
+        if (
+          !response.ok ||
+          !data?.success ||
+          !data?.url
+        ) {
+
+          throw new Error(
+            data?.error ||
+            "Não foi possível criar o checkout."
+          );
+
+        }
+
+
+        window.location.href =
+          data.url;
+
+
+      } catch (error) {
+
+        console.error(
+          "Erro ao criar pagamento:",
+          error
+        );
+
+
+        alert(
+          error instanceof Error
+            ? error.message
+            : "Não foi possível iniciar o pagamento."
+        );
+
+      }
+
+    };
 
 
   /* =====================================================
@@ -442,7 +1012,9 @@ function Checkout({
   ===================================================== */
 
   if (!isOpen) {
+
     return null;
+
   }
 
 
@@ -451,6 +1023,7 @@ function Checkout({
   ===================================================== */
 
   return (
+
     <div
       className="checkout-overlay"
       onClick={onClose}
@@ -464,9 +1037,9 @@ function Checkout({
       >
 
 
-        {/* =====================================================
+        {/* =================================================
             CABEÇALHO
-        ===================================================== */}
+        ================================================= */}
 
         <div className="checkout-header">
 
@@ -482,6 +1055,7 @@ function Checkout({
 
           </div>
 
+
           <button
             type="button"
             className="checkout-close"
@@ -494,9 +1068,9 @@ function Checkout({
         </div>
 
 
-        {/* =====================================================
+        {/* =================================================
             PRODUTO
-        ===================================================== */}
+        ================================================= */}
 
         <div className="checkout-product">
 
@@ -507,7 +1081,10 @@ function Checkout({
                 : `${import.meta.env.BASE_URL}images/product-front-2un.webp`
             }
             alt={productLabel}
+            loading="eager"
+            decoding="async"
           />
+
 
           <div className="checkout-product-info">
 
@@ -533,15 +1110,16 @@ function Checkout({
         </div>
 
 
-        {/* =====================================================
+        {/* =================================================
             CEP
-        ===================================================== */}
+        ================================================= */}
 
         <div className="checkout-section">
 
           <label htmlFor="checkout-cep">
             CEP de entrega
           </label>
+
 
           <div className="checkout-cep">
 
@@ -561,20 +1139,26 @@ function Checkout({
               }
             />
 
+
             <button
               type="button"
               className="checkout-calculate"
               onClick={
                 handleCalculateShipping
               }
-              disabled={loadingShipping}
+              disabled={
+                loadingShipping
+              }
             >
+
               {loadingShipping
                 ? "Calculando..."
                 : "Calcular frete"}
+
             </button>
 
           </div>
+
 
           {cepError ? (
 
@@ -588,7 +1172,7 @@ function Checkout({
 
               {isCepValid
                 ? "CEP pronto para consultar o frete."
-                : "O frete será calculado de acordo com seu endereço."}
+                : "Digite seu CEP para consultar as opções de entrega."}
 
             </p>
 
@@ -597,9 +1181,9 @@ function Checkout({
         </div>
 
 
-        {/* =====================================================
+        {/* =================================================
             OPÇÕES DE FRETE
-        ===================================================== */}
+        ================================================= */}
 
         {shippingOptions.length > 0 && (
 
@@ -609,6 +1193,7 @@ function Checkout({
               Escolha a forma de entrega
             </h3>
 
+
             {shippingOptions.map(
               (option) => (
 
@@ -616,14 +1201,14 @@ function Checkout({
                   key={option.id}
                   type="button"
                   className={
-                    `checkout-shipping-option ${selectedShipping?.id ===
-                      option.id
-                      ? "selected"
-                      : ""
+                    `checkout-shipping-option ${
+                      selectedShipping?.id === option.id
+                        ? "selected"
+                        : ""
                     }`
                   }
                   onClick={() =>
-                    setSelectedShipping(
+                    handleSelectShipping(
                       option
                     )
                   }
@@ -646,6 +1231,7 @@ function Checkout({
 
                   </div>
 
+
                   <strong>
                     R${" "}
                     {option.custom_price
@@ -663,20 +1249,314 @@ function Checkout({
         )}
 
 
-        {/* =====================================================
-            DADOS DO CLIENTE
-        ===================================================== */}
+        {/* =================================================
+            ENDEREÇO + DADOS DO CLIENTE
+        ================================================= */}
 
         {selectedShipping && (
 
           <div className="checkout-customer">
 
-            <h3>
-              Dados para entrega
-            </h3>
+            {/* =================================================
+                ENDEREÇO
+            ================================================= */}
+
+            <div className="checkout-customer-heading">
+
+              <div>
+
+                <span className="checkout-step">
+                  02
+                </span>
+
+                <div>
+
+                  <h3>
+                    Endereço de entrega
+                  </h3>
+
+                  <p>
+                    Preenchemos pelo CEP. Confira e altere se necessário.
+                  </p>
+
+                </div>
+
+              </div>
 
 
-            {/* NOME */}
+              {loadingAddress && (
+
+                <span className="checkout-address-loading">
+                  Buscando endereço...
+                </span>
+
+              )}
+
+
+              {addressFound &&
+                !loadingAddress && (
+
+                  <span className="checkout-address-success">
+                    ✓ Endereço encontrado
+                  </span>
+
+                )}
+
+            </div>
+
+
+            {addressError && (
+
+              <div className="checkout-address-error">
+                {addressError}
+              </div>
+
+            )}
+
+
+            {/* =================================================
+                RUA
+            ================================================= */}
+
+            <div className="checkout-field">
+
+              <label htmlFor="customer-street">
+                Rua
+              </label>
+
+              <input
+                id="customer-street"
+                className={
+                  addressFound
+                    ? "address-auto-filled"
+                    : ""
+                }
+                type="text"
+                placeholder={
+                  loadingAddress
+                    ? "Buscando endereço..."
+                    : "Nome da rua"
+                }
+                value={addressStreet}
+                onChange={(event) =>
+                  setAddressStreet(
+                    event.target.value
+                  )
+                }
+                autoComplete="street-address"
+              />
+
+            </div>
+
+
+            {/* =================================================
+                NÚMERO + COMPLEMENTO
+            ================================================= */}
+
+            <div className="checkout-address-row">
+
+              <div className="checkout-field">
+
+                <label htmlFor="customer-number">
+                  Número
+                </label>
+
+                <input
+                  id="customer-number"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Ex.: 123"
+                  value={addressNumber}
+                  onChange={(event) =>
+                    setAddressNumber(
+                      event.target.value
+                    )
+                  }
+                  autoComplete="address-line2"
+                />
+
+              </div>
+
+
+              <div className="checkout-field">
+
+                <label htmlFor="customer-complement">
+                  Complemento
+                  <span> opcional</span>
+                </label>
+
+                <input
+                  id="customer-complement"
+                  type="text"
+                  placeholder="Apto, casa..."
+                  value={addressComplement}
+                  onChange={(event) =>
+                    setAddressComplement(
+                      event.target.value
+                    )
+                  }
+                  autoComplete="address-line2"
+                />
+
+              </div>
+
+            </div>
+
+
+            {/* =================================================
+                BAIRRO
+            ================================================= */}
+
+            <div className="checkout-field">
+
+              <label htmlFor="customer-neighborhood">
+                Bairro
+              </label>
+
+              <input
+                id="customer-neighborhood"
+                className={
+                  addressFound
+                    ? "address-auto-filled"
+                    : ""
+                }
+                type="text"
+                placeholder="Seu bairro"
+                value={addressNeighborhood}
+                onChange={(event) =>
+                  setAddressNeighborhood(
+                    event.target.value
+                  )
+                }
+                autoComplete="address-level3"
+              />
+
+            </div>
+
+
+            {/* =================================================
+                CIDADE + ESTADO
+            ================================================= */}
+
+            <div className="checkout-address-row">
+
+              <div className="checkout-field">
+
+                <label htmlFor="customer-city">
+                  Cidade
+                </label>
+
+                <input
+                  id="customer-city"
+                  className={
+                    addressFound
+                      ? "address-auto-filled"
+                      : ""
+                  }
+                  type="text"
+                  placeholder="São Paulo"
+                  value={addressCity}
+                  onChange={(event) =>
+                    setAddressCity(
+                      event.target.value
+                    )
+                  }
+                  autoComplete="address-level2"
+                />
+
+              </div>
+
+
+              <div className="checkout-field checkout-state-field">
+
+                <label htmlFor="customer-state">
+                  UF
+                </label>
+
+                <input
+                  id="customer-state"
+                  className={
+                    addressFound
+                      ? "address-auto-filled"
+                      : ""
+                  }
+                  type="text"
+                  placeholder="SP"
+                  maxLength={2}
+                  value={addressState}
+                  onChange={(event) =>
+                    setAddressState(
+                      event.target.value
+                        .toUpperCase()
+                    )
+                  }
+                  autoComplete="address-level1"
+                />
+
+              </div>
+
+            </div>
+
+
+            {/* =================================================
+                REFERÊNCIA
+            ================================================= */}
+
+            <div className="checkout-field">
+
+              <label htmlFor="customer-reference">
+                Referência
+                <span> opcional</span>
+              </label>
+
+              <input
+                id="customer-reference"
+                type="text"
+                placeholder="Ex.: próximo ao mercado, portão azul..."
+                value={addressReference}
+                onChange={(event) =>
+                  setAddressReference(
+                    event.target.value
+                  )
+                }
+                autoComplete="off"
+              />
+
+            </div>
+
+
+            {/* =================================================
+                DADOS PESSOAIS
+            ================================================= */}
+
+            <div className="checkout-customer-heading checkout-personal-heading">
+
+              <div>
+
+                <span className="checkout-step">
+                  03
+                </span>
+
+                <div>
+
+                  <h3>
+                    Seus dados
+                  </h3>
+
+                  <p>
+                    Preencha seus dados para receber o pedido.
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            {/* =================================================
+                NOME
+            ================================================= */}
 
             <div className="checkout-field">
 
@@ -700,29 +1580,57 @@ function Checkout({
             </div>
 
 
-            {/* CPF */}
+            {/* =================================================
+                CPF + WHATSAPP
+            ================================================= */}
 
-            <div className="checkout-field">
+            <div className="checkout-address-row">
 
-              <label htmlFor="customer-cpf">
-                CPF
-              </label>
+              <div className="checkout-field">
 
-              <input
-                id="customer-cpf"
-                type="text"
-                inputMode="numeric"
-                placeholder="000.000.000-00"
-                value={customerCpf}
-                onChange={handleCpfChange}
-                maxLength={14}
-                autoComplete="off"
-              />
+                <label htmlFor="customer-cpf">
+                  CPF
+                </label>
+
+                <input
+                  id="customer-cpf"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="000.000.000-00"
+                  value={customerCpf}
+                  onChange={handleCpfChange}
+                  maxLength={14}
+                  autoComplete="off"
+                />
+
+              </div>
+
+
+              <div className="checkout-field">
+
+                <label htmlFor="customer-phone">
+                  WhatsApp
+                </label>
+
+                <input
+                  id="customer-phone"
+                  type="tel"
+                  inputMode="tel"
+                  placeholder="(11) 99999-9999"
+                  value={customerPhone}
+                  onChange={handlePhoneChange}
+                  maxLength={15}
+                  autoComplete="tel"
+                />
+
+              </div>
 
             </div>
 
 
-            {/* EMAIL */}
+            {/* =================================================
+                EMAIL
+            ================================================= */}
 
             <div className="checkout-field">
 
@@ -746,191 +1654,14 @@ function Checkout({
             </div>
 
 
-            {/* TELEFONE */}
-
-            <div className="checkout-field">
-
-              <label htmlFor="customer-phone">
-                WhatsApp
-              </label>
-
-              <input
-                id="customer-phone"
-                type="tel"
-                placeholder="(11) 99999-9999"
-                value={customerPhone}
-                onChange={(event) =>
-                  setCustomerPhone(
-                    event.target.value
-                  )
-                }
-                autoComplete="tel"
-              />
-
-            </div>
-
-
-            {/* =====================================================
-                ENDEREÇO
-            ===================================================== */}
-
-            <h3 className="checkout-address-title">
-              Endereço de entrega
-            </h3>
-
-
-            {/* RUA */}
-
-            <div className="checkout-field">
-
-              <label htmlFor="customer-street">
-                Rua
-              </label>
-
-              <input
-                id="customer-street"
-                type="text"
-                placeholder="Nome da rua"
-                value={addressStreet}
-                onChange={(event) =>
-                  setAddressStreet(
-                    event.target.value
-                  )
-                }
-                autoComplete="street-address"
-              />
-
-            </div>
-
-
-            {/* NÚMERO + COMPLEMENTO */}
-
-            <div className="checkout-address-row">
-
-              <div className="checkout-field">
-
-                <label htmlFor="customer-number">
-                  Número
-                </label>
-
-                <input
-                  id="customer-number"
-                  type="text"
-                  placeholder="123"
-                  value={addressNumber}
-                  onChange={(event) =>
-                    setAddressNumber(
-                      event.target.value
-                    )
-                  }
-                />
-
-              </div>
-
-
-              <div className="checkout-field">
-
-                <label htmlFor="customer-complement">
-                  Complemento
-                </label>
-
-                <input
-                  id="customer-complement"
-                  type="text"
-                  placeholder="Apto, casa..."
-                  value={addressComplement}
-                  onChange={(event) =>
-                    setAddressComplement(
-                      event.target.value
-                    )
-                  }
-                />
-
-              </div>
-
-            </div>
-
-
-            {/* BAIRRO */}
-
-            <div className="checkout-field">
-
-              <label htmlFor="customer-neighborhood">
-                Bairro
-              </label>
-
-              <input
-                id="customer-neighborhood"
-                type="text"
-                placeholder="Seu bairro"
-                value={addressNeighborhood}
-                onChange={(event) =>
-                  setAddressNeighborhood(
-                    event.target.value
-                  )
-                }
-                autoComplete="address-level2"
-              />
-
-            </div>
-
-
-            {/* CIDADE + ESTADO */}
-
-            <div className="checkout-address-row">
-
-              <div className="checkout-field">
-
-                <label htmlFor="customer-city">
-                  Cidade
-                </label>
-
-                <input
-                  id="customer-city"
-                  type="text"
-                  placeholder="São Paulo"
-                  value={addressCity}
-                  onChange={(event) =>
-                    setAddressCity(
-                      event.target.value
-                    )
-                  }
-                />
-
-              </div>
-
-
-              <div className="checkout-field">
-
-                <label htmlFor="customer-state">
-                  Estado
-                </label>
-
-                <input
-                  id="customer-state"
-                  type="text"
-                  placeholder="SP"
-                  maxLength={2}
-                  value={addressState}
-                  onChange={(event) =>
-                    setAddressState(
-                      event.target.value.toUpperCase()
-                    )
-                  }
-                />
-
-              </div>
-
-            </div>
-
           </div>
 
         )}
 
 
-        {/* =====================================================
+        {/* =================================================
             FRETE
-        ===================================================== */}
+        ================================================= */}
 
         <div className="checkout-shipping">
 
@@ -944,13 +1675,14 @@ function Checkout({
 
               {selectedShipping
                 ? `R$ ${shippingPrice
-                  .toFixed(2)
-                  .replace(".", ",")}`
+                    .toFixed(2)
+                    .replace(".", ",")}`
                 : "—"}
 
             </strong>
 
           </div>
+
 
           <p>
 
@@ -965,9 +1697,9 @@ function Checkout({
         </div>
 
 
-        {/* =====================================================
+        {/* =================================================
             RESUMO
-        ===================================================== */}
+        ================================================= */}
 
         <div className="checkout-summary">
 
@@ -997,8 +1729,8 @@ function Checkout({
 
               {selectedShipping
                 ? `R$ ${shippingPrice
-                  .toFixed(2)
-                  .replace(".", ",")}`
+                    .toFixed(2)
+                    .replace(".", ",")}`
                 : "—"}
 
             </strong>
@@ -1024,29 +1756,33 @@ function Checkout({
         </div>
 
 
-        {/* =====================================================
+        {/* =================================================
             BOTÃO
-        ===================================================== */}
+        ================================================= */}
 
         <button
           type="button"
           className="checkout-button"
           disabled={!canContinue}
-          onClick={handleContinuePayment}
+          onClick={
+            handleContinuePayment
+          }
         >
 
           {!selectedShipping
             ? "Selecione o frete para continuar"
-            : !customerDataValid
-              ? "Preencha seus dados para continuar"
-              : "Continuar para pagamento"}
+            : loadingAddress
+              ? "Localizando endereço..."
+              : !customerDataValid
+                ? "Preencha seus dados para continuar"
+                : "Continuar para pagamento"}
 
         </button>
 
 
-        {/* =====================================================
+        {/* =================================================
             SEGURANÇA
-        ===================================================== */}
+        ================================================= */}
 
         <div className="checkout-security">
 
@@ -1064,7 +1800,10 @@ function Checkout({
       </div>
 
     </div>
+
   );
+
 }
+
 
 export default Checkout;
