@@ -993,6 +993,25 @@ export async function webhookInfinitePay(
      * enviar o pedido ao Bling.
     */
 
+    /* ==========================================
+   MARCAR ERRO NO BLING
+========================================== */
+    await pool.execute(
+      `
+  UPDATE pedidos
+  SET
+    bling_status = ?,
+    bling_error = ?,
+    updated_at = NOW()
+  WHERE order_nsu = ?
+  `,
+      [
+        "erro",
+        error?.message || "Erro desconhecido no Bling",
+        order_nsu,
+      ]
+    );
+
     return res.sendStatus(400);
 
   }

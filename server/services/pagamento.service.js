@@ -8,6 +8,10 @@ import {
   createCheckout,
 } from "./infinitePay.service.js";
 
+import {
+  calculateShipping,
+} from "./melhorEnvio.service.js";
+
 import pool from "../config/database.js";
 
 
@@ -39,7 +43,7 @@ const TEST_PAYMENT_MODE = true;
 
 export async function criarPagamento({
   quantidade,
-  frete,
+  shippingId,
   cliente,
   endereco,
 }) {
@@ -62,18 +66,22 @@ export async function criarPagamento({
 
 
   /* ===================================================
-     VALIDAÇÃO DO FRETE
+     VALIDAÇÃO DO SERVIÇO DE FRETE
   =================================================== */
 
+  const shippingIdNumber =
+    Number(shippingId);
+
   if (
-    typeof frete !== "number" ||
-    !Number.isFinite(frete) ||
-    frete < 0
+    !Number.isInteger(
+      shippingIdNumber
+    ) ||
+    shippingIdNumber <= 0
   ) {
 
     const error =
       new Error(
-        "Valor do frete inválido."
+        "Serviço de frete inválido."
       );
 
     error.status = 400;
@@ -310,6 +318,161 @@ export async function criarPagamento({
 
 
   /* ===================================================
+     VALIDAR FRETE NOVAMENTE NO SERVIDOR
+  =================================================== */
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "🔐 VALIDANDO FRETE NO SERVIDOR"
+  );
+
+  console.log(
+    "CEP:",
+    cep
+  );
+
+  console.log(
+    "QUANTIDADE:",
+    quantidade
+  );
+
+  console.log(
+    "SERVIÇO ESCOLHIDO:",
+    shippingIdNumber
+  );
+
+
+  let shippingOptions;
+
+  try {
+
+    shippingOptions =
+      await calculateShipping({
+        cepDestino: cep,
+        quantidade,
+      });
+
+  } catch (error) {
+
+    console.error(
+      "❌ ERRO AO VALIDAR FRETE NO SERVIDOR"
+    );
+
+    console.error(
+      error.message
+    );
+
+    throw error;
+  }
+
+
+  /* ===================================================
+     VALIDAR RESPOSTA DO MELHOR ENVIO
+  =================================================== */
+
+  if (!Array.isArray(shippingOptions)) {
+
+    const error =
+      new Error(
+        "Resposta inválida do cálculo de frete."
+      );
+
+    error.status = 502;
+
+    throw error;
+  }
+
+
+  /* ===================================================
+     ENCONTRAR O SERVIÇO ESCOLHIDO
+  =================================================== */
+
+  const selectedShipping =
+    shippingOptions.find(
+      (option) =>
+        Number(option?.id) ===
+        shippingIdNumber
+    );
+
+
+  if (!selectedShipping) {
+
+    const error =
+      new Error(
+        "A opção de frete selecionada não está mais disponível. Calcule o frete novamente."
+      );
+
+    error.status = 400;
+
+    throw error;
+  }
+
+
+  /* ===================================================
+     PEGAR PREÇO OFICIAL DO MELHOR ENVIO
+  =================================================== */
+
+  const valorFreteCalculado =
+    Number(
+      selectedShipping.custom_price
+    );
+
+
+  if (
+    !Number.isFinite(
+      valorFreteCalculado
+    ) ||
+    valorFreteCalculado < 0
+  ) {
+
+    const error =
+      new Error(
+        "O Melhor Envio retornou um valor de frete inválido."
+      );
+
+    error.status = 502;
+
+    throw error;
+  }
+
+
+  /* ===================================================
+     LOG DO FRETE
+  =================================================== */
+
+  console.log(
+    "TRANSPORTADORA:",
+    selectedShipping.company?.name ||
+    "Não informado"
+  );
+
+  console.log(
+    "SERVIÇO:",
+    selectedShipping.name ||
+    "Não informado"
+  );
+
+  console.log(
+    "VALOR OFICIAL:",
+    valorFreteCalculado
+  );
+
+  console.log(
+    "PRAZO:",
+    selectedShipping.custom_delivery_time ||
+    selectedShipping.delivery_time ||
+    "Não informado"
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  /* ===================================================
      VALOR NORMAL DO PRODUTO
   =================================================== */
 
@@ -346,7 +509,7 @@ export async function criarPagamento({
   const valorFrete =
     TEST_PAYMENT_MODE
       ? 0
-      : frete;
+      : valorFreteCalculado;
 
 
   const valorTotal =
@@ -360,12 +523,6 @@ export async function criarPagamento({
   const produtoCentavos =
     Math.round(
       valorProduto * 100
-    );
-
-
-  const freteCentavos =
-    Math.round(
-      valorFrete * 100
     );
 
 
@@ -386,9 +543,6 @@ export async function criarPagamento({
 
 
   /*
-   * A InfinitePay espera o telefone
-   * em formato internacional.
-   *
    * Se o cliente digitou apenas
    * DDD + número, adicionamos 55.
    */
@@ -461,6 +615,18 @@ export async function criarPagamento({
   console.log(
     "VALOR PRODUTO:",
     valorProduto
+  );
+
+  console.log(
+    "SERVIÇO FRETE:",
+    selectedShipping.name ||
+    "Não informado"
+  );
+
+  console.log(
+    "TRANSPORTADORA:",
+    selectedShipping.company?.name ||
+    "Não informado"
   );
 
   console.log(
@@ -613,51 +779,48 @@ export async function criarPagamento({
 
 
   /* ===================================================
-     ITENS DO CHECKOUT INFINITEPAY
+     ITEM DO CHECKOUT INFINITEPAY
   =================================================== */
+
+  /*
+   * A InfinitePay trata tudo que está em "items"
+   * como item da cobrança.
+   *
+   * Como o cliente já viu no nosso checkout:
+   *
+   * Produto = R$ 57,00
+   * Frete   = R$ XX,XX
+   * Total   = R$ XX,XX
+   *
+   * vamos enviar para a InfinitePay apenas UM item
+   * com o valor total da compra.
+   *
+   * O MySQL continua guardando produto e frete
+   * separadamente.
+   */
 
   const items = [
 
     {
-      quantity: 1,
+
+      quantity:
+        1,
 
       price:
-        produtoCentavos,
+        Math.round(
+          valorTotal * 100
+        ),
 
       description:
         TEST_PAYMENT_MODE
           ? "Teste Vanti - R$ 1,00"
           : quantidade === 2
-            ? "Queridinho Supreme - 2 unidades"
-            : "Queridinho Supreme - 1 unidade",
+            ? "Queridinho Supreme 2 Unidades + entrega"
+            : "Queridinho Supreme 1 Unidade + entrega",
+
     },
 
   ];
-
-
-  /*
-   * SOMENTE NO MODO NORMAL:
-   *
-   * Adicionamos o frete como item.
-   *
-   * No teste não enviamos frete de R$ 0,00.
-   */
-
-  if (!TEST_PAYMENT_MODE) {
-
-    items.push({
-
-      quantity: 1,
-
-      price:
-        freteCentavos,
-
-      description:
-        "Frete",
-
-    });
-
-  }
 
 
   /* ===================================================
@@ -669,10 +832,8 @@ export async function criarPagamento({
     handle:
       INFINITEPAY_HANDLE,
 
-
     items:
       items,
-
 
     order_nsu:
       orderNsu,

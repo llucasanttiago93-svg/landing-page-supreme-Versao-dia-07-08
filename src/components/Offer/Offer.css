@@ -405,15 +405,21 @@
 
     text-decoration: none;
 
+    cursor: pointer;
+
     transition:
         transform .25s ease,
-        background .25s ease;
+        background .25s ease,
+        box-shadow .25s ease;
 }
 
 .pricing-button:hover {
     background: #000;
 
     transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, .18);
 }
 
 .featured-button {
@@ -425,6 +431,11 @@
 
 .featured-button:hover {
     background: #d86902;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 24px rgba(236, 116, 4, .28);
 }
 
 

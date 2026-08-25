@@ -875,12 +875,9 @@ function Checkout({
               },
 
               body: JSON.stringify({
+                quantidade: quantity,
 
-                quantidade:
-                  quantity,
-
-                frete:
-                  shippingPrice,
+                shippingId: selectedShipping.id,
 
                 cliente: {
 
@@ -929,30 +926,7 @@ function Checkout({
 
                 },
 
-                freteDetalhes: {
-
-                  id:
-                    selectedShipping.id,
-
-                  empresa:
-                    selectedShipping
-                      .company
-                      .name,
-
-                  nome:
-                    selectedShipping
-                      .name,
-
-                  valor:
-                    shippingPrice,
-
-                  prazo:
-                    selectedShipping
-                      .custom_delivery_time ||
-                    selectedShipping
-                      .delivery_time,
-
-                },
+               
 
               }),
 
@@ -1201,10 +1175,9 @@ function Checkout({
                   key={option.id}
                   type="button"
                   className={
-                    `checkout-shipping-option ${
-                      selectedShipping?.id === option.id
-                        ? "selected"
-                        : ""
+                    `checkout-shipping-option ${selectedShipping?.id === option.id
+                      ? "selected"
+                      : ""
                     }`
                   }
                   onClick={() =>
@@ -1659,42 +1632,7 @@ function Checkout({
         )}
 
 
-        {/* =================================================
-            FRETE
-        ================================================= */}
 
-        <div className="checkout-shipping">
-
-          <div>
-
-            <span>
-              Frete
-            </span>
-
-            <strong>
-
-              {selectedShipping
-                ? `R$ ${shippingPrice
-                    .toFixed(2)
-                    .replace(".", ",")}`
-                : "—"}
-
-            </strong>
-
-          </div>
-
-
-          <p>
-
-            {TEST_PAYMENT_MODE
-              ? "Frete zerado temporariamente para teste."
-              : selectedShipping
-                ? selectedShipping.name
-                : "Digite seu CEP para consultar as opções de envio."}
-
-          </p>
-
-        </div>
 
 
         {/* =================================================
@@ -1729,8 +1667,8 @@ function Checkout({
 
               {selectedShipping
                 ? `R$ ${shippingPrice
-                    .toFixed(2)
-                    .replace(".", ",")}`
+                  .toFixed(2)
+                  .replace(".", ",")}`
                 : "—"}
 
             </strong>
