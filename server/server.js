@@ -17,6 +17,10 @@ import infinitePayRoutes from "./routes/infinitePay.routes.js";
 
 import blingRoutes from "./routes/bling.routes.js";
 
+import {
+  enviarEmailTeste,
+} from "./services/email.service.js";
+
 
 /* =====================================================
    CONFIGURAÇÃO DO SERVIDOR
@@ -87,6 +91,46 @@ app.use(
 app.use(
   "/",
   infinitePayRoutes
+);
+
+
+/* =====================================================
+   TESTE DE E-MAIL
+===================================================== */
+
+app.get(
+  "/teste-email",
+  async (req, res) => {
+
+    try {
+
+      await enviarEmailTeste();
+
+      res.json({
+        success: true,
+        message: "E-mail de teste enviado com sucesso.",
+      });
+
+    } catch (error) {
+
+      console.error(
+        "❌ ERRO AO ENVIAR E-MAIL DE TESTE"
+      );
+
+      console.error(
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        error:
+          error?.message ||
+          "Erro ao enviar e-mail.",
+      });
+
+    }
+
+  }
 );
 
 

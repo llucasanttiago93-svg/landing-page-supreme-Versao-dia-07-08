@@ -340,11 +340,11 @@ export function pagamentoConcluido(
 
 
         <a
-          href="<a href="https://vanticosmeticos.com.br/"
->"
+          href="https://vanticosmeticos.com.br/"
         >
+        
 
-          Ver outros produtos Vanti
+          🛍️ Descubra mais produtos Vanti
 
         </a>
 

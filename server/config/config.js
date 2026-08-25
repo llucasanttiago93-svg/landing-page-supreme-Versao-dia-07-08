@@ -58,7 +58,7 @@ const PORT =
 ===================================================== */
 
 const MELHOR_ENVIO_URL =
-  "https://sandbox.melhorenvio.com.br";
+  "https://melhorenvio.com.br";
 
 
 const CLIENT_ID =

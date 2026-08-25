@@ -1210,84 +1210,101 @@ export async function calculateShipping({
   }
 
 
-  /* =================================================
-     VERIFICAR RESPOSTA VAZIA
+/* =================================================
+   NORMALIZAR RESPOSTA DO MELHOR ENVIO
+================================================= */
+
+let opcoesFrete = [];
+
+if (Array.isArray(data)) {
+
+  opcoesFrete = data;
+
+} else if (
+  data &&
+  typeof data === "object" &&
+  data.custom_price != null
+) {
+
+  opcoesFrete = [
+    data
+  ];
+
+}
+
+
+/* =================================================
+   VERIFICAR RESPOSTA VAZIA
+================================================= */
+
+if (
+  opcoesFrete.length === 0
+) {
+
+  console.warn(
+    "⚠️ MELHOR ENVIO NÃO RETORNOU NENHUMA OPÇÃO DE FRETE."
+  );
+
+}
+
+
+    /* =================================================
+     VERIFICAR OPÇÕES COM ERRO
   ================================================= */
 
+  const opcoesValidas =
+    opcoesFrete.filter(
+      (item) =>
+        !item.error
+    );
+
+
+  const opcoesComErro =
+    opcoesFrete.filter(
+      (item) =>
+        item.error
+    );
+
+
+  console.log(
+    "OPÇÕES VÁLIDAS:",
+    opcoesValidas.length
+  );
+
+
+  console.log(
+    "OPÇÕES COM ERRO:",
+    opcoesComErro.length
+  );
+
+
   if (
-    !Array.isArray(data) ||
-    data.length === 0
+    opcoesComErro.length > 0
   ) {
 
     console.warn(
-      "⚠️ MELHOR ENVIO NÃO RETORNOU NENHUMA OPÇÃO DE FRETE."
+      "⚠️ SERVIÇOS COM ERRO:"
+    );
+
+    console.warn(
+      JSON.stringify(
+        opcoesComErro,
+        null,
+        2
+      )
     );
 
   }
 
 
-  /* =================================================
-     VERIFICAR OPÇÕES COM ERRO
-  ================================================= */
-
   if (
-    Array.isArray(data)
+    opcoesValidas.length === 0 &&
+    opcoesComErro.length > 0
   ) {
 
-    const opcoesValidas =
-      data.filter(
-        (item) =>
-          !item.error
-      );
-
-
-    const opcoesComErro =
-      data.filter(
-        (item) =>
-          item.error
-      );
-
-
-    console.log(
-      "OPÇÕES VÁLIDAS:",
-      opcoesValidas.length
+    console.warn(
+      "⚠️ NENHUMA TRANSPORTADORA DISPONÍVEL PARA ESTE TRECHO NO AMBIENTE ATUAL."
     );
-
-    console.log(
-      "OPÇÕES COM ERRO:",
-      opcoesComErro.length
-    );
-
-
-    if (
-      opcoesComErro.length > 0
-    ) {
-
-      console.warn(
-        "⚠️ SERVIÇOS COM ERRO:"
-      );
-
-      console.warn(
-        JSON.stringify(
-          opcoesComErro,
-          null,
-          2
-        )
-      );
-
-    }
-
-
-    if (
-      opcoesValidas.length === 0 &&
-      opcoesComErro.length > 0
-    ) {
-
-      console.warn(
-        "⚠️ NENHUMA TRANSPORTADORA DISPONÍVEL PARA ESTE TRECHO NO AMBIENTE ATUAL."
-      );
-
-    }
 
   }
 
@@ -1296,8 +1313,7 @@ export async function calculateShipping({
      RETORNAR RESPOSTA
   ================================================= */
 
-  return data;
-
+  return opcoesFrete;
 }
 
 

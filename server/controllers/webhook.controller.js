@@ -9,15 +9,20 @@ import {
 
 import pool from "../config/database.js";
 
+import {
+  enviarEmailErroBling,
+} from "../services/email.service.js";
+
 
 /* =====================================================
    WEBHOOK INFINITEPAY
 ===================================================== */
 
-export async function webhookInfinitePay(
-  req,
-  res
-) {
+export async function webhookInfinitePay(req, res) {
+
+  let etapa = "inicio";
+  let order_nsu = null;
+  let pedido = null;
 
   try {
 
@@ -36,10 +41,12 @@ export async function webhookInfinitePay(
       installments,
       capture_method,
       transaction_nsu,
-      order_nsu,
+      order_nsu: orderNsuWebhook,
       receipt_url,
       items,
     } = data;
+
+    order_nsu = orderNsuWebhook;
 
 
     /* =================================================
@@ -249,8 +256,7 @@ export async function webhookInfinitePay(
     }
 
 
-    const pedido =
-      pedidos[0];
+    pedido = pedidos[0];
 
 
     console.log(
@@ -286,6 +292,45 @@ export async function webhookInfinitePay(
       console.log(
         "BLING ORDER ID:",
         pedido.bling_order_id
+      );
+
+      console.log(
+        "================================="
+      );
+
+
+      return res.sendStatus(200);
+
+    }
+
+
+    /* =================================================
+       VERIFICAR SE JÁ POSSUI ERRO NO BLING
+    ================================================= */
+
+    if (
+      pedido.bling_status === "erro"
+    ) {
+
+      console.log(
+        "================================="
+      );
+
+      console.log(
+        "⚠️ PEDIDO JÁ POSSUI ERRO NO BLING"
+      );
+
+      console.log(
+        "ORDER NSU:",
+        order_nsu
+      );
+
+      console.log(
+        "❌ NÃO VAMOS TENTAR ENVIAR NOVAMENTE AO BLING"
+      );
+
+      console.log(
+        "📧 O ALERTA JÁ FOI PROCESSADO"
       );
 
       console.log(
@@ -646,6 +691,7 @@ export async function webhookInfinitePay(
       "================================="
     );
 
+    etapa = "bling";
 
     const produtoBling =
       await buscarProdutoVanti(
@@ -959,23 +1005,28 @@ export async function webhookInfinitePay(
     );
 
     console.error(
+      "Etapa:",
+      etapa
+    );
+
+    console.error(
       "Mensagem:",
-      error.message
+      error?.message
     );
 
     console.error(
       "Status:",
-      error.status
+      error?.status
     );
 
     console.error(
       "Dados:",
-      error.data
+      error?.data
     );
 
     console.error(
       "Stack:",
-      error.stack
+      error?.stack
     );
 
     console.error(
@@ -983,37 +1034,206 @@ export async function webhookInfinitePay(
     );
 
 
-    /*
-     * Se o Bling falhar, retornamos erro.
-     *
-     * O pagamento já foi salvo como pago no MySQL.
-     *
-     * Como bling_order_id ainda estará vazio,
-     * um novo webhook poderá tentar novamente
-     * enviar o pedido ao Bling.
-    */
+    /* =================================================
+       ERRO DURANTE PROCESSAMENTO DO BLING
+    ================================================= */
+
+    if (
+      etapa === "bling" &&
+      order_nsu
+    ) {
+
+      try {
+
+        const [resultadoUpdate] =
+          await pool.execute(
+            `
+        UPDATE pedidos
+
+        SET
+
+          bling_status = ?,
+
+          bling_error = ?,
+
+          updated_at = NOW()
+
+        WHERE order_nsu = ?
+
+        AND (
+          bling_status IS NULL
+          OR bling_status <> 'erro'
+        )
+
+        LIMIT 1
+        `,
+
+            [
+
+              "erro",
+
+              error?.message ||
+              "Erro desconhecido ao enviar pedido para o Bling.",
+
+              order_nsu
+
+            ]
+
+          );
+
+
+        /* ==========================================
+           VERIFICAR SE FOI A PRIMEIRA VEZ
+        ========================================== */
+
+        if (
+          resultadoUpdate.affectedRows === 1
+        ) {
+
+          console.log(
+            "================================="
+          );
+
+          console.log(
+            "⚠️ ERRO DO BLING REGISTRADO NO MYSQL"
+          );
+
+          console.log(
+            "ORDER NSU:",
+            order_nsu
+          );
+
+          console.log(
+            "ERRO:",
+            error?.message
+          );
+
+          console.log(
+            "================================="
+          );
+
+
+          /* ==========================================
+             ENVIAR ALERTA POR E-MAIL
+          ========================================== */
+
+          try {
+
+            await enviarEmailErroBling({
+
+              orderNsu:
+                order_nsu,
+
+              nome:
+                pedido.nome,
+
+              email:
+                pedido.email,
+
+              telefone:
+                pedido.telefone,
+
+              cpf:
+                pedido.cpf,
+
+              valorTotal:
+                pedido.valor_total,
+
+              erro:
+                error?.message ||
+                "Erro desconhecido ao enviar pedido para o Bling.",
+
+            });
+
+
+            console.log(
+              "📧 ALERTA DE ERRO DO BLING ENVIADO POR E-MAIL"
+            );
+
+
+          } catch (emailError) {
+
+            console.error(
+              "❌ NÃO FOI POSSÍVEL ENVIAR O ALERTA POR E-MAIL"
+            );
+
+            console.error(
+              emailError?.message ||
+              emailError
+            );
+
+          }
+
+
+        } else {
+
+          console.log(
+            "ℹ️ ERRO DO BLING JÁ REGISTRADO — E-MAIL NÃO SERÁ ENVIADO NOVAMENTE"
+          );
+
+          console.log(
+            "ORDER NSU:",
+            order_nsu
+          );
+
+        }
+
+
+        /* ==========================================
+           IMPORTANTE:
+           O WEBHOOK FOI RECEBIDO.
+           RESPONDER 200 EVITA NOVOS REENVios
+           DA INFINITEPAY.
+        ========================================== */
+
+        return res.sendStatus(200);
+
+
+      } catch (dbError) {
+
+        console.error(
+          "================================="
+        );
+
+        console.error(
+          "❌ NÃO FOI POSSÍVEL REGISTRAR O ERRO DO BLING NO MYSQL"
+        );
+
+        console.error(
+          "ORDER NSU:",
+          order_nsu
+        );
+
+        console.error(
+          "Erro original:",
+          error?.message
+        );
+
+        console.error(
+          "Erro ao atualizar MySQL:",
+          dbError?.message
+        );
+
+        console.error(
+          "================================="
+        );
+
+        /*
+         * Aqui mantemos 400 porque realmente
+         * não conseguimos processar o webhook.
+         */
+
+        return res.sendStatus(400);
+
+      }
+
+    }
+
 
     /* ==========================================
-   MARCAR ERRO NO BLING
-========================================== */
-    await pool.execute(
-      `
-  UPDATE pedidos
-  SET
-    bling_status = ?,
-    bling_error = ?,
-    updated_at = NOW()
-  WHERE order_nsu = ?
-  `,
-      [
-        "erro",
-        error?.message || "Erro desconhecido no Bling",
-        order_nsu,
-      ]
-    );
+       OUTROS ERROS DO WEBHOOK
+    ========================================== */
 
     return res.sendStatus(400);
-
   }
-
 }

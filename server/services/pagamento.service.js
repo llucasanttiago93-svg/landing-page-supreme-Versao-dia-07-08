@@ -420,6 +420,23 @@ export async function criarPagamento({
       selectedShipping.custom_price
     );
 
+  /* ===================================================
+ DADOS DO FRETE ESCOLHIDO
+=================================================== */
+
+  const shippingName =
+    selectedShipping.name ||
+    "Não informado";
+
+  const shippingCompany =
+    selectedShipping.company?.name ||
+    "Não informado";
+
+  const shippingDeliveryTime =
+    selectedShipping.custom_delivery_time ??
+    selectedShipping.delivery_time ??
+    null;
+
 
   if (
     !Number.isFinite(
@@ -654,52 +671,64 @@ export async function criarPagamento({
       await pool.execute(
 
         `
-        INSERT INTO pedidos (
-          order_nsu,
-          status,
-          quantidade,
-          valor_produto,
-          valor_frete,
-          valor_total,
-          nome,
-          email,
-          telefone,
-          cpf,
-          cep,
-          rua,
-          numero,
-          complemento,
-          bairro,
-          cidade,
-          estado
-        )
+INSERT INTO pedidos (
+  order_nsu,
+  status,
+  quantidade,
+  valor_produto,
+  valor_frete,
+  shipping_id,
+  shipping_name,
+  shipping_company,
+  shipping_delivery_time,
+  valor_total,
+  nome,
+  email,
+  telefone,
+  cpf,
+  cep,
+  rua,
+  numero,
+  complemento,
+  bairro,
+  cidade,
+  estado
+)
 
-        VALUES (
-          ?,
-          'aguardando_pagamento',
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?
-        )
-        `,
+VALUES (
+  ?,
+  'aguardando_pagamento',
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?,
+  ?
+)
+`,
 
         [
           orderNsu,
           quantidade,
           valorProduto,
           valorFrete,
+          shippingId,
+          shippingName,
+          shippingCompany,
+          shippingDeliveryTime,
           valorTotal,
           nome,
           email,

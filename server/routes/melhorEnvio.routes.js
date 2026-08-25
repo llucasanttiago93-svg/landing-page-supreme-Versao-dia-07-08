@@ -113,7 +113,7 @@ router.get(
 
       res.send(`
         <h1>Melhor Envio autorizado!</h1>
-        <p>A integração Sandbox foi autorizada com sucesso.</p>
+        <p>A integração do Melhor Envio foi autorizada com sucesso.</p>
         <p>Você já pode fechar esta página.</p>
       `);
 
