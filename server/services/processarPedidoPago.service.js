@@ -2,12 +2,15 @@ import {
   checkPayment,
 } from "./infinitePay.service.js";
 
+
 import {
   criarPedidoVenda,
   buscarProdutoVanti,
 } from "./bling.service.js";
 
+
 import pool from "../config/database.js";
+
 
 import {
   enviarEmailErroBling,
@@ -23,24 +26,35 @@ export async function processarPedidoPago({
   orderNsu,
 
   transactionNsu,
+
   invoiceSlug,
 
+
   amount,
+
   paidAmount,
+
   installments,
+
   captureMethod,
+
   receiptUrl,
+
   items,
 
 }) {
 
-  let pedido = null;
+
+  let pedido =
+    null;
+
 
   let etapa =
     "inicio";
 
 
   try {
+
 
     /* =================================================
        VALIDAR IDENTIFICADORES
@@ -54,6 +68,7 @@ export async function processarPedidoPago({
 
     }
 
+
     if (!transactionNsu) {
 
       throw new Error(
@@ -61,6 +76,7 @@ export async function processarPedidoPago({
       );
 
     }
+
 
     if (!invoiceSlug) {
 
@@ -102,46 +118,69 @@ export async function processarPedidoPago({
         SELECT
 
           id,
+
           order_nsu,
+
           status,
 
           quantidade,
 
           valor_produto,
+
           valor_frete,
 
           shipping_id,
+
           shipping_name,
+
           shipping_company,
+
           shipping_delivery_time,
 
           valor_total,
 
           nome,
+
           email,
+
           telefone,
+
           cpf,
 
           cep,
+
           rua,
+
           numero,
+
           complemento,
+
           bairro,
+
           cidade,
+
           estado,
 
           invoice_slug,
+
           transaction_nsu,
+
           paid_amount,
+
           installments,
+
           capture_method,
+
           receipt_url,
+
           paid_at,
 
           bling_order_id,
+
           bling_status,
 
           created_at,
+
           updated_at
 
         FROM pedidos
@@ -152,7 +191,9 @@ export async function processarPedidoPago({
         `,
 
         [
+
           orderNsu
+
         ]
 
       );
@@ -234,46 +275,6 @@ export async function processarPedidoPago({
 
 
     /* =================================================
-       PEDIDO JÁ SENDO PROCESSADO
-    ================================================= */
-
-    if (
-      pedido.bling_status ===
-      "processando"
-    ) {
-
-      console.log(
-        "================================="
-      );
-
-      console.log(
-        "⚠️ PEDIDO JÁ ESTÁ SENDO PROCESSADO"
-      );
-
-      console.log(
-        "ORDER NSU:",
-        orderNsu
-      );
-
-      console.log(
-        "================================="
-      );
-
-
-      return {
-
-        success:
-          true,
-
-        processing:
-          true,
-
-      };
-
-    }
-
-
-    /* =================================================
        CONFIRMAR PAGAMENTO
     ================================================= */
 
@@ -298,7 +299,7 @@ export async function processarPedidoPago({
       );
 
       console.log(
-        "Vamos continuar para o Bling."
+        "Vamos continuar para a confirmação do fluxo."
       );
 
       console.log(
@@ -333,6 +334,7 @@ export async function processarPedidoPago({
 
 
     } else {
+
 
       console.log(
         "================================="
@@ -566,12 +568,98 @@ export async function processarPedidoPago({
 
 
     /* =================================================
-       DEFINIR SKU
+       TRAVAR PROCESSAMENTO DO BLING
+       
+       IMPORTANTE:
+       A trava acontece SOMENTE depois
+       que o pagamento foi confirmado.
     ================================================= */
 
     etapa =
       "bling";
 
+
+    const [
+      resultadoProcessamento
+    ] =
+      await pool.execute(
+
+        `
+        UPDATE pedidos
+
+        SET
+
+          bling_status = ?,
+
+          updated_at = NOW()
+
+        WHERE id = ?
+
+        AND bling_order_id IS NULL
+
+        AND (
+          bling_status IS NULL
+          OR bling_status = 'erro'
+        )
+
+        LIMIT 1
+        `,
+
+        [
+
+          "processando",
+
+          pedido.id
+
+        ]
+
+      );
+
+
+    /*
+     * Se não conseguiu atualizar uma linha,
+     * outra execução provavelmente pegou
+     * esse pedido primeiro.
+     */
+
+    if (
+      resultadoProcessamento.affectedRows !== 1
+    ) {
+
+      console.log(
+        "================================="
+      );
+
+      console.log(
+        "⚠️ PEDIDO JÁ ESTÁ SENDO PROCESSADO"
+      );
+
+      console.log(
+        "ORDER NSU:",
+        orderNsu
+      );
+
+      console.log(
+        "================================="
+      );
+
+
+      return {
+
+        success:
+          true,
+
+        processing:
+          true,
+
+      };
+
+    }
+
+
+    /* =================================================
+       DEFINIR SKU
+    ================================================= */
 
     const quantidade =
       Number(
@@ -680,69 +768,6 @@ export async function processarPedidoPago({
     console.log(
       "================================="
     );
-
-
-    /* =================================================
-       MARCAR COMO PROCESSANDO
-    ================================================= */
-
-    const [
-      resultadoProcessamento
-    ] =
-      await pool.execute(
-
-        `
-        UPDATE pedidos
-
-        SET
-
-          bling_status = ?,
-
-          updated_at = NOW()
-
-        WHERE id = ?
-
-        AND bling_order_id IS NULL
-
-        AND (
-          bling_status IS NULL
-          OR bling_status <> 'processando'
-        )
-
-        LIMIT 1
-        `,
-
-        [
-
-          "processando",
-
-          pedido.id
-
-        ]
-
-      );
-
-
-    if (
-      resultadoProcessamento.affectedRows !== 1
-    ) {
-
-      console.log(
-        "⚠️ PEDIDO JÁ ESTÁ SENDO PROCESSADO POR OUTRA REQUISIÇÃO."
-      );
-
-
-      return {
-
-        success:
-          true,
-
-        processing:
-          true,
-
-      };
-
-    }
 
 
     /* =================================================
@@ -989,6 +1014,7 @@ export async function processarPedidoPago({
 
   } catch (error) {
 
+
     console.error(
       "================================="
     );
@@ -1034,6 +1060,7 @@ export async function processarPedidoPago({
 
       try {
 
+
         const [
           resultadoUpdate
         ] =
@@ -1073,6 +1100,14 @@ export async function processarPedidoPago({
 
           );
 
+
+        /*
+         * Só envia o e-mail se esta execução
+         * realmente mudou o status para erro.
+         *
+         * Isso evita e-mails duplicados em
+         * chamadas repetidas do mesmo pedido.
+         */
 
         if (
           resultadoUpdate.affectedRows === 1
@@ -1126,6 +1161,7 @@ export async function processarPedidoPago({
           }
 
         }
+
 
       } catch (dbError) {
 

@@ -601,10 +601,10 @@ export async function saveTokens(
   const expiresAt =
     expires_in
       ? new Date(
-          Date.now() +
-          Number(expires_in) *
-          1000
-        )
+        Date.now() +
+        Number(expires_in) *
+        1000
+      )
       : null;
 
 
@@ -915,117 +915,236 @@ async function blingRequest(
   options = {}
 ) {
 
-  const response =
-    await fetch(
+  const maxTentativas = 3;
 
-      url,
+  for (
+    let tentativa = 1;
+    tentativa <= maxTentativas;
+    tentativa++
+  ) {
 
-      {
+    const response =
+      await fetch(
+        url,
+        {
+          ...options,
 
-        ...options,
+          headers: {
 
-        headers: {
+            ...(options.headers || {}),
 
-          ...(options.headers || {}),
+            "Authorization":
+              `Bearer ${accessToken}`,
 
-          "Authorization":
-            `Bearer ${accessToken}`,
+            "Content-Type":
+              "application/json",
 
-          "Content-Type":
-            "application/json",
+            "Accept":
+              "application/json",
 
-          "Accept":
-            "application/json",
+            "enable-jwt":
+              "1",
 
-          "enable-jwt":
-            "1",
+          },
 
-        },
-
-      }
-
-    );
-
-
-  const text =
-    await response.text();
-
-
-  let data = {};
-
-
-  try {
-
-    data =
-      text
-        ? JSON.parse(text)
-        : {};
-
-  } catch {
-
-    data = {
-
-      raw:
-        text,
-
-    };
-
-  }
-
-
-  if (!response.ok) {
-
-    console.error(
-      "================================="
-    );
-
-    console.error(
-      "❌ ERRO NA API DO BLING"
-    );
-
-    console.error(
-      "STATUS:",
-      response.status
-    );
-
-    console.error(
-      "URL:",
-      url
-    );
-
-    console.error(
-      "RESPOSTA:",
-      data
-    );
-
-    console.error(
-      "================================="
-    );
-
-
-    const error =
-      new Error(
-        "Erro na API do Bling."
+        }
       );
 
 
-    error.status =
-      response.status;
+    const text =
+      await response.text();
 
 
-    error.data =
-      data;
+    let data = {};
 
 
-    throw error;
+    try {
+
+      data =
+        text
+          ? JSON.parse(text)
+          : {};
+
+    } catch {
+
+      data = {
+        raw:
+          text,
+      };
+
+    }
+
+
+    /*
+     * =====================================================
+     * RATE LIMIT — 429
+     * =====================================================
+     */
+
+    if (
+      response.status === 429
+    ) {
+
+      console.warn(
+        `⚠️ BLING RATE LIMIT (429) — tentativa ${tentativa}/${maxTentativas}`
+      );
+
+
+      if (
+        tentativa < maxTentativas
+      ) {
+
+        /*
+         * Tempo informado pelo Bling,
+         * caso exista.
+         */
+
+        const retryAfter =
+          response.headers.get(
+            "Retry-After"
+          );
+
+
+        let espera =
+          retryAfter
+            ? Number(retryAfter) * 1000
+            : tentativa * 3000;
+
+
+        /*
+         * Segurança para não esperar
+         * um tempo absurdo.
+         */
+
+        if (
+          !Number.isFinite(
+            espera
+          )
+        ) {
+
+          espera =
+            tentativa * 3000;
+
+        }
+
+
+        espera =
+          Math.min(
+            espera,
+            15000
+          );
+
+
+        console.log(
+          `⏳ Aguardando ${espera / 1000}s antes de tentar novamente...`
+        );
+
+
+        await new Promise(
+          resolve =>
+            setTimeout(
+              resolve,
+              espera
+            )
+        );
+
+
+        continue;
+
+      }
+
+
+      /*
+       * Esgotou as tentativas.
+       */
+
+      const error =
+        new Error(
+          "Bling está temporariamente indisponível por excesso de requisições (429)."
+        );
+
+
+      error.status =
+        429;
+
+
+      error.data =
+        data;
+
+
+      throw error;
+
+    }
+
+
+    /*
+     * =====================================================
+     * OUTROS ERROS
+     * =====================================================
+     */
+
+    if (
+      !response.ok
+    ) {
+
+      console.error(
+        "================================="
+      );
+
+      console.error(
+        "❌ ERRO NA API DO BLING"
+      );
+
+      console.error(
+        "STATUS:",
+        response.status
+      );
+
+      console.error(
+        "URL:",
+        url
+      );
+
+      console.error(
+        "RESPOSTA:",
+        data
+      );
+
+      console.error(
+        "================================="
+      );
+
+
+      const error =
+        new Error(
+          "Erro na API do Bling."
+        );
+
+
+      error.status =
+        response.status;
+
+
+      error.data =
+        data;
+
+
+      throw error;
+
+    }
+
+
+    /*
+     * =====================================================
+     * SUCESSO
+     * =====================================================
+     */
+
+    return data;
 
   }
 
-
-  return data;
-
 }
-
 
 /* =====================================================
    ESCOLHER PRODUTO BLING PELA QUANTIDADE
@@ -1127,10 +1246,10 @@ function limparCpf(
 
   return valor
     ? String(valor)
-        .replace(
-          /\D/g,
-          ""
-        )
+      .replace(
+        /\D/g,
+        ""
+      )
     : "";
 
 }
@@ -1146,10 +1265,10 @@ function limparCep(
 
   return valor
     ? String(valor)
-        .replace(
-          /\D/g,
-          ""
-        )
+      .replace(
+        /\D/g,
+        ""
+      )
     : "";
 
 }
@@ -1600,15 +1719,15 @@ export async function obterOuAtualizarContato({
       email:
         email
           ? String(
-              email
-            ).trim()
+            email
+          ).trim()
           : undefined,
 
       celular:
         telefone
           ? String(
-              telefone
-            ).trim()
+            telefone
+          ).trim()
           : undefined,
 
       numeroDocumento:
@@ -1755,15 +1874,15 @@ export async function obterOuAtualizarContato({
     email:
       email
         ? String(
-            email
-          ).trim()
+          email
+        ).trim()
         : undefined,
 
     celular:
       telefone
         ? String(
-            telefone
-          ).trim()
+          telefone
+        ).trim()
         : undefined,
 
     numeroDocumento:
@@ -1944,7 +2063,7 @@ export async function criarPedidoVenda({
   shippingCompany,
 
   shippingDeliveryTime,
-  
+
   referencia,
 
   produtoBlingId,
@@ -1978,23 +2097,23 @@ export async function criarPedidoVenda({
 
 
   const valorUnitarioNumero =
-  valorMonetario(
-    valorUnitario !== undefined &&
-    valorUnitario !== null
-      ? valorUnitario
-      : valorTotal
-  );
+    valorMonetario(
+      valorUnitario !== undefined &&
+        valorUnitario !== null
+        ? valorUnitario
+        : valorTotal
+    );
 
 
-if (
-  valorUnitarioNumero === null
-) {
+  if (
+    valorUnitarioNumero === null
+  ) {
 
-  throw new Error(
-    "Valor unitário do pedido inválido."
-  );
+    throw new Error(
+      "Valor unitário do pedido inválido."
+    );
 
-}
+  }
 
 
   const valorTotalNumero =
@@ -2168,174 +2287,172 @@ if (
   const observacoes =
     observacoesArray.length > 0
       ? observacoesArray.join(
-          " | "
-        )
+        " | "
+      )
       : undefined;
 
 
- /* ===================================================
-   PEDIDO BLING
-=================================================== */
+  /* ===================================================
+    PEDIDO BLING
+ =================================================== */
 
-const hoje =
-  new Intl.DateTimeFormat(
-    "en-CA",
-    {
-      timeZone: "America/Sao_Paulo",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }
-  ).format(
-    new Date()
-  );
+  const hoje =
+    new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone: "America/Sao_Paulo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }
+    ).format(
+      new Date()
+    );
 
 
-const pedidoBling = {
+  const pedidoBling = {
 
-  data:
-    hoje,
+    data:
+      hoje,
 
-  dataSaida:
-    hoje,
+    dataSaida:
+      hoje,
 
-  contato: {
+    contato: {
 
-    id:
-      Number(
-        contatoId
-      ),
-
-  },
-
-  itens: [
-
-    {
-
-      quantidade:
-        quantidadeNumero,
-
-      valor:
-        valorUnitarioNumero,
-
-      produto: {
-
-        id:
-          Number(
-            produtoId
-          ),
-
-      },
+      id:
+        Number(
+          contatoId
+        ),
 
     },
 
-  ],
+    itens: [
 
-  observacoes,
+      {
 
-  transporte: {
+        quantidade:
+          quantidadeNumero,
 
-  fretePorConta:
-    0,
+        valor:
+          valorUnitarioNumero,
 
-  frete:
-    valorFreteNumero,
+        produto: {
 
-  quantidadeVolumes:
-    1,
+          id:
+            Number(
+              produtoId
+            ),
 
-  pesoBruto:
-    0.1,
+        },
 
-  prazoEntrega:
-    shippingDeliveryTime !== undefined &&
-    shippingDeliveryTime !== null
-      ? Number(
-          shippingDeliveryTime
-        )
-      : 0,
+      },
 
-  contato: {
+    ],
 
-    id:
-      0,
+    observacoes,
 
-    nome:
-      String(
-        shippingCompany || ""
-      ).trim(),
+    transporte: {
 
-  },
+      fretePorConta:
+        0,
 
-  etiqueta: {
+      frete:
+        valorFreteNumero,
 
-    nome:
-      String(
-        nome || ""
-      ).trim(),
+      quantidadeVolumes:
+        1,
 
-    endereco:
-      String(
-        rua || ""
-      ).trim(),
+      pesoBruto:
+        0.1,
 
-    numero:
-      numero !== undefined &&
-        numero !== null
-        ? String(
-            numero
-          ).trim()
-        : "",
+      prazoEntrega:
+        shippingDeliveryTime !== undefined &&
+          shippingDeliveryTime !== null
+          ? Number(
+            shippingDeliveryTime
+          )
+          : 0,
 
-    complemento:
-      String(
-        complemento || ""
-      ).trim(),
+      contato: {
 
-    municipio:
-      String(
-        cidade || ""
-      ).trim(),
+        id:
+          0,
 
-    uf:
-      String(
-        estado || ""
-      ).trim(),
+        nome:
+          String(
+            shippingName || ""
+          ).trim(),
 
-    cep:
-      limparCep(
-        cep
-      ),
+      },
 
-    bairro:
-      String(
-        bairro || ""
-      ).trim(),
+      etiqueta: {
 
-    nomePais:
-      "Brasil",
+        nome:
+          String(
+            nome || ""
+          ).trim(),
 
-  },
+        endereco:
+          String(
+            rua || ""
+          ).trim(),
 
-  volumes: [
+        numero:
+          numero !== undefined &&
+            numero !== null
+            ? String(
+              numero
+            ).trim()
+            : "",
 
-    {
+        complemento:
+          String(
+            complemento || ""
+          ).trim(),
 
-      servico:
-        String(
-          shippingName || ""
-        ).trim(),
+        municipio:
+          String(
+            cidade || ""
+          ).trim(),
 
-      codigoRastreamento:
-        "",
+        uf:
+          String(
+            estado || ""
+          ).trim(),
 
-    }
+        cep:
+          limparCep(
+            cep
+          ),
 
-  ],
+        bairro:
+          String(
+            bairro || ""
+          ).trim(),
 
-},
+        nomePais:
+          "Brasil",
 
-};
+      },
+
+      volumes: [
+
+        {
+
+          servico:
+            "",
+
+          codigoRastreamento:
+            "",
+
+        }
+
+      ],
+
+    },
+
+  };
 
   /* ===================================================
      LOG DO BODY
