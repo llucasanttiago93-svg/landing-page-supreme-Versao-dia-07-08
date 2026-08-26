@@ -11,31 +11,23 @@ import Offer from "./components/Offer/Offer";
 import Faq from "./components/FAQ/FAQ";
 import Footer from "./components/Footer/Footer";
 
+
 function App() {
+  
+
   return (
     <>
       <Header />
-
       <Hero />
-
       <Testimonials />
-
       <Solution />
-
       <Fragrance />
-
       <Ingredients />
-
       <Results />
-
       <HowTo />
-
       <Guarantee />
-
       <Offer />
-
       <Faq />
-
       <Footer />
     </>
   );

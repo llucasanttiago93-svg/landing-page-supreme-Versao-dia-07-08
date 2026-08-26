@@ -114,9 +114,13 @@ export async function pagamentoConcluido(
      PROCESSAR PEDIDO
   =================================================== */
 
+  let resultado = null;
+  let erroProcessamento = null;
+
+
   try {
 
-    const resultado =
+    resultado =
       await processarPedidoPago({
 
         orderNsu:
@@ -156,6 +160,8 @@ export async function pagamentoConcluido(
 
   } catch (error) {
 
+    erroProcessamento = error;
+
     console.error(
       "================================="
     );
@@ -191,6 +197,48 @@ export async function pagamentoConcluido(
      RESPOSTA HTML
   =================================================== */
 
+  const pagamentoConfirmado =
+    !erroProcessamento &&
+    (
+      resultado?.paid === true ||
+      resultado?.alreadyProcessed === true ||
+      resultado?.processing === true
+    );
+
+  const pagamentoPendente =
+    !erroProcessamento &&
+    resultado?.paid !== true &&
+    resultado?.alreadyProcessed !== true &&
+    resultado?.processing !== true;
+
+  const titulo =
+    pagamentoConfirmado
+      ? "Compra aprovada - Vanti Cosméticos"
+      : pagamentoPendente
+        ? "Pagamento em confirmação - Vanti Cosméticos"
+        : "Pagamento em processamento - Vanti Cosméticos";
+
+  const cabecalho =
+    pagamentoConfirmado
+      ? "Tudo certo com sua compra!"
+      : pagamentoPendente
+        ? "Estamos confirmando seu pagamento"
+        : "Estamos processando seu pedido";
+
+  const mensagemPrincipal =
+    pagamentoConfirmado
+      ? "Seu pagamento foi aprovado com sucesso."
+      : pagamentoPendente
+        ? "Ainda não conseguimos confirmar o pagamento. Aguarde alguns instantes e não faça um novo pagamento."
+        : "Seu pagamento foi recebido e estamos finalizando o processamento do pedido.";
+
+  const mensagemSecundaria =
+    pagamentoConfirmado
+      ? "Seu pedido foi recebido pela Vanti Cosméticos e já está sendo preparado."
+      : pagamentoPendente
+        ? "Assim que a confirmação for concluída, seu pedido será processado normalmente."
+        : "Não é necessário realizar outro pagamento. O pedido continuará sendo processado automaticamente.";
+
   return res.send(`
 
     <!DOCTYPE html>
@@ -207,7 +255,7 @@ export async function pagamentoConcluido(
       >
 
       <title>
-        Compra aprovada - Vanti Cosméticos
+        ${titulo}
       </title>
 
 
@@ -416,15 +464,14 @@ export async function pagamentoConcluido(
 
         <h1>
 
-          Tudo certo com sua compra!
+          ${cabecalho}
 
         </h1>
 
 
         <p>
 
-          Seu pagamento foi aprovado
-          com sucesso.
+          ${mensagemPrincipal}
 
         </p>
 
@@ -452,22 +499,26 @@ export async function pagamentoConcluido(
 
           <p>
 
-            Seu pedido foi recebido pela
-            Vanti Cosméticos e já está sendo
-            preparado.
+            ${mensagemSecundaria}
 
           </p>
 
         </div>
 
 
-        <a
-          href="https://vanticosmeticos.com.br/"
-        >
+        ${
+          pagamentoConfirmado
+            ? `
+              <a
+                href="https://vanticosmeticos.com.br/"
+              >
 
-          🛍️ Descubra mais produtos Vanti
+                🛍️ Descubra mais produtos Vanti
 
-        </a>
+              </a>
+            `
+            : ""
+        }
 
 
       </div>

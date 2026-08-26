@@ -2483,26 +2483,47 @@ export async function criarPedidoVenda({
      CRIAR PEDIDO
   =================================================== */
 
-  const resultado =
-    await blingRequest(
+  let resultado;
 
-      accessToken,
+  try {
 
-      `${BLING_API_URL}/pedidos/vendas`,
+    resultado =
+      await blingRequest(
 
-      {
+        accessToken,
 
-        method:
-          "POST",
+        `${BLING_API_URL}/pedidos/vendas`,
 
-        body:
-          JSON.stringify(
-            pedidoBling
-          ),
+        {
 
-      }
+          method:
+            "POST",
 
-    );
+          body:
+            JSON.stringify(
+              pedidoBling
+            ),
+
+        }
+
+      );
+
+  } catch (error) {
+
+    /*
+     * Em erro de rede ou resposta 5xx, não sabemos se o
+     * Bling chegou a criar o pedido antes da falha.
+     * O chamador deve evitar um novo POST automático,
+     * pois ele pode gerar duplicidade.
+     */
+
+    error.blingCreateAmbiguous =
+      !Number.isFinite(error?.status) ||
+      Number(error.status) >= 500;
+
+    throw error;
+
+  }
 
 
   console.log(
@@ -2629,77 +2650,6 @@ export async function testBlingApi() {
 }
 
 /* =====================================================
-   TESTAR PEDIDO DE VENDA ESPECÍFICO
-===================================================== */
-
-export async function testarPedidoVenda() {
-
-  const accessToken =
-    await getAccessToken();
-
-  const pedidoId =
-    "26698998182";
-
-  console.log(
-    "================================="
-  );
-
-  console.log(
-    "🔎 CONSULTANDO PEDIDO MANUAL NO BLING"
-  );
-
-  console.log(
-    "ID:",
-    pedidoId
-  );
-
-  console.log(
-    "================================="
-  );
-
-
-  const resultado =
-    await blingRequest(
-
-      accessToken,
-
-      `${BLING_API_URL}/pedidos/vendas/${pedidoId}`,
-
-      {
-        method:
-          "GET",
-      }
-
-    );
-
-
-  console.log(
-    "================================="
-  );
-
-  console.log(
-    "✅ PEDIDO MANUAL RETORNADO PELO BLING"
-  );
-
-  console.log(
-    JSON.stringify(
-      resultado,
-      null,
-      2
-    )
-  );
-
-  console.log(
-    "================================="
-  );
-
-
-  return resultado;
-
-}
-
-
-/* =====================================================
    EXPORTAÇÕES
 ===================================================== */
 
@@ -2728,134 +2678,3 @@ export default {
   testBlingApi,
 
 };
-
-/* =====================================================
-   TESTAR LOGÍSTICAS DO BLING
-===================================================== */
-
-export async function testarLogisticas() {
-
-  console.log(
-    "================================="
-  );
-
-  console.log(
-    "🚚 CONSULTANDO LOGÍSTICAS DO BLING"
-  );
-
-  console.log(
-    "================================="
-  );
-
-
-  const accessToken =
-    await getAccessToken();
-
-
-  const resultado =
-    await blingRequest(
-
-      accessToken,
-
-      `${BLING_API_URL}/logisticas`,
-
-      {
-        method:
-          "GET",
-      }
-
-    );
-
-
-  console.log(
-    "================================="
-  );
-
-  console.log(
-    "✅ LOGÍSTICAS RETORNADAS PELO BLING"
-  );
-
-  console.log(
-    JSON.stringify(
-      resultado,
-      null,
-      2
-    )
-  );
-
-  console.log(
-    "================================="
-  );
-
-
-  return resultado;
-
-}
-
-
-/* =====================================================
-   TESTAR UMA LOGÍSTICA ESPECÍFICA DO BLING
-===================================================== */
-
-export async function testarLogisticaDetalhada() {
-
-  console.log(
-    "================================="
-  );
-
-  console.log(
-    "🚚 CONSULTANDO LOGÍSTICA BLING"
-  );
-
-  console.log(
-    "ID: 1150802"
-  );
-
-  console.log(
-    "================================="
-  );
-
-
-  const accessToken =
-    await getAccessToken();
-
-
-  const resultado =
-    await blingRequest(
-
-      accessToken,
-
-      `${BLING_API_URL}/logisticas/1150802`,
-
-      {
-        method:
-          "GET",
-      }
-
-    );
-
-
-  console.log(
-    "================================="
-  );
-
-  console.log(
-    "✅ LOGÍSTICA DETALHADA RETORNADA"
-  );
-
-  console.log(
-    JSON.stringify(
-      resultado,
-      null,
-      2
-    )
-  );
-
-  console.log(
-    "================================="
-  );
-
-
-  return resultado;
-
-}

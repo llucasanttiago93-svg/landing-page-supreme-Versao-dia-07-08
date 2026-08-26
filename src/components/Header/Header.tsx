@@ -1,21 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Header.css";
 
 function Header() {
+
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+
+  useEffect(() => {
+
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 30);
+    };
+
+    window.addEventListener(
+      "scroll",
+      handleScroll
+    );
+
+    return () => {
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+    };
+
+  }, []);
+
+
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
 
+
   return (
-    <header className="header">
+
+    <header
+      className={`header ${scrolled ? "scrolled" : ""}`}
+    >
 
       <div className="container header-container">
 
-        {/* ========================= */}
-        {/* LOGO */}
-        {/* ========================= */}
 
         <div className="header-left">
 
@@ -25,55 +51,39 @@ function Header() {
             aria-label="Vanti Cosméticos - início"
             onClick={closeMenu}
           >
+
             <img
               src={`${import.meta.env.BASE_URL}images/logo.webp`}
               alt="Vanti Cosméticos"
             />
+
           </a>
 
         </div>
 
 
-        {/* ========================= */}
-        {/* MENU */}
-        {/* ========================= */}
 
         <nav
           id="navigation"
           className={`navigation ${menuOpen ? "active" : ""}`}
-          aria-label="Navegação principal"
         >
 
-          <a
-            href="#beneficios"
-            onClick={closeMenu}
-          >
+          <a href="#beneficios" onClick={closeMenu}>
             Benefícios
           </a>
 
-          <a
-            href="#fragrancia"
-            onClick={closeMenu}
-          >
+          <a href="#fragrancia" onClick={closeMenu}>
             Fragrância
           </a>
 
-          <a
-            href="#como-usar"
-            onClick={closeMenu}
-          >
+          <a href="#como-usar" onClick={closeMenu}>
             Como usar
           </a>
 
-          <a
-            href="#faq"
-            onClick={closeMenu}
-          >
+          <a href="#faq" onClick={closeMenu}>
             FAQ
           </a>
 
-
-          {/* BOTÃO MOBILE */}
 
           <a
             href="#comprar"
@@ -83,12 +93,10 @@ function Header() {
             Comprar Agora
           </a>
 
+
         </nav>
 
 
-        {/* ========================= */}
-        {/* BOTÃO DESKTOP */}
-        {/* ========================= */}
 
         <div className="header-right">
 
@@ -102,17 +110,13 @@ function Header() {
         </div>
 
 
-        {/* ========================= */}
-        {/* MENU MOBILE */}
-        {/* ========================= */}
 
         <button
           type="button"
           className={`menu-toggle ${menuOpen ? "active" : ""}`}
-          onClick={() => setMenuOpen((previous) => !previous)}
-          aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Menu"
           aria-expanded={menuOpen}
-          aria-controls="navigation"
         >
 
           <span></span>
@@ -121,10 +125,15 @@ function Header() {
 
         </button>
 
+
       </div>
 
+
     </header>
+
   );
+
 }
+
 
 export default Header;

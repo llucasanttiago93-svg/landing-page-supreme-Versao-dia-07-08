@@ -34,7 +34,7 @@ import pool from "../config/database.js";
  * alterar para FALSE.
  */
 
-const TEST_PAYMENT_MODE = true;
+const TEST_PAYMENT_MODE = false;
 
 
 /* =====================================================
@@ -844,8 +844,8 @@ VALUES (
         TEST_PAYMENT_MODE
           ? "Teste Vanti - R$ 1,00"
           : quantidade === 2
-            ? "Queridinho Supreme 2 Unidades + entrega"
-            : "Queridinho Supreme 1 Unidade + entrega",
+            ? "Queridinho Supreme 2 Unidades + Entrega"
+            : "Queridinho Supreme 1 Unidade + Entrega",
 
     },
 

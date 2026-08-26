@@ -12,7 +12,7 @@ import "./Checkout.css";
  * Depois do teste, volte para FALSE.
  */
 
-const TEST_PAYMENT_MODE = true;
+const TEST_PAYMENT_MODE = false;
 
 
 /* =====================================================

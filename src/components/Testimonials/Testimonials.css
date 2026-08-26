@@ -4,7 +4,11 @@
 
     background: #f8f8f8;
 
+    overflow: hidden;
+
 }
+
+
 
 .testimonials .container {
 
@@ -15,9 +19,10 @@
 }
 
 
-/* ========================= */
-/* HEADER */
-/* ========================= */
+
+/* =========================
+   HEADER
+========================= */
 
 .testimonials-header {
 
@@ -28,6 +33,8 @@
     text-align: center;
 
 }
+
+
 
 .testimonials-eyebrow {
 
@@ -45,6 +52,8 @@
 
 }
 
+
+
 .testimonials-header h2 {
 
     font-size: clamp(2.8rem, 5vw, 4.8rem);
@@ -57,6 +66,8 @@
 
 }
 
+
+
 .testimonials-description {
 
     font-size: 1.08rem;
@@ -68,19 +79,14 @@
 }
 
 
-/* ========================= */
-/* CARROSSEL */
-/* ========================= */
+
+/* =========================
+   CARROSSEL
+========================= */
 
 .testimonials-carousel {
 
     position: relative;
-
-    width: 100%;
-
-    max-width: 1240px;
-
-    margin: auto;
 
     display: flex;
 
@@ -91,28 +97,26 @@
 }
 
 
-/* ========================= */
-/* VIEWPORT */
-/* ========================= */
 
 .testimonials-viewport {
+
     width: 100%;
 
-    padding: 12px 10px;
+    padding: 20px 10px;
 
     overflow-x: auto;
-    overflow-y: hidden;
+
+    scrollbar-width: none;
+
+    -ms-overflow-style: none;
 
     scroll-behavior: smooth;
 
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-
     scroll-snap-type: x mandatory;
+
 }
 
 
-/* Chrome / Edge / Safari */
 
 .testimonials-viewport::-webkit-scrollbar {
 
@@ -121,9 +125,6 @@
 }
 
 
-/* ========================= */
-/* TRACK */
-/* ========================= */
 
 .testimonials-track {
 
@@ -136,15 +137,14 @@
 }
 
 
-/* ========================= */
-/* CARD */
-/* ========================= */
+
+/* =========================
+   CARDS
+========================= */
 
 .testimonial-card {
 
     position: relative;
-
-    z-index: 1;
 
     flex: 0 0 min(34vw, 420px);
 
@@ -152,162 +152,19 @@
 
     height: 560px;
 
-    aspect-ratio: 1 / 1;
-
     background: #fff;
 
-    border-radius: 26px;
+    border-radius: 28px;
 
     overflow: hidden;
 
-    border: 1px solid #EC7404;
-
+    border: 1px solid rgba(236, 116, 4, .35);
 
     scroll-snap-align: start;
 
-    flex-shrink: 0;
-
-    opacity: 0;
-
-    animation: testimonialReveal .7s ease forwards;
-
-    transition:
-        transform .4s ease,
-        box-shadow .4s ease,
-        opacity .4s ease;
-
 }
 
 
-/* ========================= */
-/* ENTRADA DOS CARDS */
-/* ========================= */
-
-.testimonial-card:nth-child(1) {
-
-    animation-delay: .05s;
-
-}
-
-.testimonial-card:nth-child(2) {
-
-    animation-delay: .15s;
-
-}
-
-.testimonial-card:nth-child(3) {
-
-    animation-delay: .25s;
-
-}
-
-.testimonial-card:nth-child(4) {
-
-    animation-delay: .35s;
-
-}
-
-.testimonial-card:nth-child(5) {
-
-    animation-delay: .45s;
-
-}
-
-.testimonial-card:nth-child(6) {
-
-    animation-delay: .55s;
-
-}
-
-.testimonial-card:nth-child(7) {
-
-    animation-delay: .65s;
-
-}
-
-.testimonial-card:nth-child(8) {
-
-    animation-delay: .75s;
-
-}
-
-.testimonial-card:nth-child(9) {
-
-    animation-delay: .85s;
-
-}
-
-.testimonial-card:nth-child(10) {
-
-    animation-delay: .95s;
-
-}
-
-.testimonial-card:nth-child(11) {
-
-    animation-delay: 1.05s;
-
-}
-
-.testimonial-card:nth-child(12) {
-
-    animation-delay: 1.15s;
-
-}
-
-
-/* ========================= */
-/* ANIMAÇÃO DE ENTRADA */
-/* ========================= */
-
-@keyframes testimonialReveal {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(30px)
-            scale(.97);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0)
-            scale(1);
-
-    }
-
-}
-
-
-/* ========================= */
-/* HOVER DESKTOP */
-/* ========================= */
-
-@media (hover: hover) and (pointer: fine) {
-
-    .testimonial-card:hover {
-
-        transform:
-            translateY(-8px)
-            scale(1.015);
-
-        box-shadow:
-            0 28px 65px rgba(0, 0, 0, .15);
-
-    }
-
-}
-
-
-/* ========================= */
-/* IMAGEM */
-/* ========================= */
 
 .testimonial-card img {
 
@@ -315,24 +172,75 @@
 
     height: 100%;
 
-    display: block;
-
     object-fit: contain;
+
+    display: block;
 
 }
 
 
-/* ========================= */
-/* SETAS */
-/* ========================= */
+
+/* =========================
+   HOVER DESKTOP
+========================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+    .testimonial-card {
+
+        transition:
+
+            transform .35s ease,
+
+            box-shadow .35s ease;
+
+    }
+
+
+
+    .testimonial-card:hover {
+
+        transform: translateY(-6px);
+
+        box-shadow:
+
+            0 24px 55px rgba(0, 0, 0, .12);
+
+    }
+
+
+
+    .testimonial-card img {
+
+        transition:
+
+            transform .5s ease;
+
+    }
+
+
+
+    .testimonial-card:hover img {
+
+        transform: scale(1.03);
+
+    }
+
+}
+
+
+
+/* =========================
+   SETAS
+========================= */
 
 .carousel-button {
 
     flex-shrink: 0;
 
-    width: 50px;
+    width: 52px;
 
-    height: 50px;
+    height: 52px;
 
     display: flex;
 
@@ -342,7 +250,7 @@
 
     border-radius: 50%;
 
-    border: 1px solid #e2e2e2;
+    border: 1px solid #ddd;
 
     background: #fff;
 
@@ -354,43 +262,65 @@
 
     cursor: pointer;
 
-    transition:
-        background .3s ease,
-        border-color .3s ease,
-        color .3s ease,
-        transform .3s ease,
-        box-shadow .3s ease;
-
     box-shadow:
-        0 8px 25px rgba(0, 0, 0, .08);
+
+        0 10px 30px rgba(0, 0, 0, .08);
 
 }
 
-.carousel-button:hover {
 
-    background: #EC7404;
 
-    border-color: #EC7404;
+@media (hover: hover) and (pointer: fine) {
 
-    color: #fff;
+    .carousel-button {
 
-    transform: scale(1.08);
+        transition:
 
-    box-shadow:
-        0 12px 30px rgba(236, 116, 4, .25);
+            transform .3s ease,
+
+            background .3s ease,
+
+            border-color .3s ease,
+
+            color .3s ease,
+
+            box-shadow .3s ease;
+
+    }
+
+
+
+    .carousel-button:hover {
+
+        background: #EC7404;
+
+        border-color: #EC7404;
+
+        color: #fff;
+
+        transform: scale(1.08);
+
+        box-shadow:
+
+            0 14px 30px rgba(236, 116, 4, .24);
+
+    }
 
 }
+
+
 
 .carousel-button:active {
 
-    transform: scale(.95);
+    transform: scale(.94);
 
 }
 
 
-/* ========================= */
-/* INDICADORES */
-/* ========================= */
+
+/* =========================
+   DOTS
+========================= */
 
 .carousel-dots {
 
@@ -402,11 +332,13 @@
 
     gap: .6rem;
 
-    margin-top: 1.8rem;
+    margin-top: 2rem;
 
     flex-wrap: wrap;
 
 }
+
+
 
 .carousel-dot {
 
@@ -416,41 +348,57 @@
 
     padding: 0;
 
-    border: none;
+    border: 0;
 
-    border-radius: 50%;
+    border-radius: 999px;
 
     background: #d5d5d5;
 
     cursor: pointer;
 
-    transition:
-        width .3s ease,
-        background .3s ease,
-        transform .3s ease;
+}
+
+
+
+@media (hover: hover) and (pointer: fine) {
+
+    .carousel-dot {
+
+        transition:
+
+            transform .25s ease,
+
+            background .25s ease,
+
+            width .25s ease;
+
+    }
+
+
+
+    .carousel-dot:hover {
+
+        transform: scale(1.3);
+
+    }
 
 }
 
-.carousel-dot:hover {
 
-    transform: scale(1.3);
-
-}
 
 .carousel-dot.active {
 
-    width: 24px;
-
-    border-radius: 999px;
+    width: 28px;
 
     background: #EC7404;
 
 }
 
 
-/* ========================= */
-/* FOOTER */
-/* ========================= */
+
+/* =========================
+   FOOTER
+========================= */
 
 .testimonials-footer {
 
@@ -459,6 +407,8 @@
     text-align: center;
 
 }
+
+
 
 .footer-stars {
 
@@ -472,6 +422,8 @@
 
 }
 
+
+
 .testimonials-footer h3 {
 
     font-size: 2rem;
@@ -482,6 +434,8 @@
 
 }
 
+
+
 .testimonials-footer p {
 
     color: #666;
@@ -491,9 +445,10 @@
 }
 
 
-/* ========================= */
-/* TABLET */
-/* ========================= */
+
+/* =========================
+   TABLET
+========================= */
 
 @media (max-width: 992px) {
 
@@ -502,6 +457,8 @@
         padding: 6rem 0;
 
     }
+
+
 
     .testimonial-card {
 
@@ -514,9 +471,10 @@
 }
 
 
-/* ========================= */
-/* CELULAR */
-/* ========================= */
+
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 768px) {
 
@@ -524,20 +482,17 @@
 
         padding: 5rem 0;
 
-        overflow: hidden;
-
     }
 
 
-    /* ========================= */
-    /* HEADER */
-    /* ========================= */
 
     .testimonials-header {
 
         margin-bottom: 3rem;
 
     }
+
+
 
     .testimonials-header h2 {
 
@@ -547,6 +502,8 @@
 
     }
 
+
+
     .testimonials-description {
 
         font-size: 1rem;
@@ -554,9 +511,6 @@
     }
 
 
-    /* ========================= */
-    /* CARROSSEL */
-    /* ========================= */
 
     .testimonials-carousel {
 
@@ -569,13 +523,12 @@
     }
 
 
+
     .testimonials-viewport {
 
-        width: 100%;
+        padding:
 
-        padding: 0 24px 1rem;
-
-        scroll-snap-type: x mandatory;
+            20px 24px 1rem;
 
         scroll-padding-left: 24px;
 
@@ -586,18 +539,14 @@
     }
 
 
-    .testimonials-track {
 
-        width: max-content;
+    .testimonials-track {
 
         gap: 16px;
 
     }
 
 
-    /* ========================= */
-    /* CARD MOBILE */
-    /* ========================= */
 
     .testimonial-card {
 
@@ -607,44 +556,19 @@
 
         height: 400px;
 
-        aspect-ratio: auto;
-
         border-radius: 24px;
 
-        scroll-snap-align: start;
+    }
+
+
+
+    .testimonial-card:active {
+
+        transform: scale(.99);
 
     }
 
 
-    /* ========================= */
-    /* IMAGEM MOBILE */
-    /* ========================= */
-
-    .testimonial-card img {
-
-        width: 100%;
-
-        height: 100%;
-
-        object-fit: contain;
-
-    }
-
-
-    /* ========================= */
-    /* ANIMAÇÃO MOBILE */
-    /* ========================= */
-
-    .testimonial-card:hover {
-
-        transform: none;
-
-    }
-
-
-    /* ========================= */
-    /* SETAS */
-    /* ========================= */
 
     .carousel-button {
 
@@ -653,9 +577,6 @@
     }
 
 
-    /* ========================= */
-    /* INDICADORES */
-    /* ========================= */
 
     .carousel-dots {
 
@@ -666,9 +587,6 @@
     }
 
 
-    /* ========================= */
-    /* FOOTER */
-    /* ========================= */
 
     .testimonials-footer {
 
@@ -676,47 +594,19 @@
 
     }
 
+
+
     .testimonials-footer h3 {
 
         font-size: 1.6rem;
 
     }
 
+
+
     .testimonials-footer p {
 
         font-size: 1rem;
-
-    }
-
-}
-
-
-/* ========================= */
-/* REDUZIR MOVIMENTO */
-/* ========================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    .testimonial-card {
-
-        animation: none;
-
-        opacity: 1;
-
-        transition: none;
-
-    }
-
-    .carousel-button,
-    .carousel-dot {
-
-        transition: none;
-
-    }
-
-    .testimonials-viewport {
-
-        scroll-behavior: auto;
 
     }
 

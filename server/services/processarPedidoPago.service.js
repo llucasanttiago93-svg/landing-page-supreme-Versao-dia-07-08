@@ -1061,6 +1061,11 @@ export async function processarPedidoPago({
       try {
 
 
+        const blingStatusFinal =
+          error?.blingCreateAmbiguous
+            ? "processando"
+            : "erro";
+
         const [
           resultadoUpdate
         ] =
@@ -1079,9 +1084,12 @@ export async function processarPedidoPago({
 
             WHERE id = ?
 
+            AND bling_order_id IS NULL
+
             AND (
               bling_status IS NULL
-              OR bling_status <> 'erro'
+              OR bling_status = 'processando'
+              OR bling_status = 'erro'
             )
 
             LIMIT 1
@@ -1089,7 +1097,7 @@ export async function processarPedidoPago({
 
             [
 
-              "erro",
+              blingStatusFinal,
 
               error?.message ||
               "Erro desconhecido ao enviar pedido para o Bling.",
@@ -1110,7 +1118,8 @@ export async function processarPedidoPago({
          */
 
         if (
-          resultadoUpdate.affectedRows === 1
+          resultadoUpdate.affectedRows === 1 &&
+          pedido.bling_status !== "erro"
         ) {
 
           try {

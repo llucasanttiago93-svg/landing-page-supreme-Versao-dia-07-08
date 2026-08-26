@@ -24,7 +24,7 @@
 
     background: rgba(15, 13, 12, .62);
 
-    animation: checkoutFadeIn .18s ease;
+    
 }
 
 
@@ -49,7 +49,7 @@
     box-shadow:
         0 24px 70px rgba(0, 0, 0, .22);
 
-    animation: checkoutModalIn .22s ease;
+    
 
     overscroll-behavior: contain;
 
@@ -817,37 +817,9 @@
    ANIMAÇÕES
 ===================================================== */
 
-@keyframes checkoutFadeIn {
 
-    from {
-        opacity: 0;
-    }
 
-    to {
-        opacity: 1;
-    }
 
-}
-
-@keyframes checkoutModalIn {
-
-    from {
-        opacity: 0;
-
-        transform:
-            translateY(12px)
-            scale(.985);
-    }
-
-    to {
-        opacity: 1;
-
-        transform:
-            translateY(0)
-            scale(1);
-    }
-
-}
 
 
 /* ========================= */

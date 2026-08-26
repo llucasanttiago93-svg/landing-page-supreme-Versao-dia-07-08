@@ -1,43 +1,42 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html{
-
-    scroll-behavior:smooth;
-
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
-body{
-
-    font-family:Inter,Arial,sans-serif;
-
-    background:#f5f5f5;
-
-    color:#151312;
-
+body {
+  font-family: Inter, Arial, sans-serif;
+  background: #f5f5f5;
+  color: #151312;
+  -webkit-tap-highlight-color: transparent;
 }
 
-img{
-
-    display:block;
-
-    max-width:100%;
-
+img {
+  display: block;
+  max-width: 100%;
 }
 
-a{
-
-    text-decoration:none;
-
-    color:inherit;
-
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-button{
-
-    font:inherit;
-
+button {
+  font: inherit;
 }
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+
