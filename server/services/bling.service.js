@@ -11,6 +11,51 @@ import {
 import pool from "../config/database.js";
 
 
+/*
+router.get(
+  "/testar-logisticas",
+  async (req, res) => {
+
+    try {
+
+      const resultado =
+        await testarLogisticas();
+
+      res.json(
+        resultado
+      );
+
+    } catch (error) {
+
+      console.error(
+        "❌ ERRO AO CONSULTAR LOGÍSTICAS DO BLING"
+      );
+
+      console.error(
+        error.response?.data ||
+        error.message ||
+        error
+      );
+
+
+      res
+        .status(
+          error.response?.status || 500
+        )
+        .json(
+          error.response?.data || {
+            error:
+              error.message ||
+              "Erro ao consultar logísticas.",
+          }
+        );
+
+    }
+
+  }
+);*/
+
+
 /* =====================================================
    CONFIGURAÇÕES DA API BLING
 ===================================================== */
@@ -1892,6 +1937,14 @@ export async function criarPedidoVenda({
 
   valorFrete,
 
+  shippingId,
+
+  shippingName,
+
+  shippingCompany,
+
+  shippingDeliveryTime,
+  
   referencia,
 
   produtoBlingId,
@@ -2120,126 +2173,169 @@ if (
       : undefined;
 
 
-  /* ===================================================
-     PEDIDO BLING
-  =================================================== */
+ /* ===================================================
+   PEDIDO BLING
+=================================================== */
 
-  const hoje =
+const hoje =
+  new Intl.DateTimeFormat(
+    "en-CA",
+    {
+      timeZone: "America/Sao_Paulo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }
+  ).format(
     new Date()
-      .toISOString()
-      .slice(
-        0,
-        10
-      );
+  );
 
 
-  const pedidoBling = {
+const pedidoBling = {
 
-    data:
-      hoje,
+  data:
+    hoje,
 
-    dataSaida:
-      hoje,
+  dataSaida:
+    hoje,
 
-    contato: {
+  contato: {
 
-      id:
-        Number(
-          contatoId
-        ),
+    id:
+      Number(
+        contatoId
+      ),
 
-    },
+  },
 
-    itens: [
+  itens: [
 
-      {
+    {
 
-        quantidade:
-          quantidadeNumero,
+      quantidade:
+        quantidadeNumero,
 
-        valor:
-          valorUnitarioNumero,
+      valor:
+        valorUnitarioNumero,
 
-        produto: {
+      produto: {
 
-          id:
-            Number(
-              produtoId
-            ),
-
-        },
-
-      },
-
-    ],
-
-    observacoes,
-
-    transporte: {
-
-      etiqueta: {
-
-        nome:
-          String(
-            nome || ""
-          ).trim(),
-
-        endereco:
-          String(
-            rua || ""
-          ).trim(),
-
-        numero:
-          numero !== undefined &&
-            numero !== null
-            ? String(
-                numero
-              ).trim()
-            : "",
-
-        complemento:
-          String(
-            complemento || ""
-          ).trim(),
-
-        municipio:
-          String(
-            cidade || ""
-          ).trim(),
-
-        uf:
-          String(
-            estado || ""
-          ).trim(),
-
-        cep:
-          limparCep(
-            cep
+        id:
+          Number(
+            produtoId
           ),
 
-        bairro:
-          String(
-            bairro || ""
-          ).trim(),
-
-        nomePais:
-          "Brasil",
-
       },
-
-      ...(valorFreteNumero > 0
-        ? {
-
-            frete:
-              valorFreteNumero,
-
-          }
-        : {}),
 
     },
 
-  };
+  ],
 
+  observacoes,
+
+  transporte: {
+
+  fretePorConta:
+    0,
+
+  frete:
+    valorFreteNumero,
+
+  quantidadeVolumes:
+    1,
+
+  pesoBruto:
+    0.1,
+
+  prazoEntrega:
+    shippingDeliveryTime !== undefined &&
+    shippingDeliveryTime !== null
+      ? Number(
+          shippingDeliveryTime
+        )
+      : 0,
+
+  contato: {
+
+    id:
+      0,
+
+    nome:
+      String(
+        shippingCompany || ""
+      ).trim(),
+
+  },
+
+  etiqueta: {
+
+    nome:
+      String(
+        nome || ""
+      ).trim(),
+
+    endereco:
+      String(
+        rua || ""
+      ).trim(),
+
+    numero:
+      numero !== undefined &&
+        numero !== null
+        ? String(
+            numero
+          ).trim()
+        : "",
+
+    complemento:
+      String(
+        complemento || ""
+      ).trim(),
+
+    municipio:
+      String(
+        cidade || ""
+      ).trim(),
+
+    uf:
+      String(
+        estado || ""
+      ).trim(),
+
+    cep:
+      limparCep(
+        cep
+      ),
+
+    bairro:
+      String(
+        bairro || ""
+      ).trim(),
+
+    nomePais:
+      "Brasil",
+
+  },
+
+  volumes: [
+
+    {
+
+      servico:
+        String(
+          shippingName || ""
+        ).trim(),
+
+      codigoRastreamento:
+        "",
+
+    }
+
+  ],
+
+},
+
+};
 
   /* ===================================================
      LOG DO BODY
@@ -2415,6 +2511,76 @@ export async function testBlingApi() {
 
 }
 
+/* =====================================================
+   TESTAR PEDIDO DE VENDA ESPECÍFICO
+===================================================== */
+
+export async function testarPedidoVenda() {
+
+  const accessToken =
+    await getAccessToken();
+
+  const pedidoId =
+    "26698998182";
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "🔎 CONSULTANDO PEDIDO MANUAL NO BLING"
+  );
+
+  console.log(
+    "ID:",
+    pedidoId
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  const resultado =
+    await blingRequest(
+
+      accessToken,
+
+      `${BLING_API_URL}/pedidos/vendas/${pedidoId}`,
+
+      {
+        method:
+          "GET",
+      }
+
+    );
+
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "✅ PEDIDO MANUAL RETORNADO PELO BLING"
+  );
+
+  console.log(
+    JSON.stringify(
+      resultado,
+      null,
+      2
+    )
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  return resultado;
+
+}
+
 
 /* =====================================================
    EXPORTAÇÕES
@@ -2445,3 +2611,134 @@ export default {
   testBlingApi,
 
 };
+
+/* =====================================================
+   TESTAR LOGÍSTICAS DO BLING
+===================================================== */
+
+export async function testarLogisticas() {
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "🚚 CONSULTANDO LOGÍSTICAS DO BLING"
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  const accessToken =
+    await getAccessToken();
+
+
+  const resultado =
+    await blingRequest(
+
+      accessToken,
+
+      `${BLING_API_URL}/logisticas`,
+
+      {
+        method:
+          "GET",
+      }
+
+    );
+
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "✅ LOGÍSTICAS RETORNADAS PELO BLING"
+  );
+
+  console.log(
+    JSON.stringify(
+      resultado,
+      null,
+      2
+    )
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  return resultado;
+
+}
+
+
+/* =====================================================
+   TESTAR UMA LOGÍSTICA ESPECÍFICA DO BLING
+===================================================== */
+
+export async function testarLogisticaDetalhada() {
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "🚚 CONSULTANDO LOGÍSTICA BLING"
+  );
+
+  console.log(
+    "ID: 1150802"
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  const accessToken =
+    await getAccessToken();
+
+
+  const resultado =
+    await blingRequest(
+
+      accessToken,
+
+      `${BLING_API_URL}/logisticas/1150802`,
+
+      {
+        method:
+          "GET",
+      }
+
+    );
+
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "✅ LOGÍSTICA DETALHADA RETORNADA"
+  );
+
+  console.log(
+    JSON.stringify(
+      resultado,
+      null,
+      2
+    )
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  return resultado;
+
+}

@@ -7,6 +7,12 @@ import {
   exchangeCodeForToken,
   saveTokens,
   testBlingApi,
+  testarLogisticas,
+  testarLogisticaDetalhada,
+} from "../services/bling.service.js";
+
+import {
+  testarPedidoVenda,
 } from "../services/bling.service.js";
 
 
@@ -17,6 +23,48 @@ const router =
 /* =====================================================
    INICIAR AUTORIZAÇÃO DO BLING
 ===================================================== */
+
+router.get(
+  "/testar-pedido-venda",
+  async (req, res) => {
+
+    try {
+
+      const resultado =
+        await testarPedidoVenda();
+
+      res.json(
+        resultado
+      );
+
+    } catch (error) {
+
+      console.error(
+        "❌ ERRO AO CONSULTAR PEDIDO MANUAL:"
+      );
+
+      console.error(
+        error?.data ||
+        error?.message ||
+        error
+      );
+
+      res
+        .status(
+          error?.status || 500
+        )
+        .json(
+          error?.data || {
+            error:
+              error?.message ||
+              "Erro ao consultar pedido manual.",
+          }
+        );
+
+    }
+
+  }
+);
 
 router.get(
   "/authorize",
@@ -686,5 +734,98 @@ router.get(
   }
 );
 
+
+/* =====================================================
+   TESTAR LOGÍSTICAS DO BLING
+===================================================== */
+
+router.get(
+  "/testar-logisticas",
+  async (req, res) => {
+
+    try {
+
+      const resultado =
+        await testarLogisticas();
+
+      return res.json(
+        resultado
+      );
+
+    } catch (error) {
+
+      console.error(
+        "❌ ERRO AO CONSULTAR LOGÍSTICAS DO BLING"
+      );
+
+      console.error(
+        error.data ||
+        error.message ||
+        error
+      );
+
+      return res
+        .status(
+          error.status ||
+          500
+        )
+        .json(
+          error.data || {
+            error:
+              error.message ||
+              "Erro ao consultar logísticas.",
+          }
+        );
+
+    }
+
+  }
+);
+
+/* =====================================================
+   TESTAR LOGÍSTICA DETALHADA
+===================================================== */
+
+router.get(
+  "/testar-logistica-detalhada",
+  async (req, res) => {
+
+    try {
+
+      const resultado =
+        await testarLogisticaDetalhada();
+
+      return res.json(
+        resultado
+      );
+
+    } catch (error) {
+
+      console.error(
+        "❌ ERRO AO CONSULTAR LOGÍSTICA DETALHADA"
+      );
+
+      console.error(
+        error.data ||
+        error.message ||
+        error
+      );
+
+      return res
+        .status(
+          error.status || 500
+        )
+        .json(
+          error.data || {
+            error:
+              error.message ||
+              "Erro ao consultar logística detalhada.",
+          }
+        );
+
+    }
+
+  }
+);
 
 export default router;

@@ -4,19 +4,45 @@
 
 
 /* =====================================================
+   SERVIÇO DE PROCESSAMENTO DO PEDIDO PAGO
+===================================================== */
+
+import {
+  processarPedidoPago,
+} from "../services/processarPedidoPago.service.js";
+
+
+/* =====================================================
    ESCAPAR VALORES PARA HTML
 ===================================================== */
 
-function escapeHtml(value) {
+function escapeHtml(
+  value
+) {
 
   return String(
     value || ""
   )
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
@@ -25,18 +51,25 @@ function escapeHtml(value) {
    PÁGINA DE PAGAMENTO CONCLUÍDO
 ===================================================== */
 
-export function pagamentoConcluido(
+export async function pagamentoConcluido(
   req,
   res
 ) {
 
+
+  /* ===================================================
+     DADOS RECEBIDOS DA INFINITEPAY
+  =================================================== */
+
   const {
     order_nsu,
+    transaction_nsu,
+    slug,
   } = req.query;
 
 
   /* ===================================================
-     DADOS RECEBIDOS
+     DADOS PARA HTML
   =================================================== */
 
   const orderNsu =
@@ -63,15 +96,102 @@ export function pagamentoConcluido(
   );
 
   console.log(
+    "TRANSACTION NSU:",
+    transaction_nsu
+  );
+
+  console.log(
+    "SLUG:",
+    slug
+  );
+
+  console.log(
     "================================="
   );
+
+
+  /* ===================================================
+     PROCESSAR PEDIDO
+  =================================================== */
+
+  try {
+
+    const resultado =
+      await processarPedidoPago({
+
+        orderNsu:
+          order_nsu,
+
+        transactionNsu:
+          transaction_nsu,
+
+        invoiceSlug:
+          slug,
+
+      });
+
+
+    console.log(
+      "================================="
+    );
+
+    console.log(
+      "✅ REDIRECT PROCESSADO"
+    );
+
+    console.log(
+      "ORDER NSU:",
+      order_nsu
+    );
+
+    console.log(
+      "RESULTADO:",
+      resultado
+    );
+
+    console.log(
+      "================================="
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "================================="
+    );
+
+    console.error(
+      "❌ ERRO AO PROCESSAR PEDIDO PELO REDIRECT"
+    );
+
+    console.error(
+      "ORDER NSU:",
+      order_nsu
+    );
+
+    console.error(
+      "ERRO:",
+      error?.message ||
+      error
+    );
+
+    console.error(
+      "STACK:",
+      error?.stack
+    );
+
+    console.error(
+      "================================="
+    );
+
+  }
 
 
   /* ===================================================
      RESPOSTA HTML
   =================================================== */
 
-  res.send(`
+  return res.send(`
 
     <!DOCTYPE html>
 
@@ -283,6 +403,7 @@ export function pagamentoConcluido(
 
     <body>
 
+
       <div class="box">
 
 
@@ -308,8 +429,9 @@ export function pagamentoConcluido(
         </p>
 
 
-        ${orderNsu
-      ? `
+        ${
+          orderNsu
+            ? `
 
               <div class="order">
 
@@ -322,8 +444,8 @@ export function pagamentoConcluido(
               </div>
 
             `
-      : ""
-    }
+            : ""
+        }
 
 
         <div class="message">
@@ -342,7 +464,6 @@ export function pagamentoConcluido(
         <a
           href="https://vanticosmeticos.com.br/"
         >
-        
 
           🛍️ Descubra mais produtos Vanti
 
@@ -350,6 +471,7 @@ export function pagamentoConcluido(
 
 
       </div>
+
 
     </body>
 
