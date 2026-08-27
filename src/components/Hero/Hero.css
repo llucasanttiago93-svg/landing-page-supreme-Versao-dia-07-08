@@ -4,29 +4,42 @@
 
 .hero {
     width: 100%;
+
     min-height: calc(100svh - 82px);
+
     margin-top: 82px;
 
     background: #f5f5f5;
+
     overflow: hidden;
 }
 
 
 /* =====================================================
-   CONTAINER
-   MESMO EIXO DO HEADER
+   CONTAINER PRINCIPAL
+   Mesma largura do Header
 ===================================================== */
 
 .hero-container {
-    width: min(1200px, calc(100% - 2rem));
+    width: min(1200px, 92%);
+
     min-height: calc(100svh - 82px);
 
     margin-inline: auto;
 
     display: grid;
+
     grid-template-columns: 1fr 1fr;
 
     align-items: stretch;
+
+    /*
+        Mesmo espaço interno dos dois lados.
+    */
+
+    padding-inline: 1rem;
+
+    box-sizing: border-box;
 }
 
 
@@ -38,21 +51,35 @@
     min-width: 0;
 
     display: flex;
+
     flex-direction: column;
 
     justify-content: center;
+
     align-items: flex-start;
 
     text-align: left;
 
-    padding: 3rem 1rem 3rem 1rem;
+    /*
+        Não colocar margem aqui.
+        O respiro já é controlado pelo container.
+    */
+
+    padding:
+        3rem
+        2rem
+        3rem
+        0;
 }
 
 
-/* Limita o conteúdo */
+/* =====================================================
+   LIMITADOR DO CONTEÚDO
+===================================================== */
 
 .hero-left > * {
     width: 100%;
+
     max-width: 560px;
 }
 
@@ -67,6 +94,7 @@
     color: #ec7404;
 
     font-size: .78rem;
+
     font-weight: 700;
 
     letter-spacing: .18em;
@@ -79,20 +107,29 @@
 
 .hero-rating {
     display: flex;
+
     align-items: center;
+
+    justify-content: flex-start;
 
     gap: .7rem;
 
     margin-bottom: 1.1rem;
 
     color: #333;
+
     font-size: .9rem;
 }
 
+
 .stars {
     color: #ec7404;
+
     letter-spacing: .08em;
+
     font-size: 1rem;
+
+    white-space: nowrap;
 }
 
 
@@ -105,7 +142,12 @@
 
     color: #151312;
 
-    font-size: clamp(3rem, 4.5vw, 5.2rem);
+    font-size: clamp(
+        3rem,
+        4.5vw,
+        5.2rem
+    );
+
     line-height: .94;
 
     letter-spacing: -.045em;
@@ -113,12 +155,14 @@
     font-weight: 700;
 }
 
+
 .hero h1 span {
     display: inline-block;
 
     font-family: Georgia, serif;
 
     font-style: italic;
+
     font-weight: 400;
 
     letter-spacing: -.035em;
@@ -135,11 +179,14 @@
     color: #444;
 
     font-size: 1.05rem;
+
     line-height: 1.65;
 }
 
+
 .hero-description strong {
     color: #ec7404;
+
     font-weight: 700;
 }
 
@@ -150,6 +197,7 @@
 
 .hero-button {
     width: fit-content !important;
+
     max-width: none !important;
 
     min-height: 56px;
@@ -157,7 +205,9 @@
     padding: 0 2rem;
 
     display: inline-flex;
+
     align-items: center;
+
     justify-content: center;
 
     background: #ec7404;
@@ -167,6 +217,7 @@
     border-radius: 999px;
 
     font-size: 1rem;
+
     font-weight: 700;
 
     text-decoration: none;
@@ -179,6 +230,7 @@
         box-shadow .3s ease,
         background .3s ease;
 }
+
 
 .hero-button:hover {
     background: #d96802;
@@ -194,7 +246,9 @@
 
 .hero-trust {
     display: flex;
+
     flex-wrap: wrap;
+
     align-items: center;
 
     gap: .7rem 1.2rem;
@@ -206,39 +260,60 @@
     font-size: .78rem;
 }
 
+
 .hero-trust span {
     white-space: nowrap;
 }
 
 
 /* =====================================================
-   LADO DIREITO — IMAGEM
+   LADO DIREITO
 ===================================================== */
 
 .hero-right {
     width: 100%;
+
     min-width: 0;
+
     min-height: 100%;
 
     overflow: hidden;
 
     display: flex;
+
+    align-items: stretch;
+
+    justify-content: center;
+
+    /*
+        MESMO RESPIRO DO LADO ESQUERDO.
+    */
+
+    padding:
+        0
+        0
+        0
+        0;
+
+    box-sizing: border-box;
 }
 
 
 /* =====================================================
    IMAGEM
-
-   Mantém o centro da fotografia.
 ===================================================== */
 
 .hero-right img {
     width: 100%;
+
     height: 100%;
+
+    min-width: 0;
 
     display: block;
 
     object-fit: cover;
+
     object-position: center center;
 }
 
@@ -254,9 +329,11 @@
             transform .9s cubic-bezier(.22, 1, .36, 1);
     }
 
+
     .hero-right:hover img {
         transform: scale(1.015);
     }
+
 }
 
 
@@ -267,22 +344,33 @@
 @media (max-width: 1200px) {
 
     .hero-container {
-        width: min(1200px, calc(100% - 2rem));
+        width: min(1200px, 92%);
     }
+
 
     .hero-left {
         padding:
             3.5rem
-            1rem;
+            1.5rem
+            3.5rem
+            0;
     }
 
+
     .hero h1 {
-        font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+        font-size:
+            clamp(
+                2.8rem,
+                4.5vw,
+                4.5rem
+            );
     }
+
 
     .hero-description {
         font-size: 1rem;
     }
+
 }
 
 
@@ -293,22 +381,31 @@
 @media (max-width: 900px) {
 
     .hero {
+
         min-height: auto;
+
         margin-top: 70px;
     }
 
+
     .hero-container {
+
         width: min(100%, 760px);
 
         min-height: auto;
+
+        padding-inline: 1rem;
 
         grid-template-columns: 1fr;
     }
 
 
-    /* IMAGEM */
+    /* ---------------------------------------------
+       IMAGEM
+    --------------------------------------------- */
 
     .hero-right {
+
         order: -1;
 
         width: 100%;
@@ -316,22 +413,27 @@
         height: auto;
 
         aspect-ratio: 4 / 3;
-
-        padding: 0;
     }
 
+
     .hero-right img {
+
         width: 100%;
+
         height: 100%;
 
         object-fit: cover;
+
         object-position: center center;
     }
 
 
-    /* CONTEÚDO */
+    /* ---------------------------------------------
+       CONTEÚDO
+    --------------------------------------------- */
 
     .hero-left {
+
         width: 100%;
 
         padding:
@@ -344,25 +446,49 @@
         text-align: center;
     }
 
+
     .hero-left > * {
+
         max-width: 650px;
     }
 
-    .hero h1 {
-        font-size: clamp(2.8rem, 7vw, 4.2rem);
+
+    .hero-rating {
+
+        justify-content: center;
+
+        width: auto;
     }
 
+
+    .hero h1 {
+
+        font-size:
+            clamp(
+                2.8rem,
+                7vw,
+                4.2rem
+            );
+    }
+
+
     .hero-description {
+
         max-width: 620px;
     }
 
+
     .hero-button {
+
         margin-inline: auto;
     }
 
+
     .hero-trust {
+
         justify-content: center;
     }
+
 }
 
 
@@ -373,66 +499,143 @@
 @media (max-width: 600px) {
 
     .hero {
+
         margin-top: 70px;
     }
 
+
     .hero-container {
+
+        width: 100%;
+
+        padding-inline: 0;
+    }
+
+
+    /* ---------------------------------------------
+       IMAGEM
+    --------------------------------------------- */
+
+    .hero-right {
+
+        aspect-ratio: 4 / 5;
+
         width: 100%;
     }
 
 
-    /* IMAGEM */
+    .hero-right img {
 
-    .hero-right {
-        aspect-ratio: 4 / 5;
+        object-fit: cover;
+
+        object-position: center center;
     }
 
 
-    /* CONTEÚDO */
+    /* ---------------------------------------------
+       CONTEÚDO
+    --------------------------------------------- */
 
     .hero-left {
+
+        width: 100%;
+
         padding:
             2.5rem
             1.25rem
             3rem;
     }
 
+
     .hero-left > * {
+
         max-width: 480px;
     }
 
+
+    /* ---------------------------------------------
+       EYEBROW
+    --------------------------------------------- */
+
     .hero-eyebrow {
+
         font-size: .7rem;
+
         letter-spacing: .15em;
     }
 
+
+    /* ---------------------------------------------
+       RATING
+    --------------------------------------------- */
+
     .hero-rating {
-        font-size: .82rem;
+
+        width: auto;
+
+        justify-content: center;
+
+        align-items: center;
+
+        text-align: center;
+
         gap: .5rem;
+
         margin-bottom: .9rem;
+
+        font-size: .82rem;
     }
 
-    .stars {
+
+    .hero-rating .stars {
+
+        white-space: nowrap;
+
         font-size: .9rem;
     }
 
+
+    /* ---------------------------------------------
+       TÍTULO
+    --------------------------------------------- */
+
     .hero h1 {
-        font-size: clamp(2.5rem, 11vw, 3.3rem);
+
+        font-size:
+            clamp(
+                2.5rem,
+                11vw,
+                3.3rem
+            );
 
         line-height: .95;
+
         letter-spacing: -.04em;
 
         margin-bottom: 1.2rem;
     }
 
+
+    /* ---------------------------------------------
+       DESCRIÇÃO
+    --------------------------------------------- */
+
     .hero-description {
+
         font-size: .96rem;
+
         line-height: 1.6;
 
         margin-bottom: 1.5rem;
     }
 
+
+    /* ---------------------------------------------
+       BOTÃO
+    --------------------------------------------- */
+
     .hero-button {
+
         width: 100% !important;
 
         min-height: 56px;
@@ -442,13 +645,20 @@
         font-size: .95rem;
     }
 
+
+    /* ---------------------------------------------
+       CONFIANÇA
+    --------------------------------------------- */
+
     .hero-trust {
+
         flex-direction: column;
 
         gap: .45rem;
 
         font-size: .72rem;
     }
+
 }
 
 
@@ -459,21 +669,29 @@
 @media (max-width: 400px) {
 
     .hero-right {
+
         aspect-ratio: 4 / 5;
     }
 
+
     .hero-left {
+
         padding:
             2.2rem
             1rem
             2.8rem;
     }
 
+
     .hero h1 {
+
         font-size: 2.4rem;
     }
 
+
     .hero-description {
+
         font-size: .92rem;
     }
+
 }
