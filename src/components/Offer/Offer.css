@@ -1,75 +1,119 @@
 .offer {
+
     padding: 7rem 0 5rem;
+
     background: #151312;
+
+    overflow: hidden;
+
 }
+
 
 .offer .container {
+
     width: min(1240px, 92%);
+
     margin: auto;
+
 }
 
 
-/* ========================= */
-/* HEADER */
-/* ========================= */
+/* =========================
+   HEADER
+========================= */
 
 .offer-header {
+
     max-width: 760px;
+
     margin: 0 auto 4.5rem;
+
     text-align: center;
+
 }
+
 
 .offer-eyebrow {
+
     color: #EC7404;
+
     font-size: .8rem;
+
     font-weight: 700;
+
     letter-spacing: .22em;
+
     text-transform: uppercase;
+
     margin-bottom: 1rem;
+
 }
+
 
 .offer-header h2 {
+
     color: #fff;
+
     font-size: clamp(2.8rem, 5vw, 4.8rem);
+
     line-height: .98;
+
     font-weight: 700;
+
     margin-bottom: 1.5rem;
+
 }
+
 
 .offer-description {
+
     max-width: 650px;
+
     margin: auto;
+
     color: #c9c9c9;
+
     font-size: 1.05rem;
+
     line-height: 1.7;
+
 }
+
 
 .offer-description strong {
+
     color: #fff;
+
 }
 
 
-/* ========================= */
-/* GRID */
-/* ========================= */
+/* =========================
+   GRID
+========================= */
 
 .pricing-grid {
+
     display: grid;
+
     grid-template-columns: repeat(2, 1fr);
+
     gap: 2rem;
 
     max-width: 980px;
+
     margin: auto;
 
     align-items: stretch;
+
 }
 
 
-/* ========================= */
-/* CARD */
-/* ========================= */
+/* =========================
+   CARD
+========================= */
 
 .pricing-card {
+
     position: relative;
 
     background: #fff;
@@ -79,7 +123,9 @@
     padding: 2.2rem 2rem 1.8rem;
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
 
     text-align: center;
@@ -87,24 +133,17 @@
     box-shadow:
         0 20px 60px rgba(0, 0, 0, .18);
 
-    transition:
-        transform .3s ease,
-        box-shadow .3s ease;
-}
+    will-change: transform;
 
-.pricing-card:hover {
-    transform: translateY(-6px);
-
-    box-shadow:
-        0 30px 70px rgba(0, 0, 0, .25);
 }
 
 
-/* ========================= */
-/* CARD DESTACADO */
-/* ========================= */
+/* =========================
+   CARD DESTACADO
+========================= */
 
 .pricing-card.featured {
+
     border: 3px solid #EC7404;
 
     transform: scale(1.04);
@@ -113,24 +152,20 @@
         0 25px 70px rgba(236, 116, 4, .25);
 
     z-index: 2;
-}
 
-.pricing-card.featured:hover {
-    transform: scale(1.06) translateY(-4px);
-
-    box-shadow:
-        0 35px 90px rgba(236, 116, 4, .32);
 }
 
 
-/* ========================= */
-/* BADGE */
-/* ========================= */
+/* =========================
+   BADGE
+========================= */
 
 .badge {
+
     position: absolute;
 
     top: -18px;
+
     left: 50%;
 
     transform: translateX(-50%);
@@ -138,6 +173,7 @@
     white-space: nowrap;
 
     background: #EC7404;
+
     color: #fff;
 
     padding: .6rem 1.5rem;
@@ -145,123 +181,152 @@
     border-radius: 999px;
 
     font-size: .72rem;
+
     font-weight: 800;
 
     letter-spacing: .1em;
 
     box-shadow:
         0 8px 20px rgba(236, 116, 4, .25);
+
 }
 
 
-/* ========================= */
-/* LABEL */
-/* ========================= */
+/* =========================
+   LABEL
+========================= */
 
 .card-label {
+
     color: #999;
 
     font-size: .75rem;
+
     font-weight: 700;
 
     letter-spacing: .08em;
+
     text-transform: uppercase;
 
     margin-bottom: .5rem;
+
 }
+
 
 .featured-label {
+
     color: #EC7404;
+
 }
 
 
-/* ========================= */
-/* TITULO */
-/* ========================= */
+/* =========================
+   TITULO
+========================= */
 
 .pricing-card h3 {
+
     color: #151312;
 
     font-size: 2rem;
+
     line-height: 1;
 
     margin-bottom: .6rem;
+
 }
 
 
-/* ========================= */
-/* DESCRIÇÃO */
-/* ========================= */
+/* =========================
+   DESCRIÇÃO
+========================= */
 
 .card-description {
+
     max-width: 280px;
 
     color: #777;
 
     font-size: .9rem;
+
     line-height: 1.5;
 
 }
 
-.card-description span{
-    color: var(--laranja);
+
+.card-description span {
+
+    color: #EC7404;
+
     font-weight: 700;
+
 }
 
 
-/* ========================= */
-/* PRODUTO */
-/* ========================= */
+/* =========================
+   PRODUTO
+========================= */
 
 .product-wrapper {
+
     position: relative;
 
     width: 100%;
+
     height: 325px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     margin-bottom: -.5rem;
+
     margin-top: -.5rem;
+
+    will-change: transform;
 
 }
 
+
 .pricing-image {
+
     width: 100%;
+
     max-width: 320px;
+
     height: 320px;
 
     object-fit: contain;
 
     display: block;
 
-    transition: transform .35s ease;
 }
 
-.pricing-card:hover .pricing-image {
-    transform: scale(1.04);
-}
-
-
-/* CARD DESTACADO */
 
 .featured-product {
+
     height: 385px;
+
 }
+
 
 .featured-image {
+
     max-width: 380px;
+
     height: 380px;
+
 }
 
 
-/* ========================= */
-/* PREÇO ANTIGO */
-/* ========================= */
+/* =========================
+   PREÇO ANTIGO
+========================= */
 
 .price-old {
+
     color: #888;
 
     font-size: .85rem;
@@ -269,62 +334,83 @@
     margin-bottom: .15rem;
 
     margin-top: 12px;
+
 }
+
 
 .price-old s {
+
     color: #888;
+
 }
 
 
-/* ========================= */
-/* PREÇO */
-/* ========================= */
+/* =========================
+   PREÇO
+========================= */
 
 .price {
+
     display: flex;
 
     align-items: flex-start;
+
     justify-content: center;
 
     margin-bottom: .4rem;
+
 }
 
+
 .price span {
+
     color: #151312;
 
     font-size: 1.25rem;
 
     margin-top: .65rem;
+
 }
 
+
 .price strong {
+
     color: #EC7404;
 
     font-size: 4.6rem;
+
     line-height: .9;
+
     font-weight: 700;
+
 }
 
+
 .price small {
+
     color: #151312;
 
     font-size: 1.25rem;
 
     margin-top: .65rem;
+
 }
 
 
-/* ========================= */
-/* ECONOMIA */
-/* ========================= */
+/* =========================
+   ECONOMIA
+========================= */
 
 .saving {
+
     display: inline-flex;
 
     align-items: center;
+
     justify-content: center;
 
     background: #20a044;
+
     color: #effaf2;
 
     padding: .45rem .9rem;
@@ -332,31 +418,39 @@
     border-radius: 5px;
 
     font-size: .8rem;
+
     font-weight: 700;
 
     margin-bottom: 1.4rem;
+
 }
 
 
-/* ========================= */
-/* BENEFÍCIOS */
-/* ========================= */
+/* =========================
+   BENEFÍCIOS
+========================= */
 
 .pricing-benefits {
+
     list-style: none;
 
     width: 100%;
 
     display: flex;
+
     flex-direction: column;
 
     gap: .7rem;
 
     margin: 0 0 1.6rem;
+
     padding: 0;
+
 }
 
+
 .pricing-benefits li {
+
     display: flex;
 
     align-items: center;
@@ -370,20 +464,25 @@
     font-size: .92rem;
 
     line-height: 1.3;
+
 }
 
+
 .benefit-check {
+
     color: #22a447;
 
     font-weight: 800;
+
 }
 
 
-/* ========================= */
-/* BOTÃO */
-/* ========================= */
+/* =========================
+   BOTÃO
+========================= */
 
 .pricing-button {
+
     width: 100%;
 
     min-height: 54px;
@@ -391,77 +490,69 @@
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     padding: .9rem 1.2rem;
 
+    border: 0;
+
     border-radius: 999px;
 
     background: #151312;
+
     color: #fff;
 
     font-size: .95rem;
+
     font-weight: 700;
 
     text-decoration: none;
 
     cursor: pointer;
 
-    transition:
-        transform .25s ease,
-        background .25s ease,
-        box-shadow .25s ease;
+    will-change: transform;
+
 }
 
-.pricing-button:hover {
-    background: #000;
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, .18);
-}
 
 .featured-button {
+
     background: #EC7404;
 
     box-shadow:
         0 8px 20px rgba(236, 116, 4, .2);
-}
 
-.featured-button:hover {
-    background: #d86902;
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 10px 24px rgba(236, 116, 4, .28);
 }
 
 
-/* ========================= */
-/* SEGURANÇA DO CARD */
-/* ========================= */
+/* =========================
+   SEGURANÇA DO CARD
+========================= */
 
 .card-secure {
+
     color: #999;
 
     font-size: .72rem;
 
     margin-top: .8rem;
+
 }
 
 
-/* ========================= */
-/* FOOTER DA OFERTA */
-/* ========================= */
+/* =========================
+   FOOTER DA OFERTA
+========================= */
 
 .offer-footer {
+
     margin-top: 4rem;
 
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     flex-wrap: wrap;
@@ -471,26 +562,34 @@
     color: #d6d6d6;
 
     font-size: .9rem;
+
 }
 
+
 .offer-trust-item {
+
     display: flex;
 
     align-items: center;
 
     gap: .4rem;
+
 }
+
 
 .trust-icon {
+
     font-size: .9rem;
+
 }
 
 
-/* ========================= */
-/* TEXTO FINAL */
-/* ========================= */
+/* =========================
+   TEXTO FINAL
+========================= */
 
 .offer-bottom-text {
+
     margin-top: 1.5rem;
 
     text-align: center;
@@ -498,208 +597,255 @@
     color: #777;
 
     font-size: .8rem;
+
 }
 
 
-/* ========================= */
-/* TABLET */
-/* ========================= */
+/* =========================
+   TABLET
+========================= */
 
 @media (max-width: 992px) {
 
     .offer {
+
         padding: 6rem 0 4rem;
+
     }
 
+
     .pricing-grid {
+
         grid-template-columns: 1fr;
 
         max-width: 520px;
 
         gap: 2.5rem;
+
     }
+
 
     .pricing-card.featured {
+
         transform: none;
+
     }
 
-    .pricing-card.featured:hover {
-        transform: translateY(-6px);
-    }
 
     .pricing-card {
+
         padding: 2.2rem 2rem 1.8rem;
+
     }
 
 }
 
 
-/* ========================= */
-/* CELULAR */
-/* ========================= */
+/* =========================
+   CELULAR
+========================= */
 
 @media (max-width: 768px) {
 
     .offer {
+
         padding: 5rem 0 3.5rem;
+
     }
+
 
     .offer .container {
+
         width: min(100% - 2rem, 520px);
+
     }
 
-
-    /* HEADER */
 
     .offer-header {
+
         margin-bottom: 3.5rem;
+
     }
+
 
     .offer-eyebrow {
+
         font-size: .72rem;
+
     }
 
+
     .offer-header h2 {
+
         font-size: 2.35rem;
 
         line-height: 1;
+
     }
 
+
     .offer-description {
+
         font-size: .95rem;
 
         line-height: 1.65;
+
     }
 
 
-    /* GRID */
-
     .pricing-grid {
+
         gap: 2rem;
 
         max-width: 100%;
+
     }
 
 
-    /* CARD */
-
     .pricing-card {
+
         border-radius: 24px;
 
         padding: 2rem 1.4rem 1.5rem;
+
     }
+
 
     .pricing-card.featured {
+
         border-width: 2px;
+
     }
 
 
-    /* BADGE */
-
     .badge {
+
         top: -16px;
 
         padding: .55rem 1.2rem;
 
         font-size: .68rem;
+
     }
 
-
-    /* TITULO */
 
     .pricing-card h3 {
+
         font-size: 1.7rem;
+
     }
 
+
     .card-description {
+
         font-size: .85rem;
 
         margin-bottom: .5rem;
+
     }
 
 
-    /* PRODUTO */
-
     .product-wrapper {
+
         height: 320px;
 
         margin-bottom: .2rem;
+
     }
+
 
     .pricing-image {
+
         max-width: 320px;
+
         height: 320px;
+
     }
+
 
     .featured-product {
+
         height: 330px;
+
     }
+
 
     .featured-image {
+
         max-width: 400px;
+
         height: 400px;
+
     }
 
-
-    /* PREÇO */
 
     .price-old {
+
         font-size: .8rem;
+
     }
 
+
     .price strong {
+
         font-size: 3.8rem;
+
     }
+
 
     .price span,
     .price small {
+
         font-size: 1.1rem;
 
         margin-top: .55rem;
+
     }
 
 
-    /* ECONOMIA */
-
     .saving {
+
         font-size: .75rem;
 
         margin-bottom: 1.2rem;
+
     }
 
 
-    /* BENEFÍCIOS */
-
     .pricing-benefits {
+
         gap: .65rem;
 
         margin-bottom: 1.4rem;
+
     }
+
 
     .pricing-benefits li {
+
         font-size: .88rem;
+
     }
 
 
-    /* BOTÃO */
-
     .pricing-button {
+
         min-height: 52px;
 
         font-size: .9rem;
+
     }
 
-
-    /* SEGURANÇA */
 
     .card-secure {
+
         font-size: .68rem;
+
     }
 
 
-    /* FOOTER */
-
     .offer-footer {
+
         flex-direction: column;
 
         gap: .8rem;
@@ -707,52 +853,96 @@
         margin-top: 3rem;
 
         font-size: .82rem;
+
     }
 
+
     .offer-bottom-text {
+
         font-size: .75rem;
 
         line-height: 1.5;
+
     }
 
 }
 
 
-/* ========================= */
-/* CELULARES PEQUENOS */
-/* ========================= */
+/* =========================
+   CELULARES PEQUENOS
+========================= */
 
 @media (max-width: 380px) {
 
     .offer-header h2 {
+
         font-size: 2.1rem;
+
     }
+
 
     .pricing-card {
+
         padding-left: 1.1rem;
+
         padding-right: 1.1rem;
+
     }
+
 
     .product-wrapper {
+
         height: 205px;
+
     }
+
 
     .pricing-image {
+
         max-width: 195px;
+
         height: 195px;
+
     }
+
 
     .featured-product {
+
         height: 215px;
+
     }
+
 
     .featured-image {
+
         max-width: 210px;
+
         height: 210px;
+
     }
 
+
     .price strong {
+
         font-size: 3.5rem;
+
+    }
+
+}
+
+
+/* =========================
+   ACESSIBILIDADE
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .pricing-card,
+    .product-wrapper,
+    .pricing-button {
+
+        transition: none !important;
+
     }
 
 }

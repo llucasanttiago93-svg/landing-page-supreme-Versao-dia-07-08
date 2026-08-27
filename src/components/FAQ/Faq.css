@@ -1,238 +1,284 @@
-.faq{
+.faq {
 
-    padding:7rem 0;
+    padding: 7rem 0;
 
-    background:#ffffff;
+    background: #ffffff;
 
-}
-
-.faq .container{
-
-    width:min(900px,92%);
-
-    margin:auto;
+    overflow: hidden;
 
 }
 
-/* ========================= */
-/* HEADER */
-/* ========================= */
 
-.faq-header{
+.faq .container {
 
-    text-align:center;
+    width: min(900px, 92%);
 
-    margin-bottom:4rem;
+    margin: auto;
 
 }
 
-.faq-eyebrow{
 
-    color:#EC7404;
+/* =========================
+   HEADER
+========================= */
 
-    font-size:.85rem;
+.faq-header {
 
-    font-weight:700;
+    text-align: center;
 
-    letter-spacing:.22em;
-
-    text-transform:uppercase;
-
-    margin-bottom:1rem;
+    margin-bottom: 4rem;
 
 }
 
-.faq-header h2{
 
-    font-size:clamp(2.8rem,5vw,4.5rem);
+.faq-eyebrow {
 
-    line-height:1;
+    color: #EC7404;
 
-    color:#151312;
+    font-size: .85rem;
 
-    margin-bottom:1.2rem;
+    font-weight: 700;
 
-}
+    letter-spacing: .22em;
 
-.faq-header p{
+    text-transform: uppercase;
 
-    color:#666;
-
-    font-size:1.08rem;
-
-    line-height:1.8;
+    margin-bottom: 1rem;
 
 }
 
-/* ========================= */
-/* LISTA */
-/* ========================= */
 
-.faq-list{
+.faq-header h2 {
 
-    display:flex;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
 
-    flex-direction:column;
+    line-height: 1;
 
-    gap:1rem;
+    color: #151312;
 
-}
-
-/* ========================= */
-/* ITEM */
-/* ========================= */
-
-.faq-list details{
-
-    background:#fff;
-
-    border:1px solid #ececec;
-
-    border-radius:22px;
-
-    overflow:hidden;
-
-    transition:.3s;
+    margin-bottom: 1.2rem;
 
 }
 
-.faq-list details:hover{
 
-    border-color:#EC7404;
+.faq-header p {
 
-    box-shadow:0 10px 30px rgba(0,0,0,.05);
+    color: #666;
 
-}
+    font-size: 1.08rem;
 
-.faq-list details[open]{
-
-    border-color:#EC7404;
+    line-height: 1.8;
 
 }
 
-/* ========================= */
-/* PERGUNTA */
-/* ========================= */
 
-.faq-list summary{
+/* =========================
+   LISTA
+========================= */
 
-    list-style:none;
+.faq-list {
 
-    cursor:pointer;
+    display: flex;
 
-    padding:1.5rem 2rem;
+    flex-direction: column;
 
-    font-size:1.15rem;
-
-    font-weight:600;
-
-    color:#151312;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
+    gap: 1rem;
 
 }
 
-.faq-list summary::-webkit-details-marker{
 
-    display:none;
+/* =========================
+   ITEM
+========================= */
 
-}
+.faq-list details {
 
-.faq-list summary::after{
+    background: #fff;
 
-    content:"+";
+    border: 1px solid #ececec;
 
-    font-size:1.6rem;
+    border-radius: 22px;
 
-    color:#EC7404;
+    overflow: hidden;
 
-    transition:.3s;
-
-}
-
-.faq-list details[open] summary::after{
-
-    transform:rotate(45deg);
+    will-change: transform;
 
 }
 
-/* ========================= */
-/* RESPOSTA */
-/* ========================= */
 
-.faq-list p{
+.faq-list details:hover {
 
-    padding:0 2rem 2rem;
+    border-color: #EC7404;
 
-    color:#666;
-
-    line-height:1.8;
-
-    font-size:1rem;
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, .06);
 
 }
 
-/* ========================= */
-/* TABLET */
-/* ========================= */
 
-@media(max-width:992px){
+.faq-list details[open] {
 
-    .faq{
+    border-color: #EC7404;
 
-        padding:6rem 0;
+}
+
+
+/* =========================
+   PERGUNTA
+========================= */
+
+.faq-list summary {
+
+    list-style: none;
+
+    cursor: pointer;
+
+    padding: 1.5rem 2rem;
+
+    font-size: 1.15rem;
+
+    font-weight: 600;
+
+    color: #151312;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 1rem;
+
+}
+
+
+.faq-list summary::-webkit-details-marker {
+
+    display: none;
+
+}
+
+
+.faq-list summary::after {
+
+    content: "+";
+
+    flex-shrink: 0;
+
+    font-size: 1.6rem;
+
+    font-weight: 400;
+
+    color: #EC7404;
+
+    transition:
+        transform .35s cubic-bezier(.22, 1, .36, 1);
+
+}
+
+
+.faq-list details[open] summary::after {
+
+    transform: rotate(45deg);
+
+}
+
+
+/* =========================
+   RESPOSTA
+========================= */
+
+.faq-list p {
+
+    padding: 0 2rem 2rem;
+
+    color: #666;
+
+    line-height: 1.8;
+
+    font-size: 1rem;
+
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 992px) {
+
+    .faq {
+
+        padding: 6rem 0;
 
     }
 
 }
 
-/* ========================= */
-/* CELULAR */
-/* ========================= */
 
-@media(max-width:768px){
+/* =========================
+   CELULAR
+========================= */
 
-    .faq{
+@media (max-width: 768px) {
 
-        padding:5rem 0;
+    .faq {
 
-    }
-
-    .faq-header{
-
-        margin-bottom:3rem;
+        padding: 5rem 0;
 
     }
 
-    .faq-header h2{
 
-        font-size:2.3rem;
+    .faq-header {
 
-    }
-
-    .faq-header p{
-
-        font-size:1rem;
+        margin-bottom: 3rem;
 
     }
 
-    .faq-list summary{
 
-        padding:1.3rem 1.5rem;
+    .faq-header h2 {
 
-        font-size:1rem;
+        font-size: 2.3rem;
 
     }
 
-    .faq-list p{
 
-        padding:0 1.5rem 1.5rem;
+    .faq-header p {
 
-        font-size:.95rem;
+        font-size: 1rem;
+
+    }
+
+
+    .faq-list summary {
+
+        padding: 1.3rem 1.5rem;
+
+        font-size: 1rem;
+
+    }
+
+
+    .faq-list p {
+
+        padding: 0 1.5rem 1.5rem;
+
+        font-size: .95rem;
+
+    }
+
+}
+
+
+/* =========================
+   REDUÇÃO DE MOVIMENTO
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .faq-list details {
+
+        transform: none !important;
 
     }
 

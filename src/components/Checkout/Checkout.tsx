@@ -187,7 +187,7 @@ function Checkout({
 
 
   /* =====================================================
-     BLOQUEAR SCROLL
+     BLOQUEAR SCROLL / OVERFLOW HORIZONTAL
   ===================================================== */
 
   useEffect(() => {
@@ -196,10 +196,60 @@ function Checkout({
       return;
     }
 
-    document.body.style.overflow = "hidden";
+
+    const html = document.documentElement;
+    const body = document.body;
+
+
+    /*
+     * Guarda os valores originais.
+     *
+     * Isso é importante para que, ao fechar o checkout,
+     * o site volte exatamente ao estado anterior.
+     */
+
+    const previousHtmlOverflow =
+      html.style.overflow;
+
+    const previousHtmlOverflowX =
+      html.style.overflowX;
+
+    const previousBodyOverflow =
+      body.style.overflow;
+
+    const previousBodyOverflowX =
+      body.style.overflowX;
+
+
+    /*
+     * Bloqueia o scroll horizontal do documento.
+     */
+
+    html.style.overflow = "hidden";
+    html.style.overflowX = "hidden";
+
+    body.style.overflow = "hidden";
+    body.style.overflowX = "hidden";
+
 
     return () => {
-      document.body.style.overflow = "";
+
+      /*
+       * Restaura os valores originais.
+       */
+
+      html.style.overflow =
+        previousHtmlOverflow;
+
+      html.style.overflowX =
+        previousHtmlOverflowX;
+
+      body.style.overflow =
+        previousBodyOverflow;
+
+      body.style.overflowX =
+        previousBodyOverflowX;
+
     };
 
   }, [isOpen]);
@@ -875,9 +925,12 @@ function Checkout({
               },
 
               body: JSON.stringify({
-                quantidade: quantity,
 
-                shippingId: selectedShipping.id,
+                quantidade:
+                  quantity,
+
+                shippingId:
+                  selectedShipping.id,
 
                 cliente: {
 
@@ -925,8 +978,6 @@ function Checkout({
                     addressReference,
 
                 },
-
-               
 
               }),
 
@@ -1175,9 +1226,10 @@ function Checkout({
                   key={option.id}
                   type="button"
                   className={
-                    `checkout-shipping-option ${selectedShipping?.id === option.id
-                      ? "selected"
-                      : ""
+                    `checkout-shipping-option ${
+                      selectedShipping?.id === option.id
+                        ? "selected"
+                        : ""
                     }`
                   }
                   onClick={() =>
@@ -1630,9 +1682,6 @@ function Checkout({
           </div>
 
         )}
-
-
-
 
 
         {/* =================================================

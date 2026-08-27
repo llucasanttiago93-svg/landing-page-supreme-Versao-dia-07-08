@@ -1,33 +1,128 @@
 import { useRef, useState } from "react";
+import { motion, type Variants } from "motion/react";
 import "./Testimonials.css";
+
+const headerVariants: Variants = {
+    hidden: {
+        opacity: 0,
+        y: 35,
+    },
+
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    },
+};
+
+const cardsContainerVariants: Variants = {
+    hidden: {},
+
+    visible: {
+        transition: {
+            staggerChildren: 0.09,
+            delayChildren: 0.15,
+        },
+    },
+};
+
+const cardVariants: Variants = {
+    hidden: {
+        opacity: 0,
+        y: 35,
+        scale: 0.97,
+    },
+
+    visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: {
+            duration: 0.7,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    },
+};
 
 function Testimonials() {
 
-    const carouselRef = useRef<HTMLDivElement>(null);
+    const carouselRef =
+        useRef<HTMLDivElement>(null);
 
-    const [current, setCurrent] = useState(0);
+    const [current, setCurrent] =
+        useState(0);
 
 
     const testimonials = [
-        { image: `${import.meta.env.BASE_URL}images/prova2.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova1.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova3.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova4.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova5.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova6.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova7.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova8.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova9.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova10.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova11.webp` },
-        { image: `${import.meta.env.BASE_URL}images/prova12.webp` },
-    ];
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova2.webp`
+        },
 
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova1.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova3.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova4.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova5.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova6.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova7.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova8.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova9.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova10.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova11.webp`
+        },
+
+        {
+            image:
+                `${import.meta.env.BASE_URL}images/prova12.webp`
+        },
+    ];
 
 
     const scrollToCard = (index: number) => {
 
-        const carousel = carouselRef.current;
+        const carousel =
+            carouselRef.current;
 
         if (!carousel) return;
 
@@ -39,7 +134,6 @@ function Testimonials() {
 
 
         const card = cards[index];
-
 
         if (!card) return;
 
@@ -58,8 +152,6 @@ function Testimonials() {
     };
 
 
-
-
     const nextTestimonial = () => {
 
         const next =
@@ -71,9 +163,6 @@ function Testimonials() {
         scrollToCard(next);
 
     };
-
-
-
 
 
     const previousTestimonial = () => {
@@ -89,15 +178,12 @@ function Testimonials() {
     };
 
 
-
-
-
     const handleScroll = () => {
 
-        const carousel = carouselRef.current;
+        const carousel =
+            carouselRef.current;
 
         if (!carousel) return;
-
 
 
         const cards =
@@ -106,35 +192,37 @@ function Testimonials() {
             );
 
 
-
         let closestIndex = 0;
 
-        let closestDistance = Infinity;
+        let closestDistance =
+            Infinity;
 
 
+        cards.forEach(
+            (card, index) => {
 
-        cards.forEach((card,index)=>{
-
-
-            const distance =
-                Math.abs(
-                    card.offsetLeft -
-                    carousel.scrollLeft
-                );
-
+                const distance =
+                    Math.abs(
+                        card.offsetLeft -
+                        carousel.scrollLeft
+                    );
 
 
-            if(distance < closestDistance){
+                if (
+                    distance <
+                    closestDistance
+                ) {
 
-                closestDistance = distance;
+                    closestDistance =
+                        distance;
 
-                closestIndex = index;
+                    closestIndex =
+                        index;
+
+                }
 
             }
-
-
-        });
-
+        );
 
 
         setCurrent(closestIndex);
@@ -142,235 +230,221 @@ function Testimonials() {
     };
 
 
-
-
-
     return (
 
-        <section className="testimonials section-motion">
-
+        <section
+            className="testimonials"
+            id="depoimentos"
+        >
 
             <div className="container">
 
 
+                {/* =========================
+                    HEADER
+                ========================= */}
 
-                <div className="testimonials-header reveal-item">
-
+                <motion.div
+                    className="testimonials-header"
+                    variants={headerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{
+                        once: true,
+                        amount: 0.25,
+                    }}
+                >
 
                     <p className="testimonials-eyebrow">
-
                         QUEM USA, RECOMENDA
-
                     </p>
-
 
 
                     <h2>
-
                         Apaixonadas pelo brilho.
                         <br />
                         Encantadas pela fragrância.
-
                     </h2>
 
 
-
                     <p className="testimonials-description">
-
                         Veja experiências reais de clientes que já
                         conheceram o Queridinho Supreme.
-
                     </p>
 
-
-                </div>
-
+                </motion.div>
 
 
-
+                {/* =========================
+                    CARROSSEL
+                ========================= */}
 
                 <div className="testimonials-carousel">
 
 
-
                     <button
-
+                        type="button"
                         className="carousel-button carousel-prev"
-
                         onClick={previousTestimonial}
-
                         aria-label="Prova social anterior"
-
                     >
-
                         ‹
-
                     </button>
 
 
-
-
-
-                    <div
-
+                    <motion.div
                         className="testimonials-viewport"
-
                         ref={carouselRef}
-
                         onScroll={handleScroll}
-
+                        variants={cardsContainerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{
+                            once: true,
+                            amount: 0.1,
+                        }}
                     >
-
-
 
                         <div className="testimonials-track">
 
 
-
                             {testimonials.map(
-                                (testimonial,index)=>(
+                                (
+                                    testimonial,
+                                    index
+                                ) => (
 
-
-                                <article
-
-                                    className={
-                                        `testimonial-card 
-                                        ${
-                                        current === index
-                                        ? "active-card"
-                                        : ""
-                                        }`
-                                    }
-
-                                    key={index}
-
-                                >
-
-
-
-                                    <img
-
-                                        className="image-motion"
-
-                                        src={testimonial.image}
-
-                                        alt={
-                                            `Experiência de cliente com o Queridinho Supreme - prova social ${index + 1}`
+                                    <motion.article
+                                        key={index}
+                                        className={
+                                            `testimonial-card ${
+                                                current === index
+                                                    ? "active-card"
+                                                    : ""
+                                            }`
                                         }
+                                        variants={
+                                            cardVariants
+                                        }
+                                        whileHover={{
+                                            y: -8,
+                                            scale: 1.015,
+                                            boxShadow:
+                                                "0 28px 60px rgba(0,0,0,.14)",
+                                        }}
+                                        transition={{
+                                            duration: 0.3,
+                                        }}
+                                    >
 
-                                    />
+                                        <motion.img
+                                            src={
+                                                testimonial.image
+                                            }
+                                            alt={
+                                                `Experiência de cliente com o Queridinho Supreme - prova social ${index + 1}`
+                                            }
+                                            whileHover={{
+                                                scale: 1.035,
+                                            }}
+                                            transition={{
+                                                duration: 0.6,
+                                                ease: [
+                                                    0.22,
+                                                    1,
+                                                    0.36,
+                                                    1,
+                                                ],
+                                            }}
+                                        />
 
+                                    </motion.article>
 
-
-                                </article>
-
-
-                            ))}
-
-
+                                )
+                            )}
 
                         </div>
 
-
-
-                    </div>
-
-
-
+                    </motion.div>
 
 
                     <button
-
+                        type="button"
                         className="carousel-button carousel-next"
-
                         onClick={nextTestimonial}
-
                         aria-label="Próxima prova social"
-
                     >
-
                         ›
-
                     </button>
-
-
 
                 </div>
 
 
-
-
+                {/* =========================
+                    DOTS
+                ========================= */}
 
                 <div className="carousel-dots">
 
+                    {testimonials.map(
+                        (_, index) => (
 
-                    {testimonials.map((_,index)=>(
+                            <button
+                                type="button"
+                                key={index}
+                                className={
+                                    current === index
+                                        ? "carousel-dot active"
+                                        : "carousel-dot"
+                                }
+                                onClick={() =>
+                                    scrollToCard(index)
+                                }
+                                aria-label={
+                                    `Ir para prova social ${index + 1}`
+                                }
+                            />
 
-
-                        <button
-
-                            key={index}
-
-                            className={
-                                current === index
-                                ? "carousel-dot active"
-                                : "carousel-dot"
-                            }
-
-                            onClick={() => scrollToCard(index)}
-
-                            aria-label={
-                                `Ir para prova social ${index + 1}`
-                            }
-
-                        />
-
-
-                    ))}
-
+                        )
+                    )}
 
                 </div>
 
 
+                {/* =========================
+                    FOOTER
+                ========================= */}
 
-
-
-
-                <div className="testimonials-footer reveal-item">
-
+                <motion.div
+                    className="testimonials-footer"
+                    variants={headerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{
+                        once: true,
+                        amount: 0.3,
+                    }}
+                >
 
                     <div className="footer-stars">
-
                         ★★★★★
-
                     </div>
 
 
-
                     <h3>
-
                         Experiências reais de quem já usou.
-
                     </h3>
 
 
-
                     <p>
-
                         Veja o que nossas clientes estão falando sobre o
                         Queridinho Supreme.
-
                     </p>
 
-
-
-                </div>
-
-
+                </motion.div>
 
 
             </div>
-
 
         </section>
 

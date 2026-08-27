@@ -1,312 +1,344 @@
-.guarantee{
+.guarantee {
 
-    padding:7rem 0;
+    padding: 7rem 0;
 
-    background:#ffffff;
+    background: #ffffff;
 
-}
-
-.guarantee .container{
-
-    width:min(1240px,92%);
-
-    margin:auto;
+    overflow: hidden;
 
 }
 
-/* ========================= */
-/* HEADER */
-/* ========================= */
 
-.guarantee-header{
+.guarantee .container {
 
-    max-width:760px;
+    width: min(1240px, 92%);
 
-    margin:0 auto 5rem;
-
-    text-align:center;
+    margin: auto;
 
 }
 
-.guarantee-eyebrow{
 
-    color:#EC7404;
+/* =========================
+   HEADER
+========================= */
 
-    font-size:.85rem;
+.guarantee-header {
 
-    font-weight:700;
+    max-width: 760px;
 
-    letter-spacing:.22em;
+    margin: 0 auto 5rem;
 
-    text-transform:uppercase;
-
-    margin-bottom:1rem;
-
-}
-
-.guarantee-header h2{
-
-    font-size:clamp(2.8rem,5vw,4.6rem);
-
-    line-height:1;
-
-    color:#151312;
-
-    margin-bottom:1.3rem;
+    text-align: center;
 
 }
 
-.guarantee-description{
 
-    color:#666;
+.guarantee-eyebrow {
 
-    font-size:1.08rem;
+    color: #EC7404;
 
-    line-height:1.8;
+    font-size: .85rem;
 
-}
+    font-weight: 700;
 
-/* ========================= */
-/* GRID */
-/* ========================= */
+    letter-spacing: .22em;
 
-.guarantee-grid{
+    text-transform: uppercase;
 
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:2rem;
+    margin-bottom: 1rem;
 
 }
 
-/* ========================= */
-/* CARD */
-/* ========================= */
 
-.guarantee-card{
+.guarantee-header h2 {
 
-    background:#ffffff;
+    font-size: clamp(2.8rem, 5vw, 4.6rem);
 
-    border:1px solid #ececec;
+    line-height: 1;
 
-    border-radius:28px;
+    color: #151312;
 
-    padding:2.5rem;
-
-    transition:.35s ease;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:flex-start;
+    margin-bottom: 1.3rem;
 
 }
 
-.guarantee-card:hover{
 
-    transform:translateY(-8px);
+.guarantee-description {
 
-    box-shadow:0 22px 60px rgba(0,0,0,.08);
+    color: #666;
 
-    border-color:#EC7404;
+    font-size: 1.08rem;
 
-}
-
-.guarantee-icon{
-
-    width:70px;
-
-    height:70px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    border-radius:50%;
-
-    background:#FFF7EF;
-
-    font-size:2rem;
-
-    margin-bottom:1.5rem;
+    line-height: 1.8;
 
 }
 
-.guarantee-card h3{
 
-    font-size:1.45rem;
+/* =========================
+   GRID
+========================= */
 
-    color:#151312;
+.guarantee-grid {
 
-    margin-bottom:.8rem;
+    display: grid;
 
-}
+    grid-template-columns: repeat(2, 1fr);
 
-.guarantee-card p{
-
-    color:#666;
-
-    font-size:1rem;
-
-    line-height:1.8;
+    gap: 2rem;
 
 }
 
-/* ========================= */
-/* CTA */
-/* ========================= */
 
-.guarantee-cta{
+/* =========================
+   CARD
+========================= */
 
-    display:flex;
+.guarantee-card {
 
-    justify-content:center;
+    background: #ffffff;
 
-    margin-top:4rem;
+    border: 1px solid #ececec;
 
-}
+    border-radius: 28px;
 
-.guarantee-button{
+    padding: 2.5rem;
 
-    display:inline-flex;
+    display: flex;
 
-    justify-content:center;
+    flex-direction: column;
 
-    align-items:center;
+    align-items: flex-start;
 
-    padding:1rem 2.8rem;
-
-    border-radius:999px;
-
-    background:#EC7404;
-
-    color:#fff;
-
-    font-weight:700;
-
-    font-size:1rem;
-
-    transition:.35s ease;
+    will-change: transform;
 
 }
 
-.guarantee-button:hover{
 
-    background:#d96802;
+.guarantee-icon {
 
-    transform:translateY(-3px);
+    width: 70px;
 
-    box-shadow:0 16px 40px rgba(236,116,4,.35);
+    height: 70px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border-radius: 50%;
+
+    background: #FFF7EF;
+
+    font-size: 2rem;
+
+    margin-bottom: 1.5rem;
 
 }
 
-/* ========================= */
-/* TABLET */
-/* ========================= */
 
-@media(max-width:992px){
+.guarantee-card h3 {
 
-    .guarantee{
+    font-size: 1.45rem;
 
-        padding:6rem 0;
+    color: #151312;
+
+    margin-bottom: .8rem;
+
+}
+
+
+.guarantee-card p {
+
+    color: #666;
+
+    font-size: 1rem;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================
+   CTA
+========================= */
+
+.guarantee-cta {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 4rem;
+
+}
+
+
+.guarantee-button {
+
+    display: inline-flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 1rem 2.8rem;
+
+    border-radius: 999px;
+
+    background: #EC7404;
+
+    color: #fff;
+
+    font-weight: 700;
+
+    font-size: 1rem;
+
+    will-change: transform;
+
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 992px) {
+
+    .guarantee {
+
+        padding: 6rem 0;
 
     }
 
-    .guarantee-grid{
 
-        grid-template-columns:repeat(2,1fr);
+    .guarantee-grid {
 
-        gap:1.5rem;
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 1.5rem;
 
     }
 
-    .guarantee-card{
 
-        padding:2rem;
+    .guarantee-card {
+
+        padding: 2rem;
 
     }
 
 }
 
-/* ========================= */
-/* CELULAR */
-/* ========================= */
 
-@media(max-width:768px){
+/* =========================
+   CELULAR
+========================= */
 
-    .guarantee{
+@media (max-width: 768px) {
 
-        padding:5rem 0;
+    .guarantee {
 
-    }
-
-    .guarantee-header{
-
-        margin-bottom:3rem;
+        padding: 5rem 0;
 
     }
 
-    .guarantee-header h2{
 
-        font-size:2.3rem;
+    .guarantee-header {
 
-    }
-
-    .guarantee-description{
-
-        font-size:1rem;
+        margin-bottom: 3rem;
 
     }
 
-    .guarantee-grid{
 
-        grid-template-columns:1fr 1fr;
+    .guarantee-header h2 {
 
-    }
-
-    .guarantee-card{
-
-        align-items:center;
-
-        text-align:center;
-
-        padding:2rem 1.6rem;
+        font-size: 2.3rem;
 
     }
 
-    .guarantee-icon{
 
-        width:64px;
+    .guarantee-description {
 
-        height:64px;
-
-        font-size:1.8rem;
-
-        margin-bottom:1.2rem;
+        font-size: 1rem;
 
     }
 
-    .guarantee-card h3{
 
-        font-size:1.25rem;
+    .guarantee-grid {
 
-    }
+        grid-template-columns: 1fr 1fr;
 
-    .guarantee-card p{
-
-        font-size:.95rem;
+        gap: 1rem;
 
     }
 
-    .guarantee-button{
 
-        width:100%;
+    .guarantee-card {
 
-        max-width:360px;
+        align-items: center;
+
+        text-align: center;
+
+        padding: 1.8rem 1.2rem;
+
+        border-radius: 22px;
+
+    }
+
+
+    .guarantee-icon {
+
+        width: 60px;
+
+        height: 60px;
+
+        font-size: 1.7rem;
+
+        margin-bottom: 1rem;
+
+    }
+
+
+    .guarantee-card h3 {
+
+        font-size: 1.15rem;
+
+    }
+
+
+    .guarantee-card p {
+
+        font-size: .9rem;
+
+        line-height: 1.65;
+
+    }
+
+
+    .guarantee-button {
+
+        width: 100%;
+
+        max-width: 360px;
+
+    }
+
+}
+
+
+/* =========================
+   ACESSIBILIDADE
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .guarantee-header,
+    .guarantee-grid,
+    .guarantee-card,
+    .guarantee-cta,
+    .guarantee-button {
+
+        transition: none !important;
 
     }
 

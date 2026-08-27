@@ -1,153 +1,63 @@
 .hero {
-
     min-height: 100svh;
-
     background: #f5f5f5;
-
     overflow: hidden;
-
 }
-
-
 
 .hero-container {
-
     width: min(1400px, 100%);
-
     min-height: 100svh;
+    margin: 0 auto;
 
     display: grid;
-
     grid-template-columns: 1fr 1fr;
-
 }
 
-
-
-/* =====================
+/* =====================================================
    LADO ESQUERDO
-===================== */
+===================================================== */
 
 .hero-left {
-
     display: flex;
-
     flex-direction: column;
-
     justify-content: center;
-
     align-items: center;
 
     text-align: center;
 
     padding: 8rem 7vw 3rem;
-
 }
 
-
-
-/* =====================
-   IMAGEM
-===================== */
-
-.hero-right {
-
-    overflow: hidden;
-
-    display: flex;
-
-}
-
-
-
-.hero-image-wrapper {
-
-    width: 100%;
-
-    height: 100%;
-
-    overflow: hidden;
-
-}
-
-
-
-.hero-right img {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: cover;
-
-    display: block;
-
-}
-
-
-
-/* =====================
-   HOVER DA IMAGEM
-===================== */
-
-@media (hover: hover) and (pointer: fine) {
-
-    .hero-right:hover img {
-
-        transform: scale(1.03);
-
-    }
-
-}
-
-
-
-/* =====================
+/* =====================================================
    TEXTOS
-===================== */
+===================================================== */
 
 .hero-eyebrow {
-
     color: #ec7404;
 
     font-size: .8rem;
-
     font-weight: 700;
 
     letter-spacing: .18em;
 
     margin-bottom: .6rem;
-
 }
 
-
-
 .hero-rating {
-
     display: flex;
+    align-items: center;
 
     gap: .7rem;
 
-    align-items: center;
-
     margin-bottom: 1rem;
-
 }
-
-
 
 .stars {
-
     color: #ec7404;
-
     letter-spacing: .08em;
-
 }
 
-
-
 .hero h1 {
-
     font-size: clamp(3rem, 4vw, 5.5rem);
 
     line-height: .95;
@@ -157,25 +67,17 @@
     color: #151312;
 
     margin-bottom: 1.4rem;
-
 }
 
-
-
 .hero h1 span {
-
     font-family: serif;
 
     font-style: italic;
 
     font-weight: 500;
-
 }
 
-
-
 .hero-description {
-
     max-width: 620px;
 
     font-size: 1.05rem;
@@ -185,45 +87,34 @@
     color: #555;
 
     margin-bottom: 1.5rem;
-
 }
-
-
 
 .hero-description strong {
-
     color: #ec7404;
-
 }
 
-
-
-/* =====================
+/* =====================================================
    BENEFÍCIOS
-===================== */
+===================================================== */
 
 .hero-benefits {
-
     width: 80%;
-
     max-width: 560px;
 
     display: grid;
-
     grid-template-columns: repeat(2, 1fr);
 
     gap: 1rem;
 
     margin-bottom: 2rem;
 
+    list-style: none;
+
+    padding: 0;
 }
 
-
-
 .hero-benefit-item {
-
     display: flex;
-
     align-items: center;
 
     gap: .5rem;
@@ -240,53 +131,30 @@
 
     box-shadow: 0 8px 24px rgba(0, 0, 0, .05);
 
+    cursor: default;
 }
 
-
-
 .check {
-
     color: #ec7404;
 
     font-weight: 700;
 
+    flex-shrink: 0;
 }
 
-
-
-/* =====================
-   HOVER BENEFÍCIOS
-===================== */
-
-@media (hover: hover) and (pointer: fine) {
-
-    .hero-benefit-item:hover {
-
-        transform: translateY(-5px);
-
-        box-shadow: 0 15px 35px rgba(0, 0, 0, .10);
-
-    }
-
-}
-
-
-
-/* =====================
+/* =====================================================
    BOTÃO
-===================== */
+===================================================== */
 
 .hero-button {
-
     position: relative;
 
     display: inline-flex;
 
     align-items: center;
-
     justify-content: center;
 
-    padding: .9rem 2.2rem;
+    padding: .95rem 2.3rem;
 
     background: #ec7404;
 
@@ -301,63 +169,58 @@
     overflow: hidden;
 
     cursor: pointer;
-
 }
 
-
-
 .hero-button::before {
-
     content: "";
 
     position: absolute;
 
     top: 0;
-
     left: -120%;
 
     width: 80%;
-
     height: 100%;
 
-    background: linear-gradient(
-
-        120deg,
-
-        transparent,
-
-        rgba(255, 255, 255, .45),
-
-        transparent
-
-    );
+    background:
+        linear-gradient(
+            120deg,
+            transparent,
+            rgba(255, 255, 255, .45),
+            transparent
+        );
 
     transform: skewX(-20deg);
-
 }
-
-
 
 @media (hover: hover) and (pointer: fine) {
 
-    .hero-button:hover {
+    .hero-button {
+        transition:
+            transform .3s ease,
+            box-shadow .3s ease;
+    }
 
+    .hero-button:hover {
         transform: translateY(-3px);
 
-        box-shadow: 0 14px 30px rgba(236, 116, 4, .30);
+        box-shadow:
+            0 14px 30px rgba(236, 116, 4, .30);
+    }
 
+    .hero-button:hover::before {
+        left: 140%;
+
+        transition: left .7s ease;
     }
 
 }
 
-
-
-/* =====================
+/* =====================================================
    CONFIANÇA
-===================== */
+===================================================== */
 
 .hero-trust {
-
     display: flex;
 
     flex-wrap: wrap;
@@ -371,87 +234,112 @@
     color: #555;
 
     font-size: .85rem;
+}
+
+/* =====================================================
+   IMAGEM
+===================================================== */
+
+.hero-right {
+    overflow: hidden;
+
+    display: flex;
+
+    min-width: 0;
+}
+
+.hero-image-wrapper {
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+}
+
+.hero-right img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+/* =====================================================
+   HOVER DA IMAGEM
+===================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+
+    .hero-right img {
+        transition:
+            transform .9s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .hero-right:hover img {
+        transform: scale(1.025);
+    }
 
 }
 
-
-
-/* =====================
+/* =====================================================
    TABLET
-===================== */
+===================================================== */
 
 @media (max-width: 992px) {
 
     .hero-container {
-
         grid-template-columns: 1fr;
-
     }
 
-
-
     .hero-right {
-
         order: -1;
 
         height: 55vh;
 
+        min-height: 420px;
     }
 
-
-
     .hero-left {
-
         padding: 3rem 1.5rem;
-
     }
 
 }
 
-
-
-/* =====================
+/* =====================================================
    MOBILE
-===================== */
+===================================================== */
 
 @media (max-width: 768px) {
 
     .hero h1 {
-
         font-size: 2.5rem;
-
     }
-
-
 
     .hero-description {
-
         font-size: 1rem;
-
     }
-
-
 
     .hero-benefits {
-
         width: 100%;
-
+        gap: .75rem;
     }
-
-
 
     .hero-benefit-item {
-
         min-height: 60px;
 
+        padding: 0 1rem;
     }
 
-
-
     .hero-trust {
-
         flex-direction: column;
 
+        align-items: center;
+    }
+
+    .hero-right {
+        height: 50vh;
+
+        min-height: 350px;
     }
 
 }

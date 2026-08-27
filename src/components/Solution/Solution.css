@@ -4,6 +4,8 @@
 
     background: #fff;
 
+    overflow: hidden;
+
 }
 
 .solution-container {
@@ -22,6 +24,11 @@
 
 }
 
+
+/* =====================================================
+   IMAGEM
+===================================================== */
+
 .solution-image {
 
     height: 720px;
@@ -29,6 +36,8 @@
     overflow: hidden;
 
     border-radius: 30px;
+
+    min-width: 0;
 
 }
 
@@ -38,29 +47,22 @@
 
     height: 100%;
 
+    display: block;
+
     object-fit: cover;
 
 }
+
+
+/* =====================================================
+   CONTEÚDO
+===================================================== */
 
 .solution-content {
 
     display: flex;
 
     flex-direction: column;
-
-}
-
-.solution-eyebrow {
-
-    color: #ec7404;
-
-    font-size: .8rem;
-
-    font-weight: 700;
-
-    letter-spacing: .2em;
-
-    margin-bottom: 1rem;
 
 }
 
@@ -100,6 +102,11 @@
 
 }
 
+
+/* =====================================================
+   BENEFÍCIOS
+===================================================== */
+
 .solution-benefits {
 
     display: grid;
@@ -124,9 +131,11 @@
 
     background: #fafafa;
 
-    border: 1px solid var(--laranja);
+    border: 1px solid #ec7404;
 
     border-radius: 999px;
+
+    cursor: default;
 
 }
 
@@ -138,6 +147,8 @@
 
     font-size: 1.1rem;
 
+    flex-shrink: 0;
+
 }
 
 .solution-item p {
@@ -145,6 +156,11 @@
     font-weight: 600;
 
 }
+
+
+/* =====================================================
+   BOTÃO
+===================================================== */
 
 .solution-button {
 
@@ -160,15 +176,20 @@
 
     font-weight: 700;
 
-    transition: .3s;
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
 
 }
 
-.solution-button:hover {
 
-    transform: translateY(-4px);
-
-}
+/* =====================================================
+   TABLET
+===================================================== */
 
 @media (max-width: 992px) {
 
@@ -198,13 +219,9 @@
 
     .solution-benefits {
 
-        display: grid;
+        width: 100%;
 
         grid-template-columns: repeat(2, 1fr);
-
-        gap: 1rem;
-
-        width: 100%;
 
     }
 
@@ -226,6 +243,11 @@
 
 }
 
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
 @media (max-width: 768px) {
 
     .solution {
@@ -237,6 +259,8 @@
     .solution-image {
 
         height: 380px;
+
+        border-radius: 24px;
 
     }
 
@@ -262,13 +286,17 @@
 
     .solution-item {
 
-        width: min(360px, 100%);
+        width: 100%;
 
-        margin: 0 auto;
+        min-height: 64px;
 
-        justify-content: center;
+        padding: .8rem;
 
-        text-align: center;
+    }
+
+    .solution-item p {
+
+        font-size: .9rem;
 
     }
 
@@ -277,6 +305,26 @@
         width: 100%;
 
         max-width: 360px;
+
+    }
+
+}
+
+
+/* =====================================================
+   ACESSIBILIDADE
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .solution-image,
+    .solution-image img {
+
+        opacity: 1 !important;
+
+        transform: none !important;
+
+        animation: none !important;
 
     }
 
