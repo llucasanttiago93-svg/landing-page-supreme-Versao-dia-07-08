@@ -1,47 +1,81 @@
+/* =====================================================
+   HERO
+===================================================== */
+
 .hero {
-    min-height: 100svh;
+    width: 100%;
+    min-height: calc(100svh - 82px);
+    margin-top: 82px;
+
     background: #f5f5f5;
     overflow: hidden;
 }
 
+
+/* =====================================================
+   CONTAINER
+   MESMO EIXO DO HEADER
+===================================================== */
+
 .hero-container {
-    width: min(1400px, 100%);
-    min-height: 100svh;
-    margin: 0 auto;
+    width: min(1200px, calc(100% - 2rem));
+    min-height: calc(100svh - 82px);
+
+    margin-inline: auto;
 
     display: grid;
     grid-template-columns: 1fr 1fr;
+
+    align-items: stretch;
 }
+
 
 /* =====================================================
    LADO ESQUERDO
 ===================================================== */
 
 .hero-left {
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
+
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 
-    text-align: center;
+    text-align: left;
 
-    padding: 8rem 7vw 3rem;
+    padding: 3rem 1rem 3rem 1rem;
 }
 
+
+/* Limita o conteúdo */
+
+.hero-left > * {
+    width: 100%;
+    max-width: 560px;
+}
+
+
 /* =====================================================
-   TEXTOS
+   EYEBROW
 ===================================================== */
 
 .hero-eyebrow {
+    margin: 0 0 .7rem;
+
     color: #ec7404;
 
-    font-size: .8rem;
+    font-size: .78rem;
     font-weight: 700;
 
     letter-spacing: .18em;
-
-    margin-bottom: .6rem;
 }
+
+
+/* =====================================================
+   RATING
+===================================================== */
 
 .hero-rating {
     display: flex;
@@ -49,112 +83,82 @@
 
     gap: .7rem;
 
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
+
+    color: #333;
+    font-size: .9rem;
 }
 
 .stars {
     color: #ec7404;
     letter-spacing: .08em;
+    font-size: 1rem;
 }
 
+
+/* =====================================================
+   TÍTULO
+===================================================== */
+
 .hero h1 {
-    font-size: clamp(3rem, 4vw, 5.5rem);
-
-    line-height: .95;
-
-    font-weight: 700;
+    margin: 0 0 1.4rem;
 
     color: #151312;
 
-    margin-bottom: 1.4rem;
+    font-size: clamp(3rem, 4.5vw, 5.2rem);
+    line-height: .94;
+
+    letter-spacing: -.045em;
+
+    font-weight: 700;
 }
 
 .hero h1 span {
-    font-family: serif;
+    display: inline-block;
+
+    font-family: Georgia, serif;
 
     font-style: italic;
+    font-weight: 400;
 
-    font-weight: 500;
+    letter-spacing: -.035em;
 }
 
+
+/* =====================================================
+   DESCRIÇÃO
+===================================================== */
+
 .hero-description {
-    max-width: 620px;
+    margin: 0 0 1.8rem;
+
+    color: #444;
 
     font-size: 1.05rem;
-
-    line-height: 1.6;
-
-    color: #555;
-
-    margin-bottom: 1.5rem;
+    line-height: 1.65;
 }
 
 .hero-description strong {
     color: #ec7404;
-}
-
-/* =====================================================
-   BENEFÍCIOS
-===================================================== */
-
-.hero-benefits {
-    width: 80%;
-    max-width: 560px;
-
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-
-    gap: 1rem;
-
-    margin-bottom: 2rem;
-
-    list-style: none;
-
-    padding: 0;
-}
-
-.hero-benefit-item {
-    display: flex;
-    align-items: center;
-
-    gap: .5rem;
-
-    min-height: 70px;
-
-    padding: 0 1.2rem;
-
-    background: #fff;
-
-    border-radius: 999px;
-
-    border: 1px solid #ec7404;
-
-    box-shadow: 0 8px 24px rgba(0, 0, 0, .05);
-
-    cursor: default;
-}
-
-.check {
-    color: #ec7404;
-
     font-weight: 700;
-
-    flex-shrink: 0;
 }
+
 
 /* =====================================================
    BOTÃO
 ===================================================== */
 
 .hero-button {
-    position: relative;
+    width: fit-content !important;
+    max-width: none !important;
+
+    min-height: 56px;
+
+    padding: 0 2rem;
 
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
-
-    padding: .95rem 2.3rem;
 
     background: #ec7404;
 
@@ -162,59 +166,27 @@
 
     border-radius: 999px;
 
+    font-size: 1rem;
     font-weight: 700;
 
-    line-height: 1;
+    text-decoration: none;
 
-    overflow: hidden;
+    box-shadow:
+        0 12px 30px rgba(236, 116, 4, .25);
 
-    cursor: pointer;
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
 }
 
-.hero-button::before {
-    content: "";
+.hero-button:hover {
+    background: #d96802;
 
-    position: absolute;
-
-    top: 0;
-    left: -120%;
-
-    width: 80%;
-    height: 100%;
-
-    background:
-        linear-gradient(
-            120deg,
-            transparent,
-            rgba(255, 255, 255, .45),
-            transparent
-        );
-
-    transform: skewX(-20deg);
+    box-shadow:
+        0 18px 40px rgba(236, 116, 4, .35);
 }
 
-@media (hover: hover) and (pointer: fine) {
-
-    .hero-button {
-        transition:
-            transform .3s ease,
-            box-shadow .3s ease;
-    }
-
-    .hero-button:hover {
-        transform: translateY(-3px);
-
-        box-shadow:
-            0 14px 30px rgba(236, 116, 4, .30);
-    }
-
-    .hero-button:hover::before {
-        left: 140%;
-
-        transition: left .7s ease;
-    }
-
-}
 
 /* =====================================================
    CONFIANÇA
@@ -222,38 +194,43 @@
 
 .hero-trust {
     display: flex;
-
     flex-wrap: wrap;
+    align-items: center;
 
-    justify-content: center;
-
-    gap: 1rem;
+    gap: .7rem 1.2rem;
 
     margin-top: 1rem;
 
     color: #555;
 
-    font-size: .85rem;
+    font-size: .78rem;
 }
 
+.hero-trust span {
+    white-space: nowrap;
+}
+
+
 /* =====================================================
-   IMAGEM
+   LADO DIREITO — IMAGEM
 ===================================================== */
 
 .hero-right {
+    width: 100%;
+    min-width: 0;
+    min-height: 100%;
+
     overflow: hidden;
 
     display: flex;
-
-    min-width: 0;
 }
 
-.hero-image-wrapper {
-    width: 100%;
-    height: 100%;
 
-    overflow: hidden;
-}
+/* =====================================================
+   IMAGEM
+
+   Mantém o centro da fotografia.
+===================================================== */
 
 .hero-right img {
     width: 100%;
@@ -262,10 +239,12 @@
     display: block;
 
     object-fit: cover;
+    object-position: center center;
 }
 
+
 /* =====================================================
-   HOVER DA IMAGEM
+   HOVER
 ===================================================== */
 
 @media (hover: hover) and (pointer: fine) {
@@ -276,70 +255,225 @@
     }
 
     .hero-right:hover img {
-        transform: scale(1.025);
+        transform: scale(1.015);
     }
-
 }
 
+
 /* =====================================================
-   TABLET
+   NOTEBOOK
 ===================================================== */
 
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
 
     .hero-container {
-        grid-template-columns: 1fr;
-    }
-
-    .hero-right {
-        order: -1;
-
-        height: 55vh;
-
-        min-height: 420px;
+        width: min(1200px, calc(100% - 2rem));
     }
 
     .hero-left {
-        padding: 3rem 1.5rem;
+        padding:
+            3.5rem
+            1rem;
     }
 
-}
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 768px) {
-
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: clamp(2.8rem, 4.5vw, 4.5rem);
     }
 
     .hero-description {
         font-size: 1rem;
     }
+}
 
-    .hero-benefits {
-        width: 100%;
-        gap: .75rem;
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .hero {
+        min-height: auto;
+        margin-top: 70px;
     }
 
-    .hero-benefit-item {
-        min-height: 60px;
+    .hero-container {
+        width: min(100%, 760px);
 
-        padding: 0 1rem;
+        min-height: auto;
+
+        grid-template-columns: 1fr;
+    }
+
+
+    /* IMAGEM */
+
+    .hero-right {
+        order: -1;
+
+        width: 100%;
+
+        height: auto;
+
+        aspect-ratio: 4 / 3;
+
+        padding: 0;
+    }
+
+    .hero-right img {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+        object-position: center center;
+    }
+
+
+    /* CONTEÚDO */
+
+    .hero-left {
+        width: 100%;
+
+        padding:
+            4rem
+            1.5rem
+            4.5rem;
+
+        align-items: center;
+
+        text-align: center;
+    }
+
+    .hero-left > * {
+        max-width: 650px;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.8rem, 7vw, 4.2rem);
+    }
+
+    .hero-description {
+        max-width: 620px;
+    }
+
+    .hero-button {
+        margin-inline: auto;
+    }
+
+    .hero-trust {
+        justify-content: center;
+    }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .hero {
+        margin-top: 70px;
+    }
+
+    .hero-container {
+        width: 100%;
+    }
+
+
+    /* IMAGEM */
+
+    .hero-right {
+        aspect-ratio: 4 / 5;
+    }
+
+
+    /* CONTEÚDO */
+
+    .hero-left {
+        padding:
+            2.5rem
+            1.25rem
+            3rem;
+    }
+
+    .hero-left > * {
+        max-width: 480px;
+    }
+
+    .hero-eyebrow {
+        font-size: .7rem;
+        letter-spacing: .15em;
+    }
+
+    .hero-rating {
+        font-size: .82rem;
+        gap: .5rem;
+        margin-bottom: .9rem;
+    }
+
+    .stars {
+        font-size: .9rem;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 11vw, 3.3rem);
+
+        line-height: .95;
+        letter-spacing: -.04em;
+
+        margin-bottom: 1.2rem;
+    }
+
+    .hero-description {
+        font-size: .96rem;
+        line-height: 1.6;
+
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-button {
+        width: 100% !important;
+
+        min-height: 56px;
+
+        padding-inline: 1rem;
+
+        font-size: .95rem;
     }
 
     .hero-trust {
         flex-direction: column;
 
-        align-items: center;
+        gap: .45rem;
+
+        font-size: .72rem;
     }
+}
+
+
+/* =====================================================
+   CELULAR PEQUENO
+===================================================== */
+
+@media (max-width: 400px) {
 
     .hero-right {
-        height: 50vh;
-
-        min-height: 350px;
+        aspect-ratio: 4 / 5;
     }
 
+    .hero-left {
+        padding:
+            2.2rem
+            1rem
+            2.8rem;
+    }
+
+    .hero h1 {
+        font-size: 2.4rem;
+    }
+
+    .hero-description {
+        font-size: .92rem;
+    }
 }

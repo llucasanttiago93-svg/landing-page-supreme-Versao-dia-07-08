@@ -1,5 +1,8 @@
-.header {
+/* =====================================================
+   HEADER
+===================================================== */
 
+.header {
     position: fixed;
 
     top: 0;
@@ -17,29 +20,37 @@
 }
 
 
+/* =====================================================
+   HEADER AO ROLAR
+===================================================== */
 
 .header.scrolled {
-
     background: rgba(255, 255, 255, .92);
 
     border-bottom: 1px solid rgba(0, 0, 0, .08);
 
-    box-shadow: 0 10px 35px rgba(0, 0, 0, .08);
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, .08);
 }
 
 
+/* =====================================================
+   CONTAINER
+   Mesmo limite horizontal do HERO
+===================================================== */
 
 .container {
+    width: min(1200px, calc(100% - 2rem));
 
-    width: min(1200px, 92%);
-
-    margin: auto;
+    margin-inline: auto;
 }
 
 
+/* =====================================================
+   HEADER CONTAINER
+===================================================== */
 
 .header-container {
-
     height: 82px;
 
     display: flex;
@@ -50,17 +61,21 @@
 }
 
 
+/* =====================================================
+   LATERAIS
+===================================================== */
 
 .header-left,
 .header-right {
-
     flex: 1;
 }
 
 
+/* =====================================================
+   LOGO
+===================================================== */
 
 .logo {
-
     display: flex;
 
     align-items: center;
@@ -68,17 +83,18 @@
     width: fit-content;
 }
 
-
-
 .logo img {
-
     width: 130px;
+
+    display: block;
 }
 
 
+/* =====================================================
+   NAVEGAÇÃO
+===================================================== */
 
 .navigation {
-
     flex: 1;
 
     display: flex;
@@ -90,34 +106,36 @@
     gap: 2.5rem;
 }
 
-
-
 .navigation a {
-
     position: relative;
 
     font-size: .95rem;
 
     font-weight: 500;
+
+    white-space: nowrap;
 }
 
 
+/* =====================================================
+   LADO DIREITO
+===================================================== */
 
 .header-right {
-
     display: flex;
 
     justify-content: flex-end;
 }
 
 
+/* =====================================================
+   BOTÃO
+===================================================== */
 
 .header-button {
-
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     height: 48px;
@@ -131,51 +149,78 @@
     color: #fff;
 
     font-weight: 700;
+
+    white-space: nowrap;
+
+    text-decoration: none;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+}
+
+.header-button:hover {
+    background: #d96802;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(236, 116, 4, .25);
 }
 
 
+/* =====================================================
+   MENU MOBILE
+===================================================== */
 
 .menu-toggle {
-
     display: none;
 }
-
-
 
 .mobile-button {
-
     display: none;
 }
 
 
+/* =====================================================
+   TABLET / MOBILE
+===================================================== */
 
 @media (max-width: 900px) {
 
     .header-container {
-
         height: 70px;
     }
 
 
+    /* ---------------------------------------------
+       LATERAIS
+    --------------------------------------------- */
+
     .header-left,
     .header-right {
-
         flex: none;
     }
 
 
-    .desktop-button {
+    /* ---------------------------------------------
+       BOTÃO DESKTOP
+    --------------------------------------------- */
 
+    .desktop-button {
         display: none;
     }
 
 
-    .menu-toggle {
+    /* ---------------------------------------------
+       MENU HAMBÚRGUER
+    --------------------------------------------- */
 
+    .menu-toggle {
         display: block;
 
         width: 42px;
-
         height: 42px;
 
         border: 0;
@@ -187,51 +232,47 @@
         cursor: pointer;
     }
 
-
     .menu-toggle span {
-
         position: absolute;
 
         left: 8px;
 
         width: 26px;
-
         height: 2px;
 
         background: #111;
 
         border-radius: 20px;
+
+        transition:
+            transform .3s ease,
+            opacity .3s ease;
     }
 
-
     .menu-toggle span:nth-child(1) {
-
         top: 12px;
     }
 
-
     .menu-toggle span:nth-child(2) {
-
         top: 20px;
     }
 
-
     .menu-toggle span:nth-child(3) {
-
         top: 28px;
     }
 
 
-    .navigation {
+    /* ---------------------------------------------
+       NAVEGAÇÃO MOBILE
+    --------------------------------------------- */
 
+    .navigation {
         position: fixed;
 
         top: 70px;
-
         left: 0;
 
         width: 100%;
-
         height: calc(100vh - 70px);
 
         background: #fff;
@@ -241,7 +282,6 @@
         gap: 2rem;
 
         justify-content: center;
-
         align-items: center;
 
         opacity: 0;
@@ -249,11 +289,14 @@
         visibility: hidden;
 
         pointer-events: none;
+
+        transition:
+            opacity .3s ease,
+            visibility .3s ease;
     }
 
 
     .navigation.active {
-
         opacity: 1;
 
         visibility: visible;
@@ -263,14 +306,31 @@
 
 
     .navigation a {
-
         font-size: 1.35rem;
     }
 
 
-    .mobile-button {
+    /* ---------------------------------------------
+       BOTÃO DENTRO DO MENU
+    --------------------------------------------- */
 
+    .mobile-button {
         display: flex;
     }
+}
 
+
+/* =====================================================
+   MOBILE PEQUENO
+===================================================== */
+
+@media (max-width: 500px) {
+
+    .container {
+        width: min(1200px, calc(100% - 1.5rem));
+    }
+
+    .logo img {
+        width: 115px;
+    }
 }
