@@ -5,7 +5,6 @@ import {
 
 import {
   criarPedidoVenda,
-  buscarProdutoVanti,
 } from "./bling.service.js";
 
 
@@ -569,7 +568,7 @@ export async function processarPedidoPago({
 
     /* =================================================
        TRAVAR PROCESSAMENTO DO BLING
-       
+
        IMPORTANTE:
        A trava acontece SOMENTE depois
        que o pagamento foi confirmado.
@@ -658,7 +657,13 @@ export async function processarPedidoPago({
 
 
     /* =================================================
-       DEFINIR SKU
+       DEFINIR PRODUTO DO BLING
+       
+       1 unidade → BLING_PRODUCT_ID_1
+       2 unidades → BLING_PRODUCT_ID_2
+       
+       O vínculo agora é feito diretamente pelo
+       ID configurado no .env.
     ================================================= */
 
     const quantidade =
@@ -667,25 +672,23 @@ export async function processarPedidoPago({
       );
 
 
-    let skuProduto;
+    let produtoBlingId;
 
 
     if (
       quantidade === 1
     ) {
 
-      skuProduto =
-        process.env.BLING_SKU_1_UNIDADE ||
-        "VTRP30MLQDS";
+      produtoBlingId =
+        process.env.BLING_PRODUCT_ID_1;
 
 
     } else if (
       quantidade === 2
     ) {
 
-      skuProduto =
-        process.env.BLING_SKU_2_UNIDADES ||
-        "VTKT6RPS";
+      produtoBlingId =
+        process.env.BLING_PRODUCT_ID_2;
 
 
     } else {
@@ -698,45 +701,15 @@ export async function processarPedidoPago({
 
 
     /* =================================================
-       BUSCAR PRODUTO NO BLING
+       VALIDAR ID DO PRODUTO
     ================================================= */
 
-    console.log(
-      "================================="
-    );
-
-    console.log(
-      "🔎 BUSCANDO PRODUTO NO BLING"
-    );
-
-    console.log(
-      "QUANTIDADE DO PEDIDO:",
-      quantidade
-    );
-
-    console.log(
-      "SKU ESCOLHIDO:",
-      skuProduto
-    );
-
-    console.log(
-      "================================="
-    );
-
-
-    const produtoBling =
-      await buscarProdutoVanti(
-        skuProduto
-      );
-
-
     if (
-      !produtoBling ||
-      !produtoBling.id
+      !produtoBlingId
     ) {
 
       throw new Error(
-        `Produto ${skuProduto} não encontrado no Bling.`
+        `BLING_PRODUCT_ID não configurado para a quantidade ${quantidade}.`
       );
 
     }
@@ -747,22 +720,17 @@ export async function processarPedidoPago({
     );
 
     console.log(
-      "✅ PRODUTO ENCONTRADO NO BLING"
+      "📦 PRODUTO BLING SELECIONADO"
     );
 
     console.log(
-      "ID:",
-      produtoBling.id
+      "QUANTIDADE DO PEDIDO:",
+      quantidade
     );
 
     console.log(
-      "NOME:",
-      produtoBling.nome
-    );
-
-    console.log(
-      "SKU:",
-      produtoBling.codigo
+      "PRODUTO BLING ID:",
+      produtoBlingId
     );
 
     console.log(
@@ -789,7 +757,7 @@ export async function processarPedidoPago({
 
     console.log(
       "PRODUTO BLING ID:",
-      produtoBling.id
+      produtoBlingId
     );
 
     console.log(
@@ -846,7 +814,7 @@ export async function processarPedidoPago({
       await criarPedidoVenda({
 
         produtoBlingId:
-          produtoBling.id,
+          produtoBlingId,
 
         quantidade:
           pedido.quantidade,
@@ -1065,6 +1033,7 @@ export async function processarPedidoPago({
           error?.blingCreateAmbiguous
             ? "processando"
             : "erro";
+
 
         const [
           resultadoUpdate

@@ -72,19 +72,18 @@ function Fragrance() {
                         }}
                     >
 
+
+                        <p className="testimonials-eyebrow">
+                            O DIFERENCIAL QUE VOCÊ SENTE
+                        </p>
                         <h2>
-                            Não é apenas um reparador.
+                            Tem cheiro de cabelo Bem cuidado.<br/>
+                            E de quem acabou de sair do Salão.
                         </h2>
 
                         <h3>
-                            É a fragrância que transforma a presença dos seus cabelos.
+                            Uma fragrância sofisticada que acompanha seus fios e transforma a finalização em uma experiência.
                         </h3>
-
-                        <p className="fragrance-description">
-                            Brilho, maciez e uma fragrância sofisticada que acompanha você
-                            durante o dia. Cada movimento dos fios revela uma experiência
-                            elegante e marcante.
-                        </p>
 
                     </motion.div>
 
@@ -116,12 +115,11 @@ function Fragrance() {
                             </div>
 
                             <h4>
-                                Fragrância sofisticada
+                                Perfume Marcante
                             </h4>
 
                             <p>
-                                Aroma elegante e marcante que deixa os cabelos
-                                perfumados ao longo do dia.
+                                Aquele cheiro que faz você mexer no cabelo e sentir de novo.
                             </p>
 
                         </motion.div>
@@ -143,12 +141,11 @@ function Fragrance() {
                             </div>
 
                             <h4>
-                                Perfume premium
+                                Fragrância Sofisticada
                             </h4>
 
                             <p>
-                                Uma fragrância floral, quente e envolvente para
-                                cabelos marcantes e inesquecíveis.
+                                Uma presença Delicada, Elegante e nada comum.
                             </p>
 
                         </motion.div>
@@ -170,11 +167,11 @@ function Fragrance() {
                             </div>
 
                             <h4>
-                                Longa duração
+                                Uma Experiência que Permanece
                             </h4>
 
                             <p>
-                                Sensação de cabelo recém-perfumado por muito mais tempo.
+                                O objetivo não é só deixar o cabelo bonito. É fazer você gostar de estar com ele.
                             </p>
 
                         </motion.div>

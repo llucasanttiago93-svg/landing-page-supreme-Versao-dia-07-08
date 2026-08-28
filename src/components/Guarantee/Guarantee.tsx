@@ -81,17 +81,16 @@ function Guarantee() {
                 >
 
                     <p className="guarantee-eyebrow">
-                        COMPRE COM TRANQUILIDADE
+                        COMPRE SEM PREOCUPAÇÃO
                     </p>
 
                     <h2>
-                        Sua experiência começa
-                        antes mesmo da entrega.
+                        Você já decidiu pelo seu cabelo.
+                        Agora, compre com tranquilidade.
                     </h2>
 
                     <p className="guarantee-description">
-                        Do pagamento ao recebimento do produto, tudo foi pensado
-                        para oferecer uma compra segura, rápida e confiável.
+                        Do pagamento à entrega, tudo foi pensado para tornar sua compra simples, segura e transparente.
                     </p>
 
                 </motion.div>
@@ -254,7 +253,7 @@ function Guarantee() {
                             duration: 0.25,
                         }}
                     >
-                        Comprar Agora
+                        QUERO MEU QUERIDINHO
                     </motion.a>
 
                 </motion.div>

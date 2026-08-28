@@ -64,18 +64,19 @@ function Results() {
                 >
 
                     <p className="results-eyebrow">
-                        RESULTADOS
+                        O RESULTADO NO ESPELHO
                     </p>
 
                     <h2>
-                        Seu cabelo muda.
-                        <br />
-                        A sensação também.
+                        É aqui que você percebe.<br />
+                        E sente a diferença.
                     </h2>
 
                     <p>
-                        Desde a primeira aplicação, você percebe fios mais
-                        brilhantes, macios, alinhados e perfumados.
+                        Mais brilho.
+                        Mais maciez.
+                        Mais alinhamento.
+                        E aquele perfume que completa tudo.
                     </p>
 
                 </motion.div>
@@ -120,11 +121,11 @@ function Results() {
                             <span>✨</span>
 
                             <h3>
-                                Brilho intenso
+                                Brilho Intenso
                             </h3>
 
                             <p>
-                                Aspecto luminoso e acabamento sofisticado para os fios.
+                                Fios com aparência mais luminosa e acabamento bonito.
                             </p>
 
                         </div>
@@ -160,11 +161,11 @@ function Results() {
                             <span>🌸</span>
 
                             <h3>
-                                Perfume marcante
+                                Perfume Marcante
                             </h3>
 
                             <p>
-                                Uma fragrância sofisticada que acompanha os cabelos por mais tempo.
+                                Uma fragrância sofisticada que transforma a finalização.
                             </p>
 
                         </div>
@@ -200,11 +201,11 @@ function Results() {
                             <span>💎</span>
 
                             <h3>
-                                Maciez e sedosidade
+                                Maciez e Sedosidade
                             </h3>
 
                             <p>
-                                Toque sedoso e confortável sem deixar os fios pesados.
+                                Toque macio e agradável sem sensação pesada.
                             </p>
 
                         </div>
@@ -240,11 +241,11 @@ function Results() {
                             <span>✔</span>
 
                             <h3>
-                                Frizz controlado
+                                Fios mais Alinhados
                             </h3>
 
                             <p>
-                                Fios mais alinhados e com aparência mais bonita.
+                                Menos aparência de frizz e um acabamento mais polido.
                             </p>
 
                         </div>
@@ -265,17 +266,7 @@ function Results() {
                     }}
                 >
 
-                    <div className="stars">
-                        ★★★★★
-                    </div>
 
-                    <h3>
-                        Avaliação média 4,9 estrelas
-                    </h3>
-
-                    <p>
-                        Clientes apaixonadas pela fragrância e pelo resultado.
-                    </p>
 
                 </motion.div>
 

@@ -22,8 +22,7 @@ function Footer() {
         </div>
 
         <p className="footer-description">
-          Brilho intenso, toque sedoso e uma fragrância marcante
-          para transformar o acabamento dos seus cabelos.
+          Cuidado, beleza e aquele toque final que faz diferença.
         </p>
 
 

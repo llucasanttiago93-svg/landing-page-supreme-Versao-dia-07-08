@@ -60,6 +60,7 @@ function Testimonials() {
         {
             image:
                 `${import.meta.env.BASE_URL}images/prova2.webp`
+
         },
 
         {
@@ -261,15 +262,14 @@ function Testimonials() {
 
 
                     <h2>
-                        Apaixonadas pelo brilho.
+                        Não somos nós <br />que dizemos.
                         <br />
-                        Encantadas pela fragrância.
+                        São elas.
                     </h2>
 
 
                     <p className="testimonials-description">
-                        Veja experiências reais de clientes que já
-                        conheceram o Queridinho Supreme.
+                        Veja o que nossas clientes estão falando sobre o <strong>Queridinho Supreme</strong>.
                     </p>
 
                 </motion.div>
@@ -317,10 +317,9 @@ function Testimonials() {
                                     <motion.article
                                         key={index}
                                         className={
-                                            `testimonial-card ${
-                                                current === index
-                                                    ? "active-card"
-                                                    : ""
+                                            `testimonial-card ${current === index
+                                                ? "active-card"
+                                                : ""
                                             }`
                                         }
                                         variants={
@@ -342,8 +341,9 @@ function Testimonials() {
                                                 testimonial.image
                                             }
                                             alt={
-                                                `Experiência de cliente com o Queridinho Supreme - prova social ${index + 1}`
-                                            }
+                                                `Experiência de cliente com o Queridinho Supreme - prova social ${index + 1}`}
+                                            loading="lazy"
+                                            decoding="async"
                                             whileHover={{
                                                 scale: 1.035,
                                             }}
@@ -426,20 +426,18 @@ function Testimonials() {
                     }}
                 >
 
-                    <div className="footer-stars">
-                        ★★★★★
+
+
+                    <div className="bottom-testimonials">
+                        <h3>
+                            Agora você entende <br />por que virou o <strong>Queridinho</strong>.
+                        </h3>
+
+
+                        <p>
+                            Brilho, acabamento e aquele <br />cheiro que faz diferença.
+                        </p>
                     </div>
-
-
-                    <h3>
-                        Experiências reais de quem já usou.
-                    </h3>
-
-
-                    <p>
-                        Veja o que nossas clientes estão falando sobre o
-                        Queridinho Supreme.
-                    </p>
 
                 </motion.div>
 

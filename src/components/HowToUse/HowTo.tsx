@@ -85,15 +85,13 @@ function HowTo() {
                     </p>
 
                     <h2>
-                        Três passos.
-                        <br />
-                        Alguns segundos.
+                        Seu cabelo bonito em 3 passos.
                     </h2>
 
                     <p className="howto-description">
-                        Transforme o acabamento dos seus cabelos em poucos
-                        instantes e aproveite brilho, maciez e uma fragrância
-                        sofisticada no dia a dia.
+                        Um toque no comprimento.
+                        Espalhe nas pontas.
+                        Finalize como de costume.
                     </p>
 
                 </motion.div>
@@ -145,8 +143,7 @@ function HowTo() {
                             </h3>
 
                             <p>
-                                Coloque 1 ou 2 pumps do Queridinho Supreme na palma
-                                das mãos.
+                                1 ou 2 pumps na palma das mãos.
                             </p>
 
                         </div>
@@ -192,8 +189,7 @@ function HowTo() {
                             </h3>
 
                             <p>
-                                Distribua suavemente no comprimento e nas pontas,
-                                evitando a raiz.
+                                Passe no comprimento e nas pontas. Evite a raiz.
                             </p>
 
                         </div>
@@ -239,8 +235,7 @@ function HowTo() {
                             </h3>
 
                             <p>
-                                Aproveite cabelos mais brilhantes, sedosos e com uma
-                                fragrância marcante.
+                                Pronto. Cabelos Alinhados, Macios e Perfumados.
                             </p>
 
                         </div>
@@ -266,8 +261,7 @@ function HowTo() {
                     </span>
 
                     <p>
-                        Não enxágue. Pode ser usado diariamente em cabelos secos
-                        ou úmidos.
+                        Pode usar no cabelo seco ou úmido. Não precisa enxaguar.
                     </p>
 
                 </motion.div>

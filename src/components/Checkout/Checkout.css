@@ -840,17 +840,12 @@
 }
 
 .checkout-button:disabled {
-
-    background: #ddd;
-
-    color: #888;
-
-    cursor: not-allowed;
-
+    background: #ec7404;
+    color: #fff;
+    cursor: wait;
+    opacity: .72;
     box-shadow: none;
-
     transform: none;
-
 }
 
 

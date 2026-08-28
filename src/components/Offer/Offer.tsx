@@ -176,31 +176,22 @@ function Offer() {
 
                         <p className="offer-eyebrow">
 
-                            ESCOLHA SUA OFERTA
+                            ESCOLHA COMO QUER COMEÇAR
 
                         </p>
 
 
                         <h2>
 
-                            Seu cabelo
-                            <br />
-                            merece mais.
+                            Leve o seu Queridinho.<br />
+                            Ou já garanta o próximo.
 
                         </h2>
 
 
                         <p className="offer-description">
 
-                            Escolha sua quantidade e leve para casa o
-
-                            <strong>
-                                {" "}Queridinho Supreme
-                            </strong>
-
-                            , um reparador de pontas
-                            que combina brilho, maciez e uma
-                            fragrância marcante.
+                            Escolha a opção que combina com você e <br />leve o acabamento de salão para a sua rotina.
 
                         </p>
 
@@ -251,24 +242,20 @@ function Offer() {
 
                             <div className="card-label">
 
-                                Para experimentar
+                                PARA CONHECER
 
                             </div>
 
 
                             <h3>
 
-                                1 Unidade
+                                1 Queridinho
 
                             </h3>
 
 
                             <p className="card-description">
-
-                                Perfeito para conhecer o
-                                <span>
-                                    {" "}QUERIDINHO SUPREME
-                                </span>.
+                                Para experimentar e descobrir o acabamento que virou favorito.
 
                             </p>
 
@@ -321,7 +308,7 @@ function Offer() {
                                     </span>
 
                                     <span>
-                                        Brilho intenso
+                                        Descubra seu novo finalizador favorito
                                     </span>
 
                                 </li>
@@ -334,7 +321,7 @@ function Offer() {
                                     </span>
 
                                     <span>
-                                        Fragrância premium
+                                        Ideal para começar
                                     </span>
 
                                 </li>
@@ -347,23 +334,12 @@ function Offer() {
                                     </span>
 
                                     <span>
-                                        Controle do frizz
+                                        30 ml para sua rotina
                                     </span>
 
                                 </li>
 
 
-                                <li>
-
-                                    <span className="benefit-check">
-                                        ✓
-                                    </span>
-
-                                    <span>
-                                        Toque sedoso
-                                    </span>
-
-                                </li>
 
                             </ul>
 
@@ -391,7 +367,7 @@ function Offer() {
                                 }}
                             >
 
-                                Comprar 1 Unidade
+                                QUERO 1 QUERIDINHO
 
                             </motion.button>
 
@@ -437,22 +413,21 @@ function Offer() {
 
                             <div className="card-label featured-label">
 
-                                Melhor escolha
+                                PARA NÃO FICAR SEM
 
                             </div>
 
 
                             <h3>
 
-                                2 Unidades
+                                2 Queridinhos
 
                             </h3>
 
 
                             <p className="card-description">
 
-                                Mais produto, mais economia
-                                e mais tempo de uso.
+                                Mais praticidade para manter seu cabelo sempre finalizado.
 
                             </p>
 
@@ -486,6 +461,8 @@ function Offer() {
                             </div>
 
 
+
+
                             <div className="price">
 
                                 <span>
@@ -500,12 +477,15 @@ function Offer() {
                                     ,00
                                 </small>
 
-                            </div>
 
+
+                            </div>
+                            R$48,50 cada<br />
 
                             <div className="saving">
 
-                                ✓ Você economiza R$17,00
+
+                                Economize R$17
 
                             </div>
 
@@ -519,7 +499,7 @@ function Offer() {
                                     </span>
 
                                     <span>
-                                        Melhor custo-benefício
+                                        Melhor custo por Unidade
                                     </span>
 
                                 </li>
@@ -532,7 +512,7 @@ function Offer() {
                                     </span>
 
                                     <span>
-                                        Fragrância premium
+                                        Mais Praticidade
                                     </span>
 
                                 </li>
@@ -545,23 +525,12 @@ function Offer() {
                                     </span>
 
                                     <span>
-                                        Brilho intenso
+                                        Tenha uma reposição garantida
                                     </span>
 
                                 </li>
 
 
-                                <li>
-
-                                    <span className="benefit-check">
-                                        ✓
-                                    </span>
-
-                                    <span>
-                                        Controle do frizz
-                                    </span>
-
-                                </li>
 
                             </ul>
 
@@ -589,7 +558,7 @@ function Offer() {
                                 }}
                             >
 
-                                Quero 2 Unidades
+                                QUERO 2 QUERIDINHOS
 
                             </motion.button>
 
@@ -682,8 +651,7 @@ function Offer() {
                         }}
                     >
 
-                        Escolha sua oferta e transforme o
-                        acabamento dos seus cabelos.
+                        Seu próximo cabelo favorito está a um clique.
 
                     </motion.p>
 

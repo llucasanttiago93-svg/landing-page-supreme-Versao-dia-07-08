@@ -7,7 +7,6 @@ import "./Faq.css";
 ===================================================== */
 
 const headerVariants: Variants = {
-
     hidden: {
         opacity: 0,
         y: 35,
@@ -18,53 +17,42 @@ const headerVariants: Variants = {
         y: 0,
 
         transition: {
-            duration: .8,
+            duration: 0.8,
             ease: [.22, 1, .36, 1],
         },
     },
-
 };
 
 
 const listVariants: Variants = {
-
     hidden: {},
 
     visible: {
-
         transition: {
-            staggerChildren: .09,
-            delayChildren: .1,
+            staggerChildren: 0.09,
+            delayChildren: 0.1,
         },
-
     },
-
 };
 
 
 const itemVariants: Variants = {
-
     hidden: {
         opacity: 0,
         y: 25,
-        scale: .98,
+        scale: 0.98,
     },
 
     visible: {
-
         opacity: 1,
-
         y: 0,
-
         scale: 1,
 
         transition: {
-            duration: .6,
+            duration: 0.6,
             ease: [.22, 1, .36, 1],
         },
-
     },
-
 };
 
 
@@ -99,27 +87,27 @@ function Faq() {
 
                     viewport={{
                         once: true,
-                        amount: .25,
+                        amount: 0.25,
                     }}
                 >
 
                     <p className="faq-eyebrow">
-                        PERGUNTAS FREQUENTES
+                        ANTES DE PEDIR O SEU
                     </p>
 
 
                     <h2>
-                        Ainda ficou alguma dúvida?
+                        Ficou com alguma dúvida?
+                        <br />
+                        A gente responde.
                     </h2>
 
 
                     <p>
-                        Respondemos as perguntas mais comuns sobre o
-                        Queridinho Supreme.
+                        Tudo o que você precisa saber antes de experimentar o Queridinho Supreme.
                     </p>
 
                 </motion.div>
-
 
 
                 {/* =====================================
@@ -137,7 +125,7 @@ function Faq() {
 
                     viewport={{
                         once: true,
-                        amount: .15,
+                        amount: 0.15,
                     }}
                 >
 
@@ -154,23 +142,23 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: .25,
+                            duration: 0.25,
                             ease: [.22, 1, .36, 1],
                         }}
                     >
 
                         <summary>
-                            O Queridinho Supreme pesa os fios?
+                            Vai pesar meu cabelo?
                         </summary>
 
                         <p>
-                            Não. O Queridinho Supreme possui uma textura leve
-                            e foi desenvolvido para deixar os cabelos macios
-                            e alinhados sem sensação pesada.
+                            Não. A fórmula foi pensada para proporcionar
+                            brilho, maciez e alinhamento sem deixar aquela
+                            sensação pesada nos fios. Aplique uma pequena
+                            quantidade no comprimento e nas pontas.
                         </p>
 
                     </motion.details>
-
 
 
                     {/* =================================
@@ -185,23 +173,23 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: .25,
+                            duration: 0.25,
                             ease: [.22, 1, .36, 1],
                         }}
                     >
 
                         <summary>
-                            Posso usar o Queridinho Supreme todos os dias?
+                            Posso usar todos os dias?
                         </summary>
 
                         <p>
-                            Sim. Ele pode ser utilizado diariamente em cabelos
-                            secos ou úmidos, aplicando uma pequena quantidade
-                            no comprimento e nas pontas.
+                            Sim. O Queridinho Supreme pode ser usado
+                            diariamente em cabelos secos ou úmidos.
+                            Aplique no comprimento e nas pontas,
+                            evitando a raiz.
                         </p>
 
                     </motion.details>
-
 
 
                     {/* =================================
@@ -216,23 +204,22 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: .25,
+                            duration: 0.25,
                             ease: [.22, 1, .36, 1],
                         }}
                     >
 
                         <summary>
-                            O Queridinho Supreme serve para qualquer tipo de cabelo?
+                            Serve para o meu tipo de cabelo?
                         </summary>
 
                         <p>
-                            Sim. O produto pode ser utilizado em diferentes
-                            tipos de cabelo, incluindo lisos, ondulados,
-                            cacheados e crespos.
+                            Sim. Pode ser usado em diferentes tipos de
+                            cabelo, inclusive lisos, ondulados, cacheados
+                            e crespos.
                         </p>
 
                     </motion.details>
-
 
 
                     {/* =================================
@@ -247,23 +234,24 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: .25,
+                            duration: 0.25,
                             ease: [.22, 1, .36, 1],
                         }}
                     >
 
                         <summary>
-                            Quanto tempo dura a fragrância?
+                            E o perfume, fica por quanto tempo?
                         </summary>
 
                         <p>
-                            A duração da fragrância pode variar de acordo
-                            com o tipo de cabelo, quantidade aplicada e
-                            rotina de cada pessoa.
+                            A percepção da fragrância varia de acordo
+                            com o tipo de cabelo, a quantidade aplicada
+                            e a rotina de cada pessoa. A proposta é
+                            deixar os fios perfumados com uma
+                            fragrância sofisticada após a finalização.
                         </p>
 
                     </motion.details>
-
 
 
                     {/* =================================
@@ -278,24 +266,106 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: .25,
+                            duration: 0.25,
                             ease: [.22, 1, .36, 1],
                         }}
                     >
 
                         <summary>
-                            Como funciona o envio?
+                            Como vou receber meu pedido?
                         </summary>
 
                         <p>
                             Enviamos para todo o Brasil. Após a confirmação
-                            do pagamento, o pedido é preparado para envio
-                            e você poderá acompanhar a entrega conforme
-                            a modalidade disponível.
+                            do pagamento, seu pedido é preparado para envio
+                            e você poderá acompanhar a entrega conforme a
+                            modalidade disponível.
                         </p>
 
                     </motion.details>
 
+
+                    {/* =================================
+                        PERGUNTA 6
+                    ================================= */}
+
+                    <motion.details
+                        variants={itemVariants}
+
+                        whileHover={{
+                            y: -2,
+                        }}
+
+                        transition={{
+                            duration: 0.25,
+                            ease: [.22, 1, .36, 1],
+                        }}
+                    >
+
+                        <summary>
+                            Como é feito o pagamento?
+                        </summary>
+
+                        <p>
+                            O pagamento é realizado com segurança pelo
+                            checkout da InfinitePay, com as opções
+                            disponíveis no momento da compra.
+                        </p>
+
+                    </motion.details>
+
+                </motion.div>
+
+
+                {/* =====================================
+                    CTA FINAL
+                ===================================== */}
+
+                <motion.div
+                    className="faq-cta"
+
+                    initial={{
+                        opacity: 0,
+                        y: 24,
+                    }}
+
+                    whileInView={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+
+                    viewport={{
+                        once: true,
+                        amount: 0.3,
+                    }}
+
+                    transition={{
+                        duration: 0.7,
+                        ease: [.22, 1, .36, 1],
+                    }}
+                >
+
+                    <p className="faq-cta-text">
+                        Agora você já sabe o que esperar.
+                    </p>
+
+
+                    <motion.a
+                        href="#comprar"
+
+                        className="faq-cta-button"
+
+                        whileHover={{
+                            y: -4,
+                            scale: 1.02,
+                        }}
+
+                        whileTap={{
+                            scale: 0.97,
+                        }}
+                    >
+                        QUERO MEU QUERIDINHO
+                    </motion.a>
 
                 </motion.div>
 
@@ -304,7 +374,6 @@ function Faq() {
         </section>
 
     );
-
 }
 
 

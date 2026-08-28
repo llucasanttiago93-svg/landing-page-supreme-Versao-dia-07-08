@@ -109,22 +109,19 @@ function Hero() {
                         HEADLINE
                     ============================================= */}
 
-                    <motion.h1
-                        variants={itemVariants}
-                    >
-
-                        O cabelo de salão.
-                        <br />
-
-                        O cheiro que fica
-                        <br />
-
-                        <span>
-                            na memória.
+                    <motion.h1 variants={itemVariants}>
+                        <span className="hero-title-line">
+                            Aquele cabelo de salão.
                         </span>
 
-                    </motion.h1>
+                        <span className="hero-title-line">
+                            O cheiro que fica
+                        </span>
 
+                        <span className="hero-title-line hero-title-script">
+                            na memória.
+                        </span>
+                    </motion.h1>
 
                     {/* =============================================
                         DESCRIÇÃO
@@ -132,24 +129,19 @@ function Hero() {
 
                     <motion.p
                         className="hero-description"
-
                         variants={itemVariants}
                     >
-
                         Aquele toque final que muda tudo.
-
                         <br />
-
                         <strong>
                             Brilho, maciez e uma fragrância sofisticada.
                         </strong>
-
                         <br />
-
-                        Para sair com o cabelo bonito
-                        e com cheiro de quem acabou de sair do salão.
-
+                        Para deixar os fios com aquela sensação
+                        de cabelo recém-finalizado.
                     </motion.p>
+
+
 
 
                     {/* =============================================
@@ -172,7 +164,7 @@ function Hero() {
                             scale: 0.97,
                         }}
                     >
-                        Quero meu Queridinho
+                        QUERO MEU QUERIDINHO
                     </motion.a>
 
 
@@ -227,7 +219,7 @@ function Hero() {
                 >
 
                     <img
-                        src={`${import.meta.env.BASE_URL}images/hero-supreme.png`}
+                        src={`${import.meta.env.BASE_URL}images/hero-supreme.webp`}
 
                         alt="Mulher com cabelos brilhantes segurando o Queridinho Supreme"
                     />

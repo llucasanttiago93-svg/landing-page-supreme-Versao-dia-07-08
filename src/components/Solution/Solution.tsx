@@ -109,9 +109,9 @@ function Solution() {
         >
 
           <motion.h2 variants={contentVariants}>
-            O perfume que permanece
+            O toque final <br/>que muda o cabelo.
             <span>
-              mesmo depois que você sai.
+              E muda a sensação de estar com ele.
             </span>
           </motion.h2>
 
@@ -120,9 +120,9 @@ function Solution() {
             className="solution-description"
             variants={contentVariants}
           >
-            O Queridinho Supreme combina óleos nutritivos com uma
-            fragrância sofisticada para deixar seus cabelos
-            brilhantes, sedosos e perfumados por muito mais tempo.
+            Depois da finalização, os fios ficam mais Bonitos, Alinhados e Macios.<br/>
+
+            E aquele <i>Perfume Sofisticado</i> faz parte da experiência.
           </motion.p>
 
 
@@ -141,7 +141,7 @@ function Solution() {
               }}
             >
               <span>✓</span>
-              <p>Perfume marcante</p>
+              <p>Brilho que Aparece</p>
             </motion.div>
 
 
@@ -155,7 +155,7 @@ function Solution() {
               }}
             >
               <span>✓</span>
-              <p>Fragrância de longa duração</p>
+              <p>Fios mais Alinhados</p>
             </motion.div>
 
 
@@ -169,7 +169,7 @@ function Solution() {
               }}
             >
               <span>✓</span>
-              <p>Brilho intenso</p>
+              <p>Toque Macio e Sedoso</p>
             </motion.div>
 
 
@@ -183,7 +183,7 @@ function Solution() {
               }}
             >
               <span>✓</span>
-              <p>Toque sedoso</p>
+              <p>Fragrância que Marca</p>
             </motion.div>
 
           </motion.div>
@@ -203,7 +203,7 @@ function Solution() {
               scale: 0.97,
             }}
           >
-            Comprar Agora
+            QUERO ESSE RESULTADO
           </motion.a>
 
         </motion.div>

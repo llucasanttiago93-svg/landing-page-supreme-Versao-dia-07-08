@@ -70,9 +70,9 @@ function Checkout({
 }: CheckoutProps) {
 
 
-  /* =====================================================
+  /* =================================================
      PRODUTO
-  ===================================================== */
+  ================================================= */
 
   const price =
     TEST_PAYMENT_MODE
@@ -88,9 +88,9 @@ function Checkout({
       : "Queridinho Supreme — 2 unidades";
 
 
-  /* =====================================================
+  /* =================================================
      CEP / FRETE
-  ===================================================== */
+  ================================================= */
 
   const [cep, setCep] = useState("");
 
@@ -107,9 +107,9 @@ function Checkout({
     useState(false);
 
 
-  /* =====================================================
+  /* =================================================
      BUSCA DE ENDEREÇO
-  ===================================================== */
+  ================================================= */
 
   const [loadingAddress, setLoadingAddress] =
     useState(false);
@@ -143,9 +143,9 @@ function Checkout({
     );
 
 
-  /* =====================================================
+  /* =================================================
      DADOS DO CLIENTE
-  ===================================================== */
+  ================================================= */
 
   const [customerName, setCustomerName] =
     useState("");
@@ -160,9 +160,9 @@ function Checkout({
     useState("");
 
 
-  /* =====================================================
+  /* =================================================
      ENDEREÇO
-  ===================================================== */
+  ================================================= */
 
   const [addressStreet, setAddressStreet] =
     useState("");
@@ -186,9 +186,39 @@ function Checkout({
     useState("");
 
 
-  /* =====================================================
+  /* =================================================
+     PAGAMENTO / DUPLO CLIQUE
+  ================================================= */
+
+  /*
+   * Estado visual.
+   *
+   * Quando TRUE:
+   * - botão fica desabilitado
+   * - texto muda para "Processando..."
+   */
+
+  const [loadingPayment, setLoadingPayment] =
+    useState(false);
+
+
+  /*
+   * Trava imediata contra duplo clique.
+   *
+   * Usamos useRef além do useState porque o estado
+   * do React é atualizado de forma assíncrona.
+   *
+   * O ref bloqueia uma segunda execução
+   * imediatamente, inclusive em cliques muito rápidos.
+   */
+
+  const paymentLocked =
+    useRef(false);
+
+
+  /* =================================================
      BLOQUEAR SCROLL / OVERFLOW HORIZONTAL
-  ===================================================== */
+  ================================================= */
 
   useEffect(() => {
 
@@ -255,9 +285,27 @@ function Checkout({
   }, [isOpen]);
 
 
-  /* =====================================================
+  /* =================================================
+     LIMPAR ESTADO DE PAGAMENTO AO FECHAR
+  ================================================= */
+
+  useEffect(() => {
+
+    if (!isOpen) {
+
+      paymentLocked.current =
+        false;
+
+      setLoadingPayment(false);
+
+    }
+
+  }, [isOpen]);
+
+
+  /* =================================================
      LIMPAR ABORT CONTROLLER AO FECHAR
-  ===================================================== */
+  ================================================= */
 
   useEffect(() => {
 
@@ -272,9 +320,9 @@ function Checkout({
   }, [isOpen]);
 
 
-  /* =====================================================
+  /* =================================================
      FORMATAR CEP
-  ===================================================== */
+  ================================================= */
 
   const handleCepChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -342,9 +390,9 @@ function Checkout({
   };
 
 
-  /* =====================================================
+  /* =================================================
      BUSCAR ENDEREÇO PELO CEP
-  ===================================================== */
+  ================================================= */
 
   const fetchAddressByCep = async (
     cepNumber: string
@@ -526,9 +574,9 @@ function Checkout({
   };
 
 
-  /* =====================================================
+  /* =================================================
      CALCULAR FRETE
-  ===================================================== */
+  ================================================= */
 
   const handleCalculateShipping = async () => {
 
@@ -669,9 +717,9 @@ function Checkout({
   };
 
 
-  /* =====================================================
+  /* =================================================
      SELECIONAR FRETE
-  ===================================================== */
+  ================================================= */
 
   const handleSelectShipping = async (
     option: ShippingOption
@@ -716,17 +764,17 @@ function Checkout({
   };
 
 
-  /* =====================================================
+  /* =================================================
      CEP VÁLIDO
-  ===================================================== */
+  ================================================= */
 
   const isCepValid =
     cep.replace(/\D/g, "").length === 8;
 
 
-  /* =====================================================
+  /* =================================================
      FRETE SELECIONADO
-  ===================================================== */
+  ================================================= */
 
   const shippingPrice =
     TEST_PAYMENT_MODE
@@ -736,17 +784,17 @@ function Checkout({
         : 0;
 
 
-  /* =====================================================
+  /* =================================================
      TOTAL
-  ===================================================== */
+  ================================================= */
 
   const total =
     price + shippingPrice;
 
 
-  /* =====================================================
+  /* =================================================
      FORMATAR CPF
-  ===================================================== */
+  ================================================= */
 
   const handleCpfChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -802,9 +850,9 @@ function Checkout({
   };
 
 
-  /* =====================================================
+  /* =================================================
      FORMATAR TELEFONE
-  ===================================================== */
+  ================================================= */
 
   const handlePhoneChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -856,9 +904,9 @@ function Checkout({
   };
 
 
-  /* =====================================================
+  /* =================================================
      DADOS DO CLIENTE VÁLIDOS
-  ===================================================== */
+  ================================================= */
 
   const customerDataValid =
     customerName.trim().length >= 3 &&
@@ -884,9 +932,9 @@ function Checkout({
     addressState.trim().length === 2;
 
 
-  /* =====================================================
+  /* =================================================
      PODE CONTINUAR?
-  ===================================================== */
+  ================================================= */
 
   const canContinue =
     selectedShipping !== null &&
@@ -894,12 +942,28 @@ function Checkout({
     !loadingAddress;
 
 
-  /* =====================================================
+  /* =================================================
      PAGAMENTO
-  ===================================================== */
+  ================================================= */
 
   const handleContinuePayment =
     async () => {
+
+      /*
+       * Primeira trava:
+       * impede chamadas repetidas enquanto
+       * o pagamento já está sendo processado.
+       */
+
+      if (paymentLocked.current) {
+        return;
+      }
+
+
+      /*
+       * Segunda trava:
+       * mantém a validação original.
+       */
 
       if (
         !canContinue ||
@@ -909,6 +973,25 @@ function Checkout({
         return;
 
       }
+
+
+      /*
+       * TRAVA IMEDIATAMENTE.
+       *
+       * O ref é alterado antes do fetch.
+       * Assim um segundo clique muito rápido
+       * não consegue iniciar outra requisição.
+       */
+
+      paymentLocked.current =
+        true;
+
+
+      /*
+       * Atualiza o estado visual do botão.
+       */
+
+      setLoadingPayment(true);
 
 
       try {
@@ -1009,6 +1092,14 @@ function Checkout({
         }
 
 
+        /*
+         * Se chegou aqui, o checkout foi criado
+         * com sucesso.
+         *
+         * Mantemos o loading TRUE porque agora
+         * estamos redirecionando para o pagamento.
+         */
+
         window.location.href =
           data.url;
 
@@ -1019,6 +1110,17 @@ function Checkout({
           "Erro ao criar pagamento:",
           error
         );
+
+
+        /*
+         * Se deu erro, liberamos novamente
+         * o botão para o cliente poder tentar.
+         */
+
+        paymentLocked.current =
+          false;
+
+        setLoadingPayment(false);
 
 
         alert(
@@ -1032,9 +1134,9 @@ function Checkout({
     };
 
 
-  /* =====================================================
+  /* =================================================
      NÃO MOSTRAR
-  ===================================================== */
+  ================================================= */
 
   if (!isOpen) {
 
@@ -1043,9 +1145,9 @@ function Checkout({
   }
 
 
-  /* =====================================================
+  /* =================================================
      INTERFACE
-  ===================================================== */
+  ================================================= */
 
   return (
 
@@ -1750,19 +1852,24 @@ function Checkout({
         <button
           type="button"
           className="checkout-button"
-          disabled={!canContinue}
+          disabled={
+            !canContinue ||
+            loadingPayment
+          }
           onClick={
             handleContinuePayment
           }
         >
 
-          {!selectedShipping
-            ? "Selecione o frete para continuar"
-            : loadingAddress
-              ? "Localizando endereço..."
-              : !customerDataValid
-                ? "Preencha seus dados para continuar"
-                : "Continuar para pagamento"}
+          {loadingPayment
+            ? "Processando pagamento..."
+            : !selectedShipping
+              ? "Selecione o frete para continuar"
+              : loadingAddress
+                ? "Localizando endereço..."
+                : !customerDataValid
+                  ? "Preencha seus dados para continuar"
+                  : "Continuar para pagamento"}
 
         </button>
 

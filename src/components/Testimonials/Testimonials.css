@@ -30,7 +30,7 @@
 }
 
 .testimonials-header h2 {
-    font-size: clamp(2.8rem, 5vw, 4.8rem);
+    font-size: clamp(2.1rem, 4vw, 4.5rem);
     line-height: 1;
     color: #151312;
     margin-bottom: 1.4rem;
@@ -40,6 +40,10 @@
     font-size: 1.08rem;
     line-height: 1.8;
     color: #666;
+}
+
+.testimonials-description strong{
+    color: var(--laranja);
 }
 
 
@@ -139,6 +143,8 @@
     box-shadow:
         0 10px 30px rgba(0, 0, 0, .08);
 }
+
+
 
 @media (hover: hover) and (pointer: fine) {
 
@@ -246,6 +252,10 @@
     color: #151312;
 
     margin-bottom: .8rem;
+}
+
+.testimonials-footer h3 strong{
+    color: var(--laranja);
 }
 
 .testimonials-footer p {

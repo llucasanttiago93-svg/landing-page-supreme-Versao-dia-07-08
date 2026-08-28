@@ -111,14 +111,14 @@ function Ingredients() {
                         className="ingredients-eyebrow"
                         variants={contentVariants}
                     >
-                        INGREDIENTES
+                        POR TRÁS DO RESULTADO
                     </motion.p>
 
 
                     <motion.h2
                         variants={contentVariants}
                     >
-                        Tratamento que cuida. Fragrância que marca.
+                        E isso começa <br/>pela Fórmula.
                     </motion.h2>
 
 
@@ -126,9 +126,7 @@ function Ingredients() {
                         className="ingredients-description"
                         variants={contentVariants}
                     >
-                        Uma combinação de óleos vegetais nutritivos e uma fragrância
-                        premium para deixar os cabelos macios, brilhantes, alinhados
-                        e perfumados.
+                        Uma combinação de óleos vegetais para cuidar dos fios e uma fragrância sofisticada para completar a finalização.
                     </motion.p>
 
 
@@ -156,7 +154,7 @@ function Ingredients() {
                                 </h3>
 
                                 <p>
-                                    Ajuda a nutrir os fios sem deixar o cabelo pesado.
+                                    Nutre os fios e ajuda a manter um toque leve.
                                 </p>
 
                             </div>
@@ -183,7 +181,7 @@ function Ingredients() {
                                 </h3>
 
                                 <p>
-                                    Ajuda a proporcionar brilho e um acabamento luminoso aos fios.
+                                    Ajuda a realçar o brilho e o aspecto luminoso.
                                 </p>
 
                             </div>
@@ -210,7 +208,7 @@ function Ingredients() {
                                 </h3>
 
                                 <p>
-                                    Contribui para fios mais macios, alinhados e com menos frizz.
+                                    Contribui para fios mais macios e alinhados.
                                 </p>
 
                             </div>
@@ -233,11 +231,11 @@ function Ingredients() {
                             <div>
 
                                 <h3>
-                                    Fragrância Premium
+                                    Fragrância Sofisticada
                                 </h3>
 
                                 <p>
-                                    Perfuma os cabelos com uma fragrância sofisticada e de longa duração.
+                                    O toque final que deixa o cabelo ainda mais marcante.
                                 </p>
 
                             </div>
