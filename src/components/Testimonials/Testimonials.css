@@ -1,93 +1,167 @@
 .testimonials {
+
     padding: 6rem 0;
+
     background: #f8f8f8;
+
     overflow: hidden;
+
 }
+
 
 .testimonials .container {
+
     width: min(1240px, 92%);
+
     margin: auto;
+
 }
 
 
-/* =========================
+/* =====================================================
    HEADER
-========================= */
+===================================================== */
 
 .testimonials-header {
+
     max-width: 760px;
+
     margin: 0 auto 4rem;
+
     text-align: center;
+
 }
+
 
 .testimonials-eyebrow {
+
     color: #EC7404;
+
     font-size: .85rem;
+
     font-weight: 700;
+
     letter-spacing: .22em;
+
     text-transform: uppercase;
+
     margin-bottom: 1rem;
+
 }
+
 
 .testimonials-header h2 {
-    font-size: clamp(2.1rem, 4vw, 4.5rem);
+
+    font-size: clamp(
+        2.1rem,
+        4vw,
+        4.5rem
+    );
+
     line-height: 1;
+
     color: #151312;
+
     margin-bottom: 1.4rem;
+
 }
+
 
 .testimonials-description {
+
     font-size: 1.08rem;
+
     line-height: 1.8;
+
     color: #666;
+
 }
 
-.testimonials-description strong{
+
+.testimonials-description strong {
+
     color: var(--laranja);
+
 }
 
 
-/* =========================
+/* =====================================================
    CARROSSEL
-========================= */
+===================================================== */
 
 .testimonials-carousel {
+
     position: relative;
+
     display: flex;
+
     align-items: center;
+
     gap: 1rem;
+
 }
+
 
 .testimonials-viewport {
+
     width: 100%;
+
     padding: 20px 10px;
+
     overflow-x: auto;
+
+    overflow-y: hidden;
+
     scrollbar-width: none;
+
     -ms-overflow-style: none;
+
     scroll-behavior: smooth;
+
     scroll-snap-type: x mandatory;
+
 }
+
 
 .testimonials-viewport::-webkit-scrollbar {
+
     display: none;
+
 }
+
 
 .testimonials-track {
+
     display: flex;
+
     gap: 1.25rem;
+
     width: max-content;
+
 }
 
 
-/* =========================
+/* =====================================================
    CARDS
-========================= */
+   DESKTOP / TABLET
+===================================================== */
 
 .testimonial-card {
+
     position: relative;
 
-    flex: 0 0 min(34vw, 420px);
-    width: min(34vw, 420px);
+    flex:
+        0 0
+        min(
+            34vw,
+            420px
+        );
+
+    width:
+        min(
+            34vw,
+            420px
+        );
 
     height: 560px;
 
@@ -97,38 +171,58 @@
 
     overflow: hidden;
 
-    border: 1px solid rgba(236, 116, 4, .35);
+    border:
+        1px solid
+        rgba(
+            236,
+            116,
+            4,
+            .35
+        );
 
     scroll-snap-align: start;
+
+    cursor: pointer;
+
 }
 
+
 .testimonial-card img {
+
     width: 100%;
+
     height: 100%;
 
     object-fit: contain;
 
     display: block;
+
 }
 
 
-/* =========================
+/* =====================================================
    SETAS
-========================= */
+===================================================== */
 
 .carousel-button {
+
     flex-shrink: 0;
 
     width: 52px;
+
     height: 52px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     border-radius: 50%;
 
-    border: 1px solid #ddd;
+    border:
+        1px solid
+        #ddd;
 
     background: #fff;
 
@@ -141,47 +235,72 @@
     cursor: pointer;
 
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, .08);
-}
+        0 10px 30px
+        rgba(
+            0,
+            0,
+            0,
+            .08
+        );
 
+}
 
 
 @media (hover: hover) and (pointer: fine) {
 
     .carousel-button {
+
         transition:
             transform .3s ease,
             background .3s ease,
             border-color .3s ease,
             color .3s ease,
             box-shadow .3s ease;
+
     }
 
+
     .carousel-button:hover {
+
         background: #EC7404;
+
         border-color: #EC7404;
+
         color: #fff;
 
         transform: scale(1.08);
 
         box-shadow:
-            0 14px 30px rgba(236, 116, 4, .24);
+            0 14px 30px
+            rgba(
+                236,
+                116,
+                4,
+                .24
+            );
+
     }
 
 }
 
+
 .carousel-button:active {
+
     transform: scale(.94);
+
 }
 
 
-/* =========================
+/* =====================================================
    DOTS
-========================= */
+===================================================== */
 
 .carousel-dots {
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     gap: .6rem;
@@ -189,10 +308,14 @@
     margin-top: 2rem;
 
     flex-wrap: wrap;
+
 }
 
+
 .carousel-dot {
+
     width: 8px;
+
     height: 8px;
 
     padding: 0;
@@ -204,39 +327,55 @@
     background: #d5d5d5;
 
     cursor: pointer;
+
 }
+
 
 @media (hover: hover) and (pointer: fine) {
 
     .carousel-dot {
+
         transition:
             transform .25s ease,
             background .25s ease,
             width .25s ease;
+
     }
+
 
     .carousel-dot:hover {
+
         transform: scale(1.3);
+
     }
 
 }
 
+
 .carousel-dot.active {
+
     width: 28px;
+
     background: #EC7404;
+
 }
 
 
-/* =========================
+/* =====================================================
    FOOTER
-========================= */
+===================================================== */
 
 .testimonials-footer {
+
     margin-top: 4rem;
+
     text-align: center;
+
 }
 
+
 .footer-stars {
+
     color: #EC7404;
 
     font-size: 2rem;
@@ -244,134 +383,588 @@
     letter-spacing: .18rem;
 
     margin-bottom: 1rem;
+
 }
 
+
 .testimonials-footer h3 {
+
     font-size: 2rem;
 
     color: #151312;
 
     margin-bottom: .8rem;
+
 }
 
-.testimonials-footer h3 strong{
+
+.testimonials-footer h3 strong {
+
     color: var(--laranja);
+
 }
+
 
 .testimonials-footer p {
+
     color: #666;
+
     font-size: 1.05rem;
+
 }
 
 
-/* =========================
+/* =====================================================
    TABLET
-========================= */
+===================================================== */
 
 @media (max-width: 992px) {
 
     .testimonials {
+
         padding: 6rem 0;
+
     }
 
+
     .testimonial-card {
-        flex-basis: min(55vw, 500px);
-        width: min(55vw, 500px);
+
+        flex-basis:
+            min(
+                55vw,
+                500px
+            );
+
+        width:
+            min(
+                55vw,
+                500px
+            );
+
     }
 
 }
 
 
-/* =========================
+/* =====================================================
    MOBILE
-========================= */
+===================================================== */
 
 @media (max-width: 768px) {
 
     .testimonials {
+
         padding: 5rem 0;
+
     }
+
 
     .testimonials-header {
+
         margin-bottom: 3rem;
+
     }
+
 
     .testimonials-header h2 {
+
         font-size: 2.3rem;
+
         line-height: 1.05;
+
     }
+
 
     .testimonials-description {
+
         font-size: 1rem;
+
     }
+
+
+    /* -----------------------------------------------
+       CARROSSEL MOBILE
+    ----------------------------------------------- */
 
     .testimonials-carousel {
-        width: calc(100% + 48px);
-        margin-left: -24px;
+
+        width:
+            calc(
+                100% + 48px
+            );
+
+        margin-left:
+            -24px;
+
         gap: 0;
+
     }
+
 
     .testimonials-viewport {
+
         padding:
-            20px 24px 1rem;
+            20px 24px 1.5rem;
 
-        scroll-padding-left: 24px;
+        overflow-x:
+            auto;
 
-        overscroll-behavior-x: contain;
+        overflow-y:
+            hidden;
 
-        -webkit-overflow-scrolling: touch;
+        scroll-padding-left:
+            24px;
+
+        overscroll-behavior-x:
+            contain;
+
+        -webkit-overflow-scrolling:
+            touch;
+
+        scrollbar-width:
+            none;
+
+        -ms-overflow-style:
+            none;
+
+        scroll-behavior:
+            smooth;
+
+        scroll-snap-type:
+            x mandatory;
+
+        cursor:
+            grab;
+
+        /*
+         * O carrossel normal continua
+         * sendo controlado nativamente
+         * pelo gesto horizontal.
+         */
+
+        touch-action:
+            pan-x;
+
     }
+
+
+    .testimonials-viewport:active {
+
+        cursor:
+            grabbing;
+
+    }
+
 
     .testimonials-track {
-        gap: 16px;
+
+        gap:
+            16px;
+
     }
+
+
+    /* -----------------------------------------------
+       DEPOIMENTO MOBILE
+    ----------------------------------------------- */
 
     .testimonial-card {
-        flex: 0 0 calc(100vw - 100px);
-        width: calc(100vw - 100px);
 
-        height: 400px;
+        flex:
+            0 0
+            calc(
+                100vw - 80px
+            );
 
-        border-radius: 24px;
+        width:
+            calc(
+                100vw - 80px
+            );
+
+        height:
+            min(
+                68vh,
+                560px
+            );
+
+        min-height:
+            450px;
+
+        border-radius:
+            24px;
+
+        cursor:
+            pointer;
+
+        -webkit-tap-highlight-color:
+            transparent;
+
+        scroll-snap-align:
+            start;
+
     }
+
+
+    .testimonial-card:active {
+
+        transform:
+            scale(.985);
+
+    }
+
+
+    .testimonial-card img {
+
+        width:
+            100%;
+
+        height:
+            100%;
+
+        object-fit:
+            contain;
+
+    }
+
+
+    /* -----------------------------------------------
+       SETAS EXTERNAS
+    ----------------------------------------------- */
 
     .carousel-button {
-        display: none;
+
+        display:
+            none;
+
     }
+
+
+    /* -----------------------------------------------
+       DOTS
+    ----------------------------------------------- */
 
     .carousel-dots {
-        margin-top: 1rem;
-        padding: 0 1rem;
+
+        margin-top:
+            1rem;
+
+        padding:
+            0 1rem;
+
     }
+
+
+    /* -----------------------------------------------
+       FOOTER
+    ----------------------------------------------- */
 
     .testimonials-footer {
-        margin-top: 3.5rem;
+
+        margin-top:
+            3.5rem;
+
     }
+
 
     .testimonials-footer h3 {
-        font-size: 1.6rem;
+
+        font-size:
+            1.6rem;
+
     }
 
+
     .testimonials-footer p {
-        font-size: 1rem;
+
+        font-size:
+            1rem;
+
+    }
+
+
+    /* =================================================
+       LIGHTBOX MOBILE
+    ================================================= */
+
+    .testimonial-lightbox {
+
+        position:
+            fixed;
+
+        inset:
+            0;
+
+        z-index:
+            2000;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        padding:
+            .75rem;
+
+        background:
+            rgba(
+                0,
+                0,
+                0,
+                .88
+            );
+
+        backdrop-filter:
+            blur(12px);
+
+        /*
+         * Permite o nosso JS detectar
+         * o gesto horizontal.
+         */
+
+        touch-action:
+            pan-y;
+
+        overscroll-behavior:
+            contain;
+
+    }
+
+
+    .lightbox-content {
+
+        width:
+            100%;
+
+        height:
+            90vh;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        /*
+         * Evita que o navegador trate
+         * o gesto como scroll horizontal.
+         */
+
+        touch-action:
+            none;
+
+    }
+
+
+    .lightbox-content img {
+
+        max-width:
+            calc(
+                100vw - 24px
+            );
+
+        max-height:
+            88vh;
+
+        width:
+            auto;
+
+        height:
+            auto;
+
+        object-fit:
+            contain;
+
+        border-radius:
+            16px;
+
+        box-shadow:
+            0 25px 80px
+            rgba(
+                0,
+                0,
+                0,
+                .4
+            );
+
+        user-select:
+            none;
+
+        -webkit-user-drag:
+            none;
+
+    }
+
+
+    /* -----------------------------------------------
+       FECHAR
+    ----------------------------------------------- */
+
+    .lightbox-close {
+
+        position:
+            fixed;
+
+        top:
+            .75rem;
+
+        right:
+            .75rem;
+
+        z-index:
+            2002;
+
+        width:
+            44px;
+
+        height:
+            44px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        border:
+            0;
+
+        border-radius:
+            50%;
+
+        background:
+            rgba(
+                255,
+                255,
+                255,
+                .16
+            );
+
+        color:
+            #fff;
+
+        font-size:
+            2rem;
+
+        line-height:
+            1;
+
+        cursor:
+            pointer;
+
+    }
+
+
+    /* -----------------------------------------------
+       SETAS DO LIGHTBOX
+    ----------------------------------------------- */
+
+    .lightbox-arrow {
+
+        position:
+            fixed;
+
+        top:
+            50%;
+
+        transform:
+            translateY(-50%);
+
+        z-index:
+            2002;
+
+        width:
+            44px;
+
+        height:
+            44px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        border:
+            0;
+
+        border-radius:
+            50%;
+
+        background:
+            rgba(
+                255,
+                255,
+                255,
+                .16
+            );
+
+        color:
+            #fff;
+
+        font-size:
+            2rem;
+
+        line-height:
+            1;
+
+        cursor:
+            pointer;
+
+    }
+
+
+    .lightbox-prev {
+
+        left:
+            .65rem;
+
+    }
+
+
+    .lightbox-next {
+
+        right:
+            .65rem;
+
     }
 
 }
 
 
-/* =========================
-   ACESSIBILIDADE
-========================= */
+/* =====================================================
+   REDUÇÃO DE MOVIMENTO
+===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
     .testimonial-card,
     .testimonial-card img,
     .testimonials-header,
-    .testimonials-footer {
-        animation: none !important;
-        transition: none !important;
-        transform: none !important;
+    .testimonials-footer,
+    .testimonial-lightbox {
+
+        animation:
+            none !important;
+
+        transition:
+            none !important;
+
+        transform:
+            none !important;
+
     }
 
 }

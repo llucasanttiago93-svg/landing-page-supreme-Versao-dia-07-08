@@ -13,24 +13,29 @@ import Footer from "./components/Footer/Footer";
 
 
 function App() {
-  
 
-  return (
-    <>
-      <Header />
-      <Hero />
-      <Testimonials />
-      <Solution />
-      <Fragrance />
-      <Ingredients />
-      <Results />
-      <HowTo />
-      <Guarantee />
-      <Offer />
-      <Faq />
-      <Footer />
-    </>
-  );
+    return (
+        <>
+            <Header />
+
+            <main>
+                <Hero />
+                <Testimonials />
+                <Solution />
+                <Fragrance />
+                <Ingredients />
+                <Results />
+                <HowTo />
+                <Guarantee />
+                <Offer />
+                <Faq />
+            </main>
+
+            <Footer />
+        </>
+    );
+
 }
+
 
 export default App;

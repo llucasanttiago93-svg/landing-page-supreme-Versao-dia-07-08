@@ -1,13 +1,18 @@
-.container{
+.container {
 
-    width:min(1400px,92%);
+    width:
+        min(
+            1200px,
+            calc(100% - 2rem)
+        );
 
-    margin:auto;
+    margin-inline: auto;
 
 }
 
-section{
 
-    width:100%;
+section {
+
+    width: 100%;
 
 }

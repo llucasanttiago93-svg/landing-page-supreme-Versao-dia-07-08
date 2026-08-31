@@ -13,6 +13,7 @@ import pool from "../config/database.js";
 
 import {
   enviarEmailErroBling,
+  enviarEmailPedidoConfirmado,
 } from "./email.service.js";
 
 
@@ -27,7 +28,6 @@ export async function processarPedidoPago({
   transactionNsu,
 
   invoiceSlug,
-
 
   amount,
 
@@ -174,6 +174,8 @@ export async function processarPedidoPago({
 
           paid_at,
 
+          email_confirmacao_enviado_at,
+
           bling_order_id,
 
           bling_status,
@@ -227,19 +229,310 @@ export async function processarPedidoPago({
 
 
     /* =================================================
-       JÁ FOI ENVIADO AO BLING
+       FUNÇÃO AUXILIAR
+       ENVIAR E-MAIL DE CONFIRMAÇÃO
+       
+       Esta função é independente do Bling.
+       
+       O cliente deve receber a confirmação
+       assim que o pagamento estiver confirmado.
+    ================================================= */
+
+    const enviarConfirmacaoCliente =
+      async () => {
+
+
+        /* =============================================
+           NÃO POSSUI E-MAIL
+        ============================================= */
+
+        if (
+          !pedido.email
+        ) {
+
+          console.warn(
+            "⚠️ PEDIDO CONFIRMADO SEM E-MAIL DO CLIENTE."
+          );
+
+          return;
+
+        }
+
+
+        /* =============================================
+           JÁ FOI ENVIADO
+        ============================================= */
+
+        if (
+          pedido.email_confirmacao_enviado_at
+        ) {
+
+          console.log(
+            "📧 E-MAIL DE CONFIRMAÇÃO JÁ FOI ENVIADO."
+          );
+
+          console.log(
+            "ORDER NSU:",
+            orderNsu
+          );
+
+          return;
+
+        }
+
+
+        /*
+         * Fazemos uma trava atômica no MySQL.
+         *
+         * Somente uma execução do webhook pode
+         * assumir o envio do e-mail.
+         */
+
+        const [
+          resultadoEmailLock
+        ] =
+          await pool.execute(
+
+            `
+            UPDATE pedidos
+
+            SET
+              email_confirmacao_enviado_at = '2000-01-01 00:00:00',
+
+              updated_at = NOW()
+
+            WHERE id = ?
+
+            AND email_confirmacao_enviado_at IS NULL
+
+            LIMIT 1
+            `,
+
+            [
+              pedido.id
+            ]
+
+          );
+
+
+        /* =============================================
+           OUTRA EXECUÇÃO PEGOU O E-MAIL
+        ============================================= */
+
+        if (
+          resultadoEmailLock.affectedRows !== 1
+        ) {
+
+          console.log(
+            "📧 OUTRA EXECUÇÃO JÁ ASSUMIU O ENVIO DO E-MAIL."
+          );
+
+          console.log(
+            "ORDER NSU:",
+            orderNsu
+          );
+
+          return;
+
+        }
+
+
+        try {
+
+
+          /* ===========================================
+             ENVIAR E-MAIL
+          =========================================== */
+
+          await enviarEmailPedidoConfirmado({
+
+            nome:
+              pedido.nome,
+
+            email:
+              pedido.email,
+
+            orderNsu:
+              orderNsu,
+
+            quantidade:
+              pedido.quantidade,
+
+            valorProduto:
+              pedido.valor_produto,
+
+            valorFrete:
+              pedido.valor_frete,
+
+            valorTotal:
+              pedido.valor_total,
+
+          });
+
+
+          /* ===========================================
+             REGISTRAR DATA REAL DO ENVIO
+          =========================================== */
+
+          await pool.execute(
+
+            `
+            UPDATE pedidos
+
+            SET
+
+              email_confirmacao_enviado_at = NOW(),
+
+              updated_at = NOW()
+
+            WHERE id = ?
+
+            LIMIT 1
+            `,
+
+            [
+
+              pedido.id
+
+            ]
+
+          );
+
+
+          /*
+           * Atualiza também o objeto local.
+           */
+
+          pedido.email_confirmacao_enviado_at =
+            new Date();
+
+
+          console.log(
+            "================================="
+          );
+
+          console.log(
+            "📧 E-MAIL DE CONFIRMAÇÃO ENVIADO"
+          );
+
+          console.log(
+            "CLIENTE:",
+            pedido.email
+          );
+
+          console.log(
+            "ORDER NSU:",
+            orderNsu
+          );
+
+          console.log(
+            "================================="
+          );
+
+
+        } catch (emailError) {
+
+
+          /* =========================================
+             ERRO NO ENVIO
+             
+             Liberamos novamente a trava.
+             
+             Assim uma próxima execução do fluxo
+             poderá tentar enviar novamente.
+          ========================================= */
+
+          try {
+
+            await pool.execute(
+
+              `
+              UPDATE pedidos
+
+              SET
+
+                email_confirmacao_enviado_at = NULL,
+
+                updated_at = NOW()
+
+              WHERE id = ?
+
+              LIMIT 1
+              `,
+
+              [
+
+                pedido.id
+
+              ]
+
+            );
+
+          } catch (unlockError) {
+
+            console.error(
+              "❌ NÃO FOI POSSÍVEL LIBERAR A TRAVA DO E-MAIL."
+            );
+
+            console.error(
+              unlockError?.message ||
+              unlockError
+            );
+
+          }
+
+
+          console.error(
+            "❌ ERRO AO ENVIAR E-MAIL DE CONFIRMAÇÃO"
+          );
+
+          console.error(
+            "CLIENTE:",
+            pedido.email
+          );
+
+          console.error(
+            "ORDER NSU:",
+            orderNsu
+          );
+
+          console.error(
+            emailError?.message ||
+            emailError
+          );
+
+
+          /*
+           * IMPORTANTE:
+           *
+           * Falha no e-mail NÃO transforma
+           * o pedido pago em não pago.
+           */
+
+        }
+
+      };
+
+
+    /* =================================================
+       E-MAIL EM PEDIDO QUE JÁ FOI PROCESSADO NO BLING
+       
+       Se o Bling já possui o pedido, ainda assim
+       precisamos garantir que o cliente tenha recebido
+       a confirmação.
     ================================================= */
 
     if (
       pedido.bling_order_id
     ) {
 
+
       console.log(
         "================================="
       );
 
       console.log(
-        "⚠️ PEDIDO JÁ ENVIADO AO BLING"
+        "⚠️ PEDIDO JÁ FOI ENVIADO AO BLING"
       );
 
       console.log(
@@ -255,6 +548,15 @@ export async function processarPedidoPago({
       console.log(
         "================================="
       );
+
+
+      if (
+        pedido.status === "pago"
+      ) {
+
+        await enviarConfirmacaoCliente();
+
+      }
 
 
       return {
@@ -529,6 +831,34 @@ export async function processarPedidoPago({
     );
 
 
+    /*
+     * Atualizamos o objeto local para que,
+     * caso o fluxo continue, ele represente
+     * corretamente o estado atual.
+     */
+
+    pedido.status =
+      "pago";
+
+    pedido.invoice_slug =
+      slug;
+
+    pedido.transaction_nsu =
+      transacao;
+
+    pedido.paid_amount =
+      valorPago;
+
+    pedido.installments =
+      numeroParcelas;
+
+    pedido.capture_method =
+      metodoCaptura;
+
+    pedido.receipt_url =
+      comprovante;
+
+
     console.log(
       "================================="
     );
@@ -564,6 +894,16 @@ export async function processarPedidoPago({
     console.log(
       "================================="
     );
+
+
+    /* =================================================
+       CONFIRMAÇÃO DO PAGAMENTO PARA O CLIENTE
+       
+       IMPORTANTE:
+       A confirmação é independente do Bling.
+    ================================================= */
+
+    await enviarConfirmacaoCliente();
 
 
     /* =================================================
@@ -662,7 +1002,7 @@ export async function processarPedidoPago({
        1 unidade → BLING_PRODUCT_ID_1
        2 unidades → BLING_PRODUCT_ID_2
        
-       O vínculo agora é feito diretamente pelo
+       O vínculo é feito diretamente pelo
        ID configurado no .env.
     ================================================= */
 
@@ -1128,7 +1468,7 @@ export async function processarPedidoPago({
           } catch (emailError) {
 
             console.error(
-              "❌ NÃO FOI POSSÍVEL ENVIAR O ALERTA POR E-MAIL"
+              "❌ NÃO FOI POSSÍVEL ENVIAR O ALERTA DE ERRO DO BLING"
             );
 
             console.error(

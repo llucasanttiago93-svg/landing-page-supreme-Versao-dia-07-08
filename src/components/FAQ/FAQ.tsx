@@ -4,55 +4,55 @@ import "./Faq.css";
 
 /* =====================================================
    ANIMAÇÕES
+   Mais leves para reduzir trabalho de renderização.
 ===================================================== */
 
 const headerVariants: Variants = {
+
     hidden: {
         opacity: 0,
-        y: 35,
     },
 
     visible: {
+
         opacity: 1,
-        y: 0,
 
         transition: {
-            duration: 0.8,
-            ease: [.22, 1, .36, 1],
+            duration: 0.35,
+            ease: "easeOut",
         },
+
     },
+
 };
 
 
 const listVariants: Variants = {
+
     hidden: {},
 
-    visible: {
-        transition: {
-            staggerChildren: 0.09,
-            delayChildren: 0.1,
-        },
-    },
+    visible: {},
+
 };
 
 
 const itemVariants: Variants = {
+
     hidden: {
         opacity: 0,
-        y: 25,
-        scale: 0.98,
     },
 
     visible: {
+
         opacity: 1,
-        y: 0,
-        scale: 1,
 
         transition: {
-            duration: 0.6,
-            ease: [.22, 1, .36, 1],
+            duration: 0.3,
+            ease: "easeOut",
         },
+
     },
+
 };
 
 
@@ -142,8 +142,13 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: 0.25,
-                            ease: [.22, 1, .36, 1],
+                            duration: 0.2,
+                            ease: [
+                                0.22,
+                                1,
+                                0.36,
+                                1,
+                            ],
                         }}
                     >
 
@@ -173,8 +178,13 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: 0.25,
-                            ease: [.22, 1, .36, 1],
+                            duration: 0.2,
+                            ease: [
+                                0.22,
+                                1,
+                                0.36,
+                                1,
+                            ],
                         }}
                     >
 
@@ -204,8 +214,13 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: 0.25,
-                            ease: [.22, 1, .36, 1],
+                            duration: 0.2,
+                            ease: [
+                                0.22,
+                                1,
+                                0.36,
+                                1,
+                            ],
                         }}
                     >
 
@@ -234,8 +249,13 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: 0.25,
-                            ease: [.22, 1, .36, 1],
+                            duration: 0.2,
+                            ease: [
+                                0.22,
+                                1,
+                                0.36,
+                                1,
+                            ],
                         }}
                     >
 
@@ -266,8 +286,13 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: 0.25,
-                            ease: [.22, 1, .36, 1],
+                            duration: 0.2,
+                            ease: [
+                                0.22,
+                                1,
+                                0.36,
+                                1,
+                            ],
                         }}
                     >
 
@@ -297,8 +322,13 @@ function Faq() {
                         }}
 
                         transition={{
-                            duration: 0.25,
-                            ease: [.22, 1, .36, 1],
+                            duration: 0.2,
+                            ease: [
+                                0.22,
+                                1,
+                                0.36,
+                                1,
+                            ],
                         }}
                     >
 
@@ -326,12 +356,10 @@ function Faq() {
 
                     initial={{
                         opacity: 0,
-                        y: 24,
                     }}
 
                     whileInView={{
                         opacity: 1,
-                        y: 0,
                     }}
 
                     viewport={{
@@ -340,8 +368,8 @@ function Faq() {
                     }}
 
                     transition={{
-                        duration: 0.7,
-                        ease: [.22, 1, .36, 1],
+                        duration: 0.35,
+                        ease: "easeOut",
                     }}
                 >
 
@@ -356,8 +384,8 @@ function Faq() {
                         className="faq-cta-button"
 
                         whileHover={{
-                            y: -4,
-                            scale: 1.02,
+                            y: -3,
+                            scale: 1.01,
                         }}
 
                         whileTap={{
@@ -374,6 +402,7 @@ function Faq() {
         </section>
 
     );
+
 }
 
 

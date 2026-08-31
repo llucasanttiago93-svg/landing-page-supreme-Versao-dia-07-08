@@ -102,7 +102,7 @@
     overflow: hidden;
 
     box-shadow:
-        0 15px 40px rgba(0,0,0,.06);
+        0 15px 40px rgba(0, 0, 0, .06);
 
     cursor: default;
 
@@ -113,7 +113,9 @@
 
     width: 100%;
 
-    height: 340px;
+    height: 180px;
+
+    aspect-ratio: 1 / 1;
 
     object-fit: cover;
 
@@ -262,6 +264,10 @@
     }
 
 
+    /* =============================================
+       HEADER
+    ============================================= */
+
     .results-header {
 
         margin-bottom: 3rem;
@@ -273,6 +279,8 @@
 
         font-size: 2.3rem;
 
+        line-height: 1.05;
+
     }
 
 
@@ -280,43 +288,116 @@
 
         font-size: 1rem;
 
+        line-height: 1.6;
+
     }
 
+
+    /* =============================================
+       GRID
+       2 CARDS EM CIMA + 2 EMBAIXO
+    ============================================= */
 
     .results-grid {
 
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 1rem;
 
     }
 
+
+    /* =============================================
+       CARD
+    ============================================= */
+
+    .result-card {
+
+        border-radius: 20px;
+
+        overflow: hidden;
+
+    }
+
+
+    /* =============================================
+       IMAGEM
+    ============================================= */
 
     .result-card img {
 
-        height: 260px;
+        width: 100%;
+
+        height: 180px;
+
+        object-fit: cover;
 
     }
 
+
+    /* =============================================
+       CONTEÚDO
+    ============================================= */
 
     .result-content {
 
-        padding: 1.7rem;
+        padding: 1.15rem;
 
     }
 
+
+    /* =============================================
+       ÍCONE
+    ============================================= */
+
+    .result-content span {
+
+        width: 48px;
+
+        height: 48px;
+
+        font-size: 1.3rem;
+
+        margin-bottom: .85rem;
+
+    }
+
+
+    /* =============================================
+       TÍTULO
+    ============================================= */
 
     .result-content h3 {
 
-        font-size: 1.25rem;
+        font-size: 1.08rem;
+
+        line-height: 1.2;
+
+        margin-bottom: .55rem;
 
     }
 
+
+    /* =============================================
+       DESCRIÇÃO
+    ============================================= */
 
     .result-content p {
 
-        font-size: .95rem;
+        font-size: .86rem;
+
+        line-height: 1.45;
 
     }
 
+
+    /* =============================================
+       FOOTER
+    ============================================= */
 
     .results-footer {
 
@@ -329,10 +410,11 @@
 
         font-size: 1.6rem;
 
+        line-height: 1.2;
+
     }
 
 }
-
 
 /* =========================
    ACESSIBILIDADE

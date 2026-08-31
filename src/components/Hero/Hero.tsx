@@ -9,14 +9,21 @@ const ease = [0.22, 1, 0.36, 1] as const;
 ===================================================== */
 
 const containerVariants: Variants = {
+
     hidden: {},
 
     visible: {
+
         transition: {
+
             staggerChildren: 0.09,
+
             delayChildren: 0.15,
+
         },
+
     },
+
 };
 
 
@@ -25,20 +32,31 @@ const containerVariants: Variants = {
 ===================================================== */
 
 const itemVariants: Variants = {
+
     hidden: {
+
         opacity: 0,
+
         y: 24,
+
     },
 
     visible: {
+
         opacity: 1,
+
         y: 0,
 
         transition: {
+
             duration: 0.75,
+
             ease,
+
         },
+
     },
+
 };
 
 
@@ -47,7 +65,9 @@ const itemVariants: Variants = {
 ===================================================== */
 
 function Hero() {
+
     return (
+
         <section
             className="hero"
             id="inicio"
@@ -80,7 +100,9 @@ function Hero() {
 
                         variants={itemVariants}
                     >
+
                         ✦ O QUERIDINHO DAS CABELEIREIRAS
+
                     </motion.p>
 
 
@@ -110,6 +132,7 @@ function Hero() {
                     ============================================= */}
 
                     <motion.h1 variants={itemVariants}>
+
                         <span className="hero-title-line">
                             Aquele cabelo de salão.
                         </span>
@@ -121,7 +144,9 @@ function Hero() {
                         <span className="hero-title-line hero-title-script">
                             na memória.
                         </span>
+
                     </motion.h1>
+
 
                     {/* =============================================
                         DESCRIÇÃO
@@ -131,17 +156,21 @@ function Hero() {
                         className="hero-description"
                         variants={itemVariants}
                     >
+
                         Aquele toque final que muda tudo.
+
                         <br />
+
                         <strong>
                             Brilho, maciez e uma fragrância sofisticada.
                         </strong>
+
                         <br />
+
                         Para deixar os fios com aquela sensação
                         de cabelo recém-finalizado.
+
                     </motion.p>
-
-
 
 
                     {/* =============================================
@@ -164,7 +193,9 @@ function Hero() {
                             scale: 0.97,
                         }}
                     >
-                        QUERO MEU QUERIDINHO
+
+                        QUERO EXPERIMENTAR O QUERIDINHO
+
                     </motion.a>
 
 
@@ -196,7 +227,7 @@ function Hero() {
 
 
                 {/* =================================================
-                    LADO DIREITO
+                    LADO DIREITO — IMAGEM PRINCIPAL
                 ================================================= */}
 
                 <motion.div
@@ -221,7 +252,11 @@ function Hero() {
                     <img
                         src={`${import.meta.env.BASE_URL}images/hero-supreme.webp`}
 
-                        alt="Mulher com cabelos brilhantes segurando o Queridinho Supreme"
+                        alt="Modelo segurando o Queridinho Supreme com cabelos brilhantes e finalizados"
+
+                        fetchPriority="high"
+
+                        decoding="async"
                     />
 
                 </motion.div>
@@ -229,7 +264,9 @@ function Hero() {
             </div>
 
         </section>
+
     );
+
 }
 
 

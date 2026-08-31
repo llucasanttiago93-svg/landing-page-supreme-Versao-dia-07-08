@@ -6,23 +6,24 @@ import Checkout from "../Checkout/Checkout";
 
 /* =====================================================
    ANIMAÇÕES
+   Otimizadas para reduzir atraso visual.
 ===================================================== */
 
 const headerVariants: Variants = {
 
     hidden: {
         opacity: 0,
-        y: 35,
     },
 
     visible: {
+
         opacity: 1,
-        y: 0,
 
         transition: {
-            duration: .8,
-            ease: [.22, 1, .36, 1],
+            duration: .3,
+            ease: "easeOut",
         },
+
     },
 
 };
@@ -32,17 +33,7 @@ const cardsContainerVariants: Variants = {
 
     hidden: {},
 
-    visible: {
-
-        transition: {
-
-            staggerChildren: .12,
-
-            delayChildren: .1,
-
-        },
-
-    },
+    visible: {},
 
 };
 
@@ -50,29 +41,16 @@ const cardsContainerVariants: Variants = {
 const cardVariants: Variants = {
 
     hidden: {
-
         opacity: 0,
-
-        y: 40,
-
-        scale: .97,
-
     },
 
     visible: {
 
         opacity: 1,
 
-        y: 0,
-
-        scale: 1,
-
         transition: {
-
-            duration: .75,
-
-            ease: [.22, 1, .36, 1],
-
+            duration: .3,
+            ease: "easeOut",
         },
 
     },
@@ -83,25 +61,16 @@ const cardVariants: Variants = {
 const footerVariants: Variants = {
 
     hidden: {
-
         opacity: 0,
-
-        y: 30,
-
     },
 
     visible: {
 
         opacity: 1,
 
-        y: 0,
-
         transition: {
-
-            duration: .7,
-
-            ease: [.22, 1, .36, 1],
-
+            duration: .3,
+            ease: "easeOut",
         },
 
     },
@@ -118,34 +87,52 @@ function Offer() {
 
     /* =================================================
        LÓGICA DO CHECKOUT
-       NÃO ALTERADA
     ================================================= */
 
-    const [checkoutOpen, setCheckoutOpen] = useState(false);
+    const [checkoutOpen, setCheckoutOpen] =
+        useState(false);
+
 
     const [checkoutQuantity, setCheckoutQuantity] =
         useState<1 | 2>(1);
 
 
-    const handleBuy = (quantity: 1 | 2) => {
+    const handleBuy =
+        (quantity: 1 | 2) => {
 
-        setCheckoutQuantity(quantity);
+            setCheckoutQuantity(
+                quantity
+            );
 
-        setCheckoutOpen(true);
+            setCheckoutOpen(
+                true
+            );
 
-    };
+        };
 
 
-    const handleCloseCheckout = () => {
+    const handleCloseCheckout =
+        () => {
 
-        setCheckoutOpen(false);
+            setCheckoutOpen(
+                false
+            );
 
-    };
+        };
 
+
+    /* =================================================
+       RENDER
+    ================================================= */
 
     return (
 
         <>
+
+
+            {/* =================================================
+                OFERTA
+            ================================================= */}
 
             <section
                 className="offer"
@@ -155,9 +142,9 @@ function Offer() {
                 <div className="container">
 
 
-                    {/* =================================
+                    {/* =================================================
                         HEADER
-                    ================================= */}
+                    ================================================= */}
 
                     <motion.div
                         className="offer-header"
@@ -175,38 +162,36 @@ function Offer() {
                     >
 
                         <p className="offer-eyebrow">
-
                             ESCOLHA COMO QUER COMEÇAR
-
                         </p>
 
 
                         <h2>
-
-                            Leve o seu Queridinho.<br />
+                            Leve o seu Queridinho.
+                            <br />
                             Ou já garanta o próximo.
-
                         </h2>
 
 
                         <p className="offer-description">
-
-                            Escolha a opção que combina com você e <br />leve o acabamento de salão para a sua rotina.
-
+                            Escolha a opção que combina com você e{" "}
+                            <br />
+                            leve o acabamento de salão para a sua rotina.
                         </p>
 
                     </motion.div>
 
 
-
-                    {/* =================================
+                    {/* =================================================
                         CARDS
-                    ================================= */}
+                    ================================================= */}
 
                     <motion.div
                         className="pricing-grid"
 
-                        variants={cardsContainerVariants}
+                        variants={
+                            cardsContainerVariants
+                        }
 
                         initial="hidden"
 
@@ -219,9 +204,9 @@ function Offer() {
                     >
 
 
-                        {/* =================================
+                        {/* =================================================
                             1 UNIDADE
-                        ================================= */}
+                        ================================================= */}
 
                         <motion.article
                             className="pricing-card"
@@ -230,33 +215,34 @@ function Offer() {
 
                             whileHover={{
                                 y: -7,
+
                                 boxShadow:
                                     "0 30px 70px rgba(0,0,0,.25)",
                             }}
 
                             transition={{
-                                duration: .3,
-                                ease: [.22, 1, .36, 1],
+                                duration: .25,
+                                ease: [
+                                    .22,
+                                    1,
+                                    .36,
+                                    1,
+                                ],
                             }}
                         >
 
                             <div className="card-label">
-
                                 PARA CONHECER
-
                             </div>
 
 
                             <h3>
-
                                 1 Queridinho
-
                             </h3>
 
 
                             <p className="card-description">
                                 Para experimentar e descobrir o acabamento que virou favorito.
-
                             </p>
 
 
@@ -268,8 +254,14 @@ function Offer() {
                                 }}
 
                                 transition={{
-                                    duration: .4,
-                                    ease: [.22, 1, .36, 1],
+                                    duration: .3,
+
+                                    ease: [
+                                        .22,
+                                        1,
+                                        .36,
+                                        1,
+                                    ],
                                 }}
                             >
 
@@ -277,6 +269,8 @@ function Offer() {
                                     src={`${import.meta.env.BASE_URL}images/product-front.webp`}
                                     alt="Reparador de pontas Queridinho Supreme - 1 unidade"
                                     className="pricing-image"
+                                    loading="lazy"
+                                    decoding="async"
                                 />
 
                             </motion.div>
@@ -339,8 +333,6 @@ function Offer() {
 
                                 </li>
 
-
-
                             </ul>
 
 
@@ -373,18 +365,15 @@ function Offer() {
 
 
                             <p className="card-secure">
-
                                 🔒 Compra segura
-
                             </p>
 
                         </motion.article>
 
 
-
-                        {/* =================================
+                        {/* =================================================
                             2 UNIDADES
-                        ================================= */}
+                        ================================================= */}
 
                         <motion.article
                             className="pricing-card featured"
@@ -394,41 +383,40 @@ function Offer() {
                             whileHover={{
                                 y: -9,
                                 scale: 1.015,
+
                                 boxShadow:
                                     "0 35px 90px rgba(236,116,4,.32)",
                             }}
 
                             transition={{
-                                duration: .3,
-                                ease: [.22, 1, .36, 1],
+                                duration: .25,
+
+                                ease: [
+                                    .22,
+                                    1,
+                                    .36,
+                                    1,
+                                ],
                             }}
                         >
 
                             <div className="badge">
-
                                 🔥 MAIS VENDIDO
-
                             </div>
 
 
                             <div className="card-label featured-label">
-
                                 PARA NÃO FICAR SEM
-
                             </div>
 
 
                             <h3>
-
                                 2 Queridinhos
-
                             </h3>
 
 
                             <p className="card-description">
-
                                 Mais praticidade para manter seu cabelo sempre finalizado.
-
                             </p>
 
 
@@ -440,8 +428,14 @@ function Offer() {
                                 }}
 
                                 transition={{
-                                    duration: .4,
-                                    ease: [.22, 1, .36, 1],
+                                    duration: .3,
+
+                                    ease: [
+                                        .22,
+                                        1,
+                                        .36,
+                                        1,
+                                    ],
                                 }}
                             >
 
@@ -449,18 +443,16 @@ function Offer() {
                                     src={`${import.meta.env.BASE_URL}images/product-front-2un.webp`}
                                     alt="Reparador de pontas Queridinho Supreme - 2 unidades"
                                     className="pricing-image featured-image"
+                                    loading="lazy"
+                                    decoding="async"
                                 />
 
                             </motion.div>
 
 
                             <div className="price-old">
-
                                 De <s>R$114,00</s>
-
                             </div>
-
-
 
 
                             <div className="price">
@@ -477,16 +469,15 @@ function Offer() {
                                     ,00
                                 </small>
 
-
-
                             </div>
-                            R$48,50 cada<br />
+
+
+                            R$48,50 cada
+                            <br />
+
 
                             <div className="saving">
-
-
                                 Economize R$17
-
                             </div>
 
 
@@ -530,8 +521,6 @@ function Offer() {
 
                                 </li>
 
-
-
                             </ul>
 
 
@@ -564,9 +553,7 @@ function Offer() {
 
 
                             <p className="card-secure">
-
                                 🔒 Compra segura · Pix e Cartão
-
                             </p>
 
                         </motion.article>
@@ -574,10 +561,9 @@ function Offer() {
                     </motion.div>
 
 
-
-                    {/* =================================
+                    {/* =================================================
                         SEGURANÇA
-                    ================================= */}
+                    ================================================= */}
 
                     <motion.div
                         className="offer-footer"
@@ -596,7 +582,10 @@ function Offer() {
 
                         <div className="offer-trust-item">
 
-                            <span className="trust-icon">
+                            <span
+                                className="trust-icon"
+                                aria-hidden="true"
+                            >
                                 🔒
                             </span>
 
@@ -609,7 +598,10 @@ function Offer() {
 
                         <div className="offer-trust-item">
 
-                            <span className="trust-icon">
+                            <span
+                                className="trust-icon"
+                                aria-hidden="true"
+                            >
                                 🚚
                             </span>
 
@@ -622,7 +614,10 @@ function Offer() {
 
                         <div className="offer-trust-item">
 
-                            <span className="trust-icon">
+                            <span
+                                className="trust-icon"
+                                aria-hidden="true"
+                            >
                                 💳
                             </span>
 
@@ -635,6 +630,9 @@ function Offer() {
                     </motion.div>
 
 
+                    {/* =================================================
+                        TEXTO FINAL
+                    ================================================= */}
 
                     <motion.p
                         className="offer-bottom-text"
@@ -650,9 +648,7 @@ function Offer() {
                             amount: .25,
                         }}
                     >
-
                         Seu próximo cabelo favorito está a um clique.
-
                     </motion.p>
 
 
@@ -661,17 +657,22 @@ function Offer() {
             </section>
 
 
-
-            {/* =========================================
+            {/* =================================================
                 CHECKOUT
-
-                LÓGICA ORIGINAL PRESERVADA
-            ========================================= */}
+            ================================================= */}
 
             <Checkout
-                isOpen={checkoutOpen}
-                quantity={checkoutQuantity}
-                onClose={handleCloseCheckout}
+                isOpen={
+                    checkoutOpen
+                }
+
+                quantity={
+                    checkoutQuantity
+                }
+
+                onClose={
+                    handleCloseCheckout
+                }
             />
 
         </>
