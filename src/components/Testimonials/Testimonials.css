@@ -543,7 +543,7 @@
          */
 
         touch-action:
-            pan-x;
+            auto;
 
     }
 
