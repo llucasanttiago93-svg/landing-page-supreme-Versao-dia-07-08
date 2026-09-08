@@ -10,6 +10,7 @@ import Guarantee from "./components/Guarantee/Guarantee";
 import Offer from "./components/Offer/Offer";
 import Faq from "./components/FAQ/FAQ";
 import Footer from "./components/Footer/Footer";
+import AIAssistant from "./components/AIAssistant/AIAssistant";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             </main>
 
             <Footer />
+            <AIAssistant />
         </>
     );
 

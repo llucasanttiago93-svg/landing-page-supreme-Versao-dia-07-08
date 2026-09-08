@@ -17,6 +17,8 @@ import infinitePayRoutes from "./routes/infinitePay.routes.js";
 
 import blingRoutes from "./routes/bling.routes.js";
 
+import iaRoutes from "./routes/ia.routes.js";
+
 
 /* =====================================================
    CONFIGURAÇÃO DO SERVIDOR
@@ -87,6 +89,15 @@ app.use(
 app.use(
   "/",
   infinitePayRoutes
+);
+
+/* =====================================================
+   ROTAS DA IA
+===================================================== */
+
+app.use(
+  "/api/ia",
+  iaRoutes
 );
 
 

@@ -52,11 +52,9 @@
 
 .testimonials-header h2 {
 
-    font-size: clamp(
-        2.1rem,
-        4vw,
-        4.5rem
-    );
+    font-size: clamp(2.1rem,
+            4vw,
+            4.5rem);
 
     line-height: 1;
 
@@ -101,7 +99,6 @@
 
 }
 
-
 .testimonials-viewport {
 
     width: 100%;
@@ -110,7 +107,7 @@
 
     overflow-x: auto;
 
-    overflow-y: hidden;
+    overflow-y: clip;
 
     scrollbar-width: none;
 
@@ -119,6 +116,8 @@
     scroll-behavior: smooth;
 
     scroll-snap-type: x mandatory;
+
+    touch-action: auto;
 
 }
 
@@ -151,17 +150,12 @@
     position: relative;
 
     flex:
-        0 0
-        min(
-            34vw,
-            420px
-        );
+        0 0 min(34vw,
+            420px);
 
     width:
-        min(
-            34vw,
-            420px
-        );
+        min(34vw,
+            420px);
 
     height: 560px;
 
@@ -172,13 +166,10 @@
     overflow: hidden;
 
     border:
-        1px solid
-        rgba(
-            236,
+        1px solid rgba(236,
             116,
             4,
-            .35
-        );
+            .35);
 
     scroll-snap-align: start;
 
@@ -221,8 +212,7 @@
     border-radius: 50%;
 
     border:
-        1px solid
-        #ddd;
+        1px solid #ddd;
 
     background: #fff;
 
@@ -235,13 +225,10 @@
     cursor: pointer;
 
     box-shadow:
-        0 10px 30px
-        rgba(
+        0 10px 30px rgba(0,
             0,
             0,
-            0,
-            .08
-        );
+            .08);
 
 }
 
@@ -271,13 +258,10 @@
         transform: scale(1.08);
 
         box-shadow:
-            0 14px 30px
-            rgba(
-                236,
+            0 14px 30px rgba(236,
                 116,
                 4,
-                .24
-            );
+                .24);
 
     }
 
@@ -430,16 +414,12 @@
     .testimonial-card {
 
         flex-basis:
-            min(
-                55vw,
-                500px
-            );
+            min(55vw,
+                500px);
 
         width:
-            min(
-                55vw,
-                500px
-            );
+            min(55vw,
+                500px);
 
     }
 
@@ -489,9 +469,7 @@
     .testimonials-carousel {
 
         width:
-            calc(
-                100% + 48px
-            );
+            calc(100% + 48px);
 
         margin-left:
             -24px;
@@ -571,21 +549,14 @@
     .testimonial-card {
 
         flex:
-            0 0
-            calc(
-                100vw - 80px
-            );
+            0 0 calc(100vw - 80px);
 
         width:
-            calc(
-                100vw - 80px
-            );
+            calc(100vw - 80px);
 
         height:
-            min(
-                68vh,
-                560px
-            );
+            min(68vh,
+                560px);
 
         min-height:
             450px;
@@ -710,12 +681,10 @@
             .75rem;
 
         background:
-            rgba(
+            rgba(0,
                 0,
                 0,
-                0,
-                .88
-            );
+                .88);
 
         backdrop-filter:
             blur(12px);
@@ -764,40 +733,15 @@
 
     .lightbox-content img {
 
-        max-width:
-            calc(
-                100vw - 24px
-            );
-
-        max-height:
-            88vh;
-
-        width:
-            auto;
-
-        height:
-            auto;
-
-        object-fit:
-            contain;
-
-        border-radius:
-            16px;
-
-        box-shadow:
-            0 25px 80px
-            rgba(
-                0,
-                0,
-                0,
-                .4
-            );
-
-        user-select:
-            none;
-
-        -webkit-user-drag:
-            none;
+        max-width: calc(100vw - 24px);
+        max-height: 88vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 16px;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, .4);
+        user-select: none;
+        -webkit-user-drag: none;
 
     }
 
@@ -842,12 +786,10 @@
             50%;
 
         background:
-            rgba(
+            rgba(255,
                 255,
                 255,
-                255,
-                .16
-            );
+                .16);
 
         color:
             #fff;
@@ -904,12 +846,10 @@
             50%;
 
         background:
-            rgba(
+            rgba(255,
                 255,
                 255,
-                255,
-                .16
-            );
+                .16);
 
         color:
             #fff;

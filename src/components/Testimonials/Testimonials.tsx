@@ -5,6 +5,7 @@ import {
 } from "react";
 
 import {
+    AnimatePresence,
     motion,
     type Variants,
 } from "motion/react";
@@ -108,6 +109,49 @@ const cardVariants: Variants = {
 
 
 /* =====================================================
+   ANIMAÇÃO DA IMAGEM DO LIGHTBOX
+===================================================== */
+
+const lightboxImageVariants: Variants = {
+
+    enter: (direction: number) => ({
+
+        opacity: 0.88,
+
+        x:
+            direction *
+            18,
+
+        scale: 0.995,
+
+    }),
+
+    center: {
+
+        opacity: 1,
+
+        x: 0,
+
+        scale: 1,
+
+    },
+
+    exit: (direction: number) => ({
+
+        opacity: 0,
+
+        x:
+            direction *
+            -18,
+
+        scale: 0.995,
+
+    }),
+
+};
+
+
+/* =====================================================
    COMPONENTE
 ===================================================== */
 
@@ -140,6 +184,19 @@ function Testimonials() {
         selectedTestimonial,
         setSelectedTestimonial,
     ] = useState<number | null>(null);
+
+
+    /* =================================================
+       DIREÇÃO DA TRANSIÇÃO DO LIGHTBOX
+
+       1  = indo para a próxima
+       -1 = indo para a anterior
+    ================================================= */
+
+    const [
+        lightboxDirection,
+        setLightboxDirection,
+    ] = useState(1);
 
 
     /* =================================================
@@ -420,7 +477,6 @@ function Testimonials() {
                 null
             );
 
-
             setLightboxTouchStartX(
                 null
             );
@@ -448,6 +504,11 @@ function Testimonials() {
                         ? 0
 
                         : selectedTestimonial + 1;
+
+
+            setLightboxDirection(
+                1
+            );
 
 
             setSelectedTestimonial(
@@ -487,6 +548,11 @@ function Testimonials() {
                         ? testimonials.length - 1
 
                         : selectedTestimonial - 1;
+
+
+            setLightboxDirection(
+                -1
+            );
 
 
             setSelectedTestimonial(
@@ -604,14 +670,13 @@ function Testimonials() {
 
 
     /* =================================================
-       TECLADO + BLOQUEIO DO BODY
+       TECLADO
     ================================================= */
 
     useEffect(() => {
 
         if (
-            selectedTestimonial ===
-            null
+            selectedTestimonial === null
         ) {
 
             return;
@@ -625,8 +690,7 @@ function Testimonials() {
             ) => {
 
                 if (
-                    event.key ===
-                    "Escape"
+                    event.key === "Escape"
                 ) {
 
                     closeTestimonial();
@@ -637,8 +701,7 @@ function Testimonials() {
 
 
                 if (
-                    event.key ===
-                    "ArrowRight"
+                    event.key === "ArrowRight"
                 ) {
 
                     nextSelectedTestimonial();
@@ -649,8 +712,7 @@ function Testimonials() {
 
 
                 if (
-                    event.key ===
-                    "ArrowLeft"
+                    event.key === "ArrowLeft"
                 ) {
 
                     previousSelectedTestimonial();
@@ -666,20 +728,12 @@ function Testimonials() {
         );
 
 
-        document.body.style.overflow =
-            "hidden";
-
-
         return () => {
 
             document.removeEventListener(
                 "keydown",
                 handleKeyDown
             );
-
-
-            document.body.style.overflow =
-                "";
 
         };
 
@@ -819,10 +873,9 @@ function Testimonials() {
 
                                         className={`
                                             testimonial-card
-                                            ${
-                                                current === index
-                                                    ? "active-card"
-                                                    : ""
+                                            ${current === index
+                                                ? "active-card"
+                                                : ""
                                             }
                                         `}
 
@@ -859,9 +912,9 @@ function Testimonials() {
 
                                             if (
                                                 event.key ===
-                                                    "Enter" ||
+                                                "Enter" ||
                                                 event.key ===
-                                                    " "
+                                                " "
                                             ) {
 
                                                 event.preventDefault();
@@ -1129,34 +1182,62 @@ function Testimonials() {
                     ============================================= */}
 
                     <div
-
                         className="lightbox-content"
-
-                        onClick={(
-                            event
-                        ) => {
-
-                            event.stopPropagation();
-
-                        }}
-
                     >
 
-                        <img
+                        <AnimatePresence
+                            initial={false}
+                            mode="popLayout"
+                            custom={lightboxDirection}
+                        >
 
-                            src={
-                                testimonials[
-                                    selectedTestimonial
-                                ].image
-                            }
+                            <motion.img
 
-                            alt={
-                                `Experiência de cliente com o Queridinho Supreme - prova social ${selectedTestimonial + 1}`
-                            }
+                                key={selectedTestimonial}
 
-                            decoding="async"
+                                src={
+                                    testimonials[
+                                        selectedTestimonial
+                                    ].image
+                                }
 
-                        />
+                                alt={
+                                    `Experiência de cliente com o Queridinho Supreme - prova social ${selectedTestimonial + 1}`
+                                }
+
+                                decoding="async"
+
+                                custom={
+                                    lightboxDirection
+                                }
+
+                                variants={
+                                    lightboxImageVariants
+                                }
+
+                                initial="enter"
+
+                                animate="center"
+
+                                exit="exit"
+
+                                transition={{
+                                    duration: 0.50,
+                                    ease: [
+                                        0.22,
+                                        1,
+                                        0.36,
+                                        1,
+                                    ],
+                                }}
+
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                }}
+
+                            />
+
+                        </AnimatePresence>
 
                     </div>
 
