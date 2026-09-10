@@ -108,6 +108,10 @@ function AIAssistant() {
         useRef<HTMLDivElement>(null);
 
 
+    const chatRef =
+        useRef<HTMLDivElement>(null);
+
+
     const inputRef =
         useRef<HTMLInputElement>(null);
 
@@ -235,6 +239,77 @@ function AIAssistant() {
             "none";
 
 
+        /*
+         * iPhone/Safari: quando o teclado abre, o visual viewport
+         * fica menor que o viewport normal. Se o chat continuar
+         * usando apenas 100dvh, o Safari pode deslocar o componente
+         * para tentar revelar o input.
+         *
+         * Aqui fazemos o chat acompanhar exatamente o visual viewport.
+         */
+
+        const chat =
+            chatRef.current;
+
+
+        const visualViewport =
+            window.visualViewport;
+
+
+        const updateVisualViewport =
+            () => {
+
+                if (!chat) {
+
+                    return;
+
+                }
+
+
+                if (visualViewport) {
+
+                    chat.style.setProperty(
+                        "--ai-viewport-top",
+                        `${visualViewport.offsetTop}px`
+                    );
+
+                    chat.style.setProperty(
+                        "--ai-viewport-height",
+                        `${visualViewport.height}px`
+                    );
+
+                } else {
+
+                    chat.style.setProperty(
+                        "--ai-viewport-top",
+                        "0px"
+                    );
+
+                    chat.style.setProperty(
+                        "--ai-viewport-height",
+                        "100dvh"
+                    );
+
+                }
+
+            };
+
+
+        updateVisualViewport();
+
+
+        visualViewport?.addEventListener(
+            "resize",
+            updateVisualViewport
+        );
+
+
+        visualViewport?.addEventListener(
+            "scroll",
+            updateVisualViewport
+        );
+
+
         return () => {
 
             /*
@@ -259,6 +334,28 @@ function AIAssistant() {
 
             document.documentElement.style.overscrollBehavior =
                 "";
+
+
+            visualViewport?.removeEventListener(
+                "resize",
+                updateVisualViewport
+            );
+
+
+            visualViewport?.removeEventListener(
+                "scroll",
+                updateVisualViewport
+            );
+
+
+            chat?.style.removeProperty(
+                "--ai-viewport-top"
+            );
+
+
+            chat?.style.removeProperty(
+                "--ai-viewport-height"
+            );
 
 
             /*
@@ -690,6 +787,10 @@ function AIAssistant() {
             ================================================= */}
 
             <div
+
+                ref={
+                    chatRef
+                }
 
                 className={`
                     ai-chat
