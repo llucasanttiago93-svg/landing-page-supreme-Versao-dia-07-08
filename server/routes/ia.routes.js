@@ -1,4 +1,5 @@
 import express from "express";
+import { rateLimit } from "express-rate-limit";
 
 import {
   responderComIA,
@@ -10,59 +11,37 @@ const router =
 
 
 /* =====================================================
-   TESTE ONLINE DA IA
+   LIMITADOR DE REQUISIÇÕES DA IA
 ===================================================== */
 
-router.get(
-  "/teste",
-  async (req, res) => {
+const limiteIA =
+  rateLimit({
 
-    try {
+    // Janela de 10 minutos
+    windowMs:
+      10 * 60 * 1000,
 
-      const resposta =
-        await responderComIA({
+    // Máximo de 20 mensagens por IP
+    limit:
+      20,
 
-          mensagem:
-            "Oi! Diga em uma frase para que serve o Queridinho Supreme.",
+    // Headers modernos de rate limit
+    standardHeaders:
+      "draft-8",
 
-          historico:
-            [],
+    // Não utilizar os headers antigos
+    legacyHeaders:
+      false,
 
-        });
+    // Resposta quando ultrapassar o limite
+    message: {
 
+      error:
+        "Muitas mensagens enviadas. Aguarde alguns minutos e tente novamente.",
 
-      return res.json({
+    },
 
-        sucesso:
-          true,
-
-        resposta,
-
-      });
-
-
-    } catch (error) {
-
-      console.error(
-        "❌ Erro no teste da IA:",
-        error
-      );
-
-
-      return res.status(500).json({
-
-        sucesso:
-          false,
-
-        erro:
-          error.message,
-
-      });
-
-    }
-
-  }
-);
+  });
 
 
 /* =====================================================
@@ -71,6 +50,8 @@ router.get(
 
 router.post(
   "/chat",
+  limiteIA,
+
   async (req, res) => {
 
     try {
@@ -101,7 +82,7 @@ router.post(
 
 
       /* ===============================================
-         LIMITAR TAMANHO
+         LIMITAR TAMANHO DA MENSAGEM
       =============================================== */
 
       if (
@@ -119,6 +100,84 @@ router.post(
 
 
       /* ===============================================
+         VALIDAR E LIMITAR HISTÓRICO
+      =============================================== */
+
+      let historicoSeguro = [];
+
+
+      if (
+        Array.isArray(historico)
+      ) {
+
+        historicoSeguro =
+          historico
+            .filter(
+              (item) =>
+                item &&
+                typeof item === "object"
+            )
+            .slice(-12)
+            .map(
+              (item) => ({
+
+                role:
+                  typeof item.role === "string"
+                    ? item.role
+                    : "",
+
+                content:
+                  typeof item.content === "string"
+                    ? item.content.slice(0, 1000)
+                    : "",
+
+              })
+            )
+            .filter(
+              (item) =>
+                item.content.trim()
+            );
+
+      }
+
+
+      /* ===============================================
+         LIMITAR TAMANHO TOTAL DO HISTÓRICO
+      =============================================== */
+
+      let totalCaracteres =
+        0;
+
+
+      historicoSeguro =
+        historicoSeguro.filter(
+          (item) => {
+
+            const tamanho =
+              item.content.length;
+
+
+            if (
+              totalCaracteres + tamanho >
+              6000
+            ) {
+
+              return false;
+
+            }
+
+
+            totalCaracteres +=
+              tamanho;
+
+
+            return true;
+
+          }
+        );
+
+
+      /* ===============================================
          RESPONDER
       =============================================== */
 
@@ -129,9 +188,7 @@ router.post(
             mensagem.trim(),
 
           historico:
-            Array.isArray(historico)
-              ? historico
-              : [],
+            historicoSeguro,
 
         });
 

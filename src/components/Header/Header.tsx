@@ -278,7 +278,7 @@ function Header() {
                     >
 
                         <img
-                            src={`${import.meta.env.BASE_URL}images/logo.webp`}
+                            src={`${import.meta.env.BASE_URL}images/logo.svg`}
                             alt="Vanti Cosméticos"
                         />
 

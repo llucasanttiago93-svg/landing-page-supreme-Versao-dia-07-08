@@ -1,4 +1,5 @@
 import express from "express";
+import { rateLimit } from "express-rate-limit";
 
 import {
   isAuthorized,
@@ -15,11 +16,75 @@ const router =
 
 
 /* =====================================================
+   LIMITADOR DE COTAÇÃO DE FRETE
+===================================================== */
+
+const limiteFrete =
+  rateLimit({
+
+    // Janela de 10 minutos
+    windowMs:
+      10 * 60 * 1000,
+
+    // Máximo de 30 cotações por IP
+    limit:
+      30,
+
+    standardHeaders:
+      "draft-8",
+
+    legacyHeaders:
+      false,
+
+    message: {
+
+      error:
+        "Muitas cotações de frete. Aguarde alguns minutos e tente novamente.",
+
+    },
+
+  });
+
+
+/* =====================================================
+   LIMITADOR DE PAGAMENTO
+===================================================== */
+
+const limitePagamento =
+  rateLimit({
+
+    // Janela de 10 minutos
+    windowMs:
+      10 * 60 * 1000,
+
+    // Máximo de 10 tentativas de checkout por IP
+    limit:
+      10,
+
+    standardHeaders:
+      "draft-8",
+
+    legacyHeaders:
+      false,
+
+    message: {
+
+      error:
+        "Muitas tentativas de pagamento. Aguarde alguns minutos e tente novamente.",
+
+    },
+
+  });
+
+
+/* =====================================================
    COTAÇÃO DE FRETE
 ===================================================== */
 
 router.post(
   "/frete",
+  limiteFrete,
+
   async (req, res) => {
 
     try {
@@ -59,8 +124,10 @@ router.post(
 
       const data =
         await calculateShipping({
+
           cepDestino,
           quantidade,
+
         });
 
 
@@ -81,8 +148,10 @@ router.post(
         .status(error.status || 500)
         .json(
           error.data || {
+
             error:
               "Erro interno ao calcular o frete.",
+
           }
         );
 
@@ -98,6 +167,8 @@ router.post(
 
 router.post(
   "/pagamento",
+  limitePagamento,
+
   async (req, res) => {
 
     try {
@@ -125,8 +196,10 @@ router.post(
         .status(error.status || 500)
         .json(
           error.data || {
+
             error:
               "Erro interno ao criar checkout InfinitePay.",
+
           }
         );
 

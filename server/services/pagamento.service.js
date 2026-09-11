@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 import {
   INFINITEPAY_HANDLE,
   PAYMENT_SUCCESS_URL,
@@ -547,8 +549,8 @@ export async function criarPagamento({
      ORDER NSU
   =================================================== */
 
-  const orderNsu =
-    `VANTI-${Date.now()}`;
+const orderNsu =
+  `VANTI-${crypto.randomUUID()}`;
 
 
   /* ===================================================
