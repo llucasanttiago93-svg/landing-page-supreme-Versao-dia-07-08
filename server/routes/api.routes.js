@@ -173,6 +173,19 @@ router.post(
 
     try {
 
+      const origin = req.get("origin");
+
+      if (origin?.endsWith(".netlify.app")) {
+
+        return res.status(403).json({
+
+          error:
+            "Pagamento desativado na versão demonstrativa.",
+
+        });
+
+      }
+
       const resultado =
         await criarPagamento(
           req.body
