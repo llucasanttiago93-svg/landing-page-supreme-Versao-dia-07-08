@@ -14,6 +14,8 @@ import "./Checkout.css";
 
 const TEST_PAYMENT_MODE = false;
 
+const IS_DEMO = window.location.hostname.endsWith(".netlify.app");
+
 
 /* =====================================================
    PROPS
@@ -974,6 +976,13 @@ function Checkout({
 
       }
 
+      if (IS_DEMO) {
+        alert(
+          "Demonstração: o pagamento está desativado neste projeto."
+        );
+        return;
+      }
+
 
       /*
        * TRAVA IMEDIATAMENTE.
@@ -1328,10 +1337,9 @@ function Checkout({
                   key={option.id}
                   type="button"
                   className={
-                    `checkout-shipping-option ${
-                      selectedShipping?.id === option.id
-                        ? "selected"
-                        : ""
+                    `checkout-shipping-option ${selectedShipping?.id === option.id
+                      ? "selected"
+                      : ""
                     }`
                   }
                   onClick={() =>
